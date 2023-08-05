@@ -1,0 +1,82 @@
+<%- include('./partials/header.ejs') %>
+
+
+
+    <section class="gradient-custom container">
+        <div class="container py-5 h-100 row justify-content-center align-items-center">
+            <div class="col-12 col-lg-9 col-xl-8">
+                <div class="card shadow-2-strong card-registration">
+                    <div class="card-body shadow" style="background-color: #EBEBEB;border-radius: 5px;">
+
+                        <form action="/address/edit?addressId=<%= address._id%>" method="post"
+                            class="d-flex flex-column align-items-center mt-1" id="form">
+
+                            <div class="mb-1">
+                                <div class="fw-bold text-center fs-5 text-uppercase mb-1">Enter Your Address</div>
+                                <hr class="bg-dark">
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <div class="form-outline mb-1">
+                                    <label class="form-label" for="buildingName" style="font-size: .80rem;">Building
+                                        Name</label>
+                                    <input type="text" id="buildingName" name="buildingName" style="box-shadow: none;"
+                                        class="form-control form-control-sm" value="<%= address.buildingName %>"
+                                        required />
+                                </div>
+
+                                <div class="form-outline mb-1">
+                                    <label class="form-label" style="font-size: .80rem;" for="street">Street</label>
+                                    <input type="text" id="street" name="street" style="box-shadow: none;"
+                                        class="form-control form-control-sm" value="<%= address.street %>" required />
+                                </div>
+
+                                <div class="form-outline mb-1">
+                                    <label class="form-label" style="font-size: .80rem;" for="city">City</label>
+                                    <input type="text" id="city" name="city" style="box-shadow: none;"
+                                        class="form-control form-control-sm" value="<%= address.city %>" required />
+                                </div>
+
+                                <div class="form-outline mb-1">
+                                    <label class="form-label" style="font-size: .80rem;" for="state">State</label>
+                                    <input type="text" id="state" name="state" style="box-shadow: none;"
+                                        class="form-control form-control-sm " value="<%= address.state %>" required />
+                                </div>
+
+
+                                <div>
+                                    <label class="form-label" style="font-size: .80rem;" for="pincode">Pin
+                                        Code</label>
+                                    <input type="text" id="pincode" name="pincode" style="box-shadow: none;"
+                                        class="form-control  form-control-sm" pattern="^\d{6}$"
+                                        value="<%= address.pincode %>" required />
+                                </div>
+
+
+                                <div class="form-outline mb-1">
+                                    <label class="form-label" style="font-size: .80rem;" for="number">Phone
+                                        Number</label>
+                                    <input type="text" id="number" name="number" style="box-shadow: none;"
+                                        class="form-control form-control-sm " pattern="^\d{10}$"
+                                        value="<%= address.phonenumber %>" required />
+                                </div>
+
+                                <input type="hidden" name="type" value="<%= type %>">
+
+                                <div id="error-field" class="text-danger"></div>
+                                <div class="form-outline mb-1 d-flex justify-content-center">
+                                    <button type="submit" style="background-color: #15A78F;color: #fff;width: 200px;"
+                                        class="btn fw-normal p-10 mb-3 mt-3">Update</button>
+                                </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <%- include('./partials/footer.ejs') %>

@@ -1,0 +1,173 @@
+<%- include('./partials/header.ejs') %>
+
+    <head>
+        <!-- Other meta tags and title -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    </head>
+
+    <style>
+        /* Custom Styles */
+        .profile-image {
+            height: 8rem;
+            width: 8rem;
+            border: .2rem solid #15A78F;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+        }
+
+        .profile-image i {
+            font-size: 2.5rem;
+            color: #15A78F;
+        }
+
+        .profile-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+
+        .profile-joined-date {
+            font-size: 0.875rem;
+            color: #15A78F;
+        }
+
+        .profile-card {
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            background-color: #F4F5F7;
+        }
+
+        .profile-card .card-header {
+            background-color: #15A78F;
+            color: #fff;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .profile-card .card-header h4 {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .profile-card .card-body {
+            padding: 20px;
+        }
+
+        .profile-card .btn {
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .btn-edit {
+            background-color: #15A78F;
+            color: #fff;
+        }
+
+        .btn-change-password {
+            background-color: #15A78F;
+            color: #fff;
+        }
+    </style>
+
+
+
+    <div class="container-fluid vh-100">
+        <div class="row m-0  h-100">
+            <div class="col mt-4">
+                <div>
+                    <div class="container mt-4">
+                        <div class="row h-50 align-items-center">
+                            <div class="col">
+                                <div class="row h-75">
+                                    <div class="col">
+                                        <div class="row justify-content-center">
+                                            <div class="col-6 d-flex justify-content-center">
+                                                <div class="profile-image">
+                                                    <i class="fa fa-user"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row justify-content-center">
+                                            <div class="col-6 d-flex flex-column align-items-center">
+                                                <div class="profile-name">
+                                                    <%= user.username%>
+                                                </div>
+                                                <div class="profile-joined-date"> Created at
+                                                    <% const createdAtDate=new Date(user.createdAt); %>
+                                                        <%= createdAtDate.toDateString() %>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center mt-4">
+                        <div class="col-8 d-flex flex-column">
+                            <div
+                                style="border: .005rem solid rgb(174, 171, 171); background-color: #15A78F; min-height: 3rem; display: flex; justify-content: center; align-items: center;">
+                                <a href="/user/profile" class="nav-link text-light">Profile</a>
+                            </div>
+
+                            <div
+                                style="border: .005rem solid rgb(174, 171, 171);min-height: 3rem;display: flex; justify-content: center; align-items: center;">
+                                <a href="/order" class="nav-link text-dark">Orders</a>
+                            </div>
+                            <div
+                                style="border: .005rem solid rgb(174, 171, 171);min-height: 3rem;display: flex; justify-content: center; align-items: center;">
+                                <a href="/user/profile/address" class="nav-link text-dark">Address</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col my-5"">
+                <div class=" col-lg-10">
+                <div class="container mt-4">
+                    <div class="card profile-card">
+                        <div class="card-header py-4">
+                            <h4 class="mb-0" style="display: flex; justify-content: center; align-items: center;">My
+                                Profile</h4>
+
+                        </div>
+                        <div class="card-body">
+
+                            <form>
+                                <div class="form-group focused mb-4">
+                                    <label class="form-control-label" for="input-username">Username</label>
+                                    <input type="text" id="input-username" style="box-shadow: none;"
+                                        class="form-control form-control-alternative bg-light" value=<%=user.username%>
+                                    readonly>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-control-label" for="input-email">Email address</label>
+                                    <input type="email" id="input-email" style="box-shadow: none;"
+                                        class="form-control form-control-alternative bg-light" value=<%=user.email%>
+                                    readonly>
+                                </div>
+                            </form>
+
+                            <div class="d-flex justify-content-between align-items-center pt-2">
+                                <a href="/user/profile/edit?id=<%= user._id%>" class="btn btn-edit my-3">Edit
+                                    Username</a>
+                                <a href="/user/profile/oldPassword" class="btn btn-change-password">Change Password</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </section>
+    </div>
+    </div>
+    </div>
+
+
+    <%- include('./partials/footer.ejs') %>

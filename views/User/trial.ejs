@@ -1,0 +1,118 @@
+<%- include('./partials/header')%>
+
+    <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.min.css">
+    </head>
+
+    <div class="wishlist-main">
+        <div class="container">
+            <% if (products !=null && products.length> 0) { %>
+                <h3 class="wish-head text-center mb-5 font-weight-bold">Wishlist <i class="ri-heart-line"></i></h3>
+                <% } %>
+                    <div class="row" id="wishlistRow">
+                        <% products.forEach(item=> { %>
+                            <div class="col-lg-4 col-md-6" id="<%='wish'+item._id%>">
+                                <div class="wish-item">
+                                    <a href="/product/<%=item._id %>" class="wish-img">
+                                        <img src="<%=item.image[0].url%>" alt="" style="height: 20rem; width: 15rem;">
+                                    </a>
+                                    <div class="wish-detail">
+                                        <b>
+                                            <%=item.productName %>
+                                        </b>
+                                        <h5>₹<%= item.price %>
+                                        </h5> <!-- Corrected the closing tag of h5 -->
+                                    </div>
+                                    <div class="wish-cancel">
+                                        <button style="box-shadow: none;background-color: #7fad39;"
+                                            class="btn primary-btn text-light" onclick="addToClick('<%=item._id%>')">ADD
+                                            TO CART</button>
+                                        <button class="btn-danger"
+                                            style="border: none; border-radius: 3px; width: 5rem; height: 2rem;"
+                                            onclick="removeFromWishlist('<%=item._id%>')">Remove</button>
+                                        <!-- Corrected the function name -->
+                                    </div><br>
+                                </div>
+                                <div id="snackbar">
+                                    <%= item.productName %> added to cart...
+                                </div>
+                                <div id="snackbar-error">
+                                    <%= item.productName %> has no stock left...
+                                </div>
+                            </div>
+                            <% }) %>
+                    </div>
+                    <div class="row" id="emptyWishlist">
+                        <% if(!products[0]){ %>
+                            <div class="empty-container w-100 h-50 d-flex flex-column justify-content-center align-items-center"
+                                style="gap:10px">
+                                <img src="https://res.cloudinary.com/dtbohkfpy/image/upload/v1691169381/wishlist_mekzmp.png"
+                                    height="250px" alt="" style="opacity: 0.5;">
+                                <h3>Your wishlist is empty!</h3>
+                                <p>Tap Heart button to start saving your favourites</p>
+                            </div>
+                            <% } %>
+                    </div>
+        </div>
+    </div><br>
+
+    <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function addToClick(id) {
+
+            axios.get(`/addToCart?productId=${id}`)
+                .then((result) => {
+                    console.log(result);
+                    if (result.data.response) {
+                        let x = document.getElementById("snackbar");
+                        x.className = "show";
+                        setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+                    } else {
+                        let x = document.getElementById("snackbar-error");
+                        x.className = "show";
+                        setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+                    }
+                })
+        }
+
+
+        async function removeFromWishlist(id) {
+            const confirmResult = await Swal.fire({
+                title: 'Are you sure?',
+                text: 'Are you sure you want to remove this item from the wishlist?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, remove it!',
+                cancelButtonText: 'Cancel'
+            });
+
+            if (confirmResult.isConfirmed) {
+                // Make the API call to remove the item from the wishlist
+                try {
+                    const response = await axios.get(`/removeFromWishlist?prodId=${id}`);
+
+                    // Check if the server successfully removed the item
+                    if (response.data.success) {
+                        // Find the wishlist item element with the matching product ID and remove it
+                        const wishlistItem = document.querySelector(`.wishlist-item[data-product-id="${id}"]`);
+                        if (wishlistItem) {
+                            wishlistItem.remove();
+                        }
+
+                        // Refresh the page to update the view
+                        window.location.reload();
+                    }
+                } catch (error) {
+                    // Handle any errors from the API call
+                    console.error(error);
+                }
+            }
+        }
+
+    </script>
+
+    <%- include('./partials/footer')%>

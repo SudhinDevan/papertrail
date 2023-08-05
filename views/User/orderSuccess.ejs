@@ -1,0 +1,128 @@
+<%- include('./partials/header.ejs') %>
+
+  <div class="container mt-5 mb-5">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-8 py-5">
+        <div class="card" style="background-color: #f3f6fa;">
+          <a href="/" class="px-3 py-3">
+            <img src="https://res.cloudinary.com/dtbohkfpy/image/upload/v1687950151/logo_png_la2lo3.png" width="200"
+              height="60">
+          </a>
+          <div class="invoice p-5">
+            <h5>Your Order Confirmed!</h5>
+            <span class="font-weight-bold d-block mt-4">Hi <%= user.username %></span>
+            <span>Thank you for your order!</span>
+            <div class="payment border-top mt-3 mb-3 border-bottom table-responsive">
+              <table class="table table-borderless">
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="py-2">
+                        <span class="d-block text-muted">Order Date</span>
+                        <span>
+                          <%= order.order_date.toLocaleDateString('en-US', { month: 'long' , day: 'numeric' ,
+                            year: 'numeric' ,}) %>
+                        </span>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="py-2">
+                        <span class="d-block text-muted">Order ID</span>
+                        <span>
+                          <%= order._id.toString().substring(0,6) %>
+                        </span>
+                      </div>
+                    </td>
+                    <td>
+                      <!-- Payment info (if applicable) -->
+                    </td>
+                    <td>
+                      <div class="py-2">
+                        <span class="d-block text-muted">Shipping Address</span>
+                        <span>
+                          <%= address.phonenumber%>
+                        </span><br>
+                        <span>
+                          <%= address.buildingName %>
+                        </span>
+                        <span>
+                          <%= address.city %>
+                        </span><br>
+                        <span>
+                          <%= address.state %>, <%= address.country %>
+                        </span><br>
+                        <span>
+                          <%= address.pincode %>
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="product border-bottom table-responsive">
+              <table class="table table-borderless">
+                <tbody>
+                  <% product.items.forEach((item)=>{ %>
+                    <tr>
+                      <!-- Product details (if applicable) -->
+                      <td width="20%">
+                        <img src="<%= item.product.image[0].url %>" width="90">
+                      </td>
+                      <td width="60%">
+                        <span class="font-weight-bold">
+                          <%= item.product.productName %>
+                        </span>
+                        <div class="product-qty">
+                          <span class="d-block">quantity: <%= item.quantity %></span>
+
+                        </div>
+                      </td>
+                      <td width="20%">
+                        <div class="text-right">
+                          <span class="font-weight-bold">₹<%=(item.product.price*item.quantity)%></span>
+                        </div>
+                      </td>
+                    </tr>
+                    <% }) %>
+                </tbody>
+              </table>
+            </div>
+            <div class="row d-flex justify-content-end">
+              <div class="col-md-5">
+                <table class="table table-borderless">
+                  <tbody class="totals">
+                    <tr class="border-top border-bottom">
+                      <td>
+                        <div class="text-left">
+                          <div class="text-right">
+                            <span class="font-weight-bold">
+                              <%if(coupon!=null){ %>
+                                <span class="font-weight-bold">Coupon discount:</span>
+                                ₹<%=coupon.discount%>
+                                  <%}else{%>
+                                    <%}%>
+                            </span><br>
+                            <span class="font-weight-bold">Total:</span>
+                            <span class="font-weight-bold">₹<%=order.price%></span>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <p class="font-weight-bold mb-0">Thanks for shopping with us!</p>
+            <span>PaperTrail</span>
+          </div>
+          <div class="d-flex justify-content-between footer p-3">
+            <span>PaperTrail <a href="/shop" style="font-size: 1rem;" class="mx-2 navbar-brand text-info">Continue
+                Shopping</a></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

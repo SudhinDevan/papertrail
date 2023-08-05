@@ -1,0 +1,85 @@
+<%- include('./partials/header.ejs') %>
+
+
+  <%- include('./partials/sidebar.ejs') %>
+
+    <div class="container-fluid d-flex gap-4" style="background-color: #EDF1F5;">
+
+      <div class="col-md col-sm-8 d-flex flex-column">
+
+        <div class="d-flex flex-wrap justify-content-center w-100 mt-4">
+          <% for(const image of product.image){ %>
+            <% if(image){ %>
+              <div class="col-md-3 col-sm-5 me-3 mb-3">
+
+                <div class="card">
+                  <img src="<%= image.url %>" class="card-img-top" alt="...">
+                  <div class="card-body text-center">
+                    <button onclick="deleteImage('<%= image.public_id %>', '<%= product._id %>')" <%
+                      if(product.image.length < 2 ){ %> disabled <% } %> type="button" class="btn
+                        btn-sm btn-danger"><% if(product.image.length < 2 ){ %> Can Not Delete
+                          <% }else {%>Delete<% } %></a>
+                  </div>
+                </div>
+              </div>
+
+              <% } %>
+
+                <% } %>
+                  <% if(product.image.length < 5) { %>
+                    <div class="col-md-3 col-sm-5 me-3 mb-3">
+
+                      <div class="card text-center">
+                        <div class="card-header bg-light py-4 ">
+                          <p class="mb-0">Add New Image</p>
+                        </div>
+                        <div class="card-body">
+                          <a href="/admin/product/image/add?productId=<%= product._id%>"
+                            class="btn btn-sm btn-dark">Add</a>
+                        </div>
+                      </div>
+                    </div>
+                    <% } %>
+
+        </div>
+
+
+
+
+      </div>
+
+
+      <!-- axios cdn -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"></script>
+
+      <!-- sweet alert cdn -->
+      <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+      <script>
+        function deleteImage(public_id, productId) {
+          Swal.fire({
+            icon: "warning",
+            title: "Are you sure?",
+            text: "Delete Image?",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Delete",
+          }).then((result) => {
+            if (result.isConfirmed) {
+
+              axios.delete(`/admin/product/image/delete?public_id=${public_id}&productId=${productId}`).then((result) => {
+                Swal.fire("removed!", "Image has been deleted.", "success").then((response) => {
+                  location.reload();
+                })
+              })
+
+            }
+          });
+        }
+
+
+      </script>
+
+      <%- include('./partials/footer.ejs') %>

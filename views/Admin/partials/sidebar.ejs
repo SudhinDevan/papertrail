@@ -1,0 +1,89 @@
+<section>
+    <div class="d-flex">
+        <div class="col-2">
+            <div class="d-flex flex-column justify-content-between bg-light min-vh-100" id="sidebar">
+                <div class=" container py-5">
+                    <ul class="nav nav-pills flex-column mt-2 mt-sm-0" id="menu">
+                        <li class="nav-item my-sm-1 my-2">
+                            <a href="/admin/" class="nav-link text-dark text-center text-sm-start" aria-current="page">
+                                <i class="fa fa-gauge"></i>
+                                <span href="/admin/" class="ms-2 d-none d-sm-inline">Dashboard</span>
+                            </a>
+                        </li>
+                        <hr class="text-dark d-none d-sm-block my-3" />
+                        <li class="nav-item my-sm-1 my-2">
+                            <a href="#categorymenu" data-bs-toggle="collapse"
+                                class="nav-link text-dark text-center text-sm-start" aria-current="page">
+                                <i class="fa fa-table"></i>
+                                <span class="ms-2 d-none d-sm-inline">Category</span>
+                                <i class="fa fa-caret-down"></i>
+                            </a>
+                            <ul class="nav collapse ms-1 flex-column" id="categorymenu" data-bs-parent="#menu">
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="/admin/category/"
+                                        aria-current="page">Categories</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="/admin/addCategory/" aria-current="page">Add
+                                        Category</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <hr class="text-dark d-none d-sm-block my-3" />
+                        <li class="nav-item my-sm-1 my-2">
+                            <a href="#sidemenu" data-bs-toggle="collapse"
+                                class="nav-link text-dark text-center text-sm-start" aria-current="page">
+                                <i class="fa fa-table"></i>
+                                <span class="ms-2 d-none d-sm-inline">Products</span>
+                                <i class="fa fa-caret-down"></i>
+                            </a>
+                            <ul class="nav collapse ms-1 flex-column" id="sidemenu" data-bs-parent="#menu">
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="/admin/product" aria-current="page">Products</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="/admin/product/add" aria-current="page">Add
+                                        Products</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <hr class="text-dark d-none d-sm-block my-3" />
+                        <li class="nav-item my-sm-1 my-2">
+                            <a href="/admin/order" class="nav-link text-dark text-center text-sm-start"
+                                aria-current="page">
+                                <i class="fa fa-truck-fast"></i>
+                                <span class="ms-2 d-none d-sm-inline">Orders</span>
+                            </a>
+                        </li>
+                        <hr class="text-dark d-none d-sm-block my-3" />
+                        <li class="nav-item my-sm-1 my-2">
+                            <a href="/admin/userData" class="nav-link text-dark text-center text-sm-start"
+                                aria-current="page">
+                                <i class="fa fa-users"></i>
+                                <span class="ms-2 d-none d-sm-inline">Customers</span>
+                            </a>
+                        </li>
+                        <hr class="text-dark d-none d-sm-block my-3" />
+                        <li class="nav-item my-sm-1 my-2">
+                            <a href="#couponmenu" data-bs-toggle="collapse"
+                                class="nav-link text-dark text-center text-sm-start" aria-current="page">
+                                <i class="fa fa-table"></i>
+                                <span class="ms-2 d-none d-sm-inline">Coupons</span>
+                                <i class="fa fa-caret-down"></i>
+                            </a>
+                            <ul class="nav collapse ms-1 flex-column" id="couponmenu" data-bs-parent="#menu">
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="/admin/coupon" aria-current="page">Coupon</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="/admin/coupon/add" aria-current="page">Add
+                                        Coupon</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-10">

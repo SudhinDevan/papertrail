@@ -1,0 +1,102 @@
+<%- include('./partials/header.ejs') %>
+
+    <%- include('./partials/sidebar.ejs') %>
+
+
+        <section class="gradient-custom container vh-100">
+            <div class="container py-5 h-100 row justify-content-center align-items-center">
+                <div class="col-12 col-lg-9 col-xl-8">
+                    <div class="card shadow-2-strong card-registration">
+                        <div class="card-body shadow" style="border-radius: 5px;">
+
+                            <form action="/admin/product/add" method="post"
+                                class="d-flex flex-column align-items-center mt-2" id="form"
+                                enctype="multipart/form-data">
+
+                                <div class="mb-3">
+                                    <div class="fw-bold text-center fs-6 text-uppercase mb-1">Product Information
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+
+                                    <div class="form-outline mb-1">
+                                        <label class="form-label" style="font-size: .75rem;" for="productName">Product
+                                            Name</label>
+                                        <input type="text" id="productName" name="productName" style="box-shadow: none;"
+                                            class="form-control form-control-sm" required />
+                                    </div>
+
+                                    <div class="form-outline mb-1 d-flex justify-content-between">
+                                        <div class="col-6">
+                                            <label class="form-label" style="font-size: .75rem;"
+                                                for="category">Category</label>
+                                            <select class="form-select form-select-sm input-sm shadow-none"
+                                                name="category">
+
+                                                <% categories.forEach((category)=>{ %>
+                                                    <option value="<%= category._id %>">
+                                                        <%= category.categoryName %>
+                                                    </option>
+                                                    <% }) %>
+
+                                            </select>
+                                        </div>
+
+                                        <div class="col-5 d-flex justify-content-between">
+                                            <div class="col-5">
+                                                <label class="form-label" style="font-size: .75rem;"
+                                                    for="price">Price</label>
+                                                <input type="number" id="price" name="price" style="box-shadow: none;"
+                                                    placeholder="00" class="form-control  form-control-sm"
+                                                    pattern="^\d+\.\d{2}$" required />
+                                            </div>
+                                            <div class="col-5">
+                                                <div class="form-outline mb-1">
+                                                    <label class="form-label" style="font-size: .75rem;"
+                                                        for="quantity">Quantity</label>
+                                                    <input type="number" min="0" id="quantity" name="quantity"
+                                                        style="box-shadow: none;" class="form-control  form-control-sm"
+                                                        required />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-outline mb-1">
+                                        <label class="form-label" style="font-size: .75rem;" for="blurb">Blurb</label>
+                                        <textarea class="form-control form-control-sm" id="blurb" name="blurb"
+                                            style="box-shadow: none;" rows="1" required></textarea>
+                                    </div>
+
+                                    <div class="form-outline mb-1">
+                                        <label class="form-label" style="font-size: .75rem;"
+                                            for="description">Description</label>
+                                        <textarea class="form-control form-control-sm" id="description"
+                                            name="description" style="box-shadow: none;" rows="2" required></textarea>
+                                    </div>
+
+                                    <div class="form-outline mb-1">
+                                        <label class="form-label" style="font-size: .75rem;" for="image">Image</label>
+                                        <input class="form-control form-control-sm" name="image"
+                                            style="box-shadow: none;" type="file" id="formFileMultiple" multiple
+                                            required>
+                                    </div>
+
+                                </div>
+
+                                <div id="error-field" class="text-danger fs-6"></div>
+
+                                <button type="submit" style="background-color: #7FAD39;color: #fff;width: 150px;"
+                                    class="btn btn-sm fw-normal p-10 mb-3 mt-3">Create Product</button>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <%- include('./partials/footer.ejs') %>

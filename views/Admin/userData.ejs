@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../public/css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <title>papertrail | UsersList</title>
+    <style>
+        .fixed-button {
+            top: 0;
+            left: 0;
+            margin-top: 15px;
+            /* Add margin if needed */
+            margin-left: 18px;
+            /* Add margin if needed */
+            border-radius: 5px;
+            background-color: #15A78F;
+            border: none;
+            width: 40px;
+            height: 40px;
+            color: white;
+        }
+    </style>
+
+</head>
+
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Registered Users</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+        </div>
+        </div>
+        <div class="d-flex">
+            <div class="form-outline d-flex">
+                <form action="" style="display: flex;">
+                    <input type="search" name="search" placeholder="                           search username or email"
+                        style="border-radius: 5px; width: 26rem;">
+                    <input type="submit" value="search" class="btn btn-outline-success my-2 my-sm-0 mx-2">
+                </form>
+            </div>
+            <div class="mx-3" style="display: flex;">
+                <form action="/admin/signOut/">
+                    <input type="submit" value="logout" class="btn btn-outline-success my-2 my-sm-0">
+                </form>
+            </div>
+
+
+        </div>
+
+    </nav>
+    <a href="/admin/">
+        <button class="fixed-button">&lt;</button></a>
+    <!-- on table -->
+
+
+    <div style="padding: 0px 20px 20px 20px;">
+        <table class="table table-dark table-striped">
+            <tr>
+                <th>sl.no</th>
+                <th>username</th>
+                <th>email</th>
+                <th>Verification</th>
+                <th>Access</th>
+            </tr>
+            <% for(i=0;i<user.length;i++){ %>
+                <tr>
+                    <td>
+                        <%= i+1 %>
+                    </td>
+                    <td>
+                        <%=user[i].username %>
+                    </td>
+                    <td>
+                        <%=user[i].email %>
+                    </td>
+                    <td>
+                        <%=user[i].isVerified ? 'Verified' : 'Not Verified' %>
+                    </td>
+                    <td>
+                        <form action="/admin/userData/?id=<%= user[i]._id %>" method="post">
+                            <input type="hidden" name="access" value="<%= user[i].isAccess ? 'false' : 'true' %>">
+                            <button type="submit" style="width: 6rem;"
+                                class="btn btn-<%= user[i].isAccess ? 'danger' : 'warning' %>">
+                                <%= user[i].isAccess ? ' Block ' : ' Unblock' %>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                <%}%>
+
+                    <br><br>
+        </table>
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,171 @@
+<%- include('./partials/header.ejs') %>
+
+
+
+    <div class="container-fluid mt-5">
+        <div class="row px-xl-5">
+            <% if(products){ %>
+                <% if(products.items.length> 0) {%>
+                    <div class="col-lg-8 table-responsive mb-5">
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Image</th>
+                                    <th scope="col">Product</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Total</th>
+                                    <th scope="col">Remove</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <% for(let i=0;i<products.items.length;i++) { %>
+                                    <tr>
+                                        <td>
+                                            <img src="<%= productList[i].image[0].url %>" alt="Product Image"
+                                                style="width: 100px; height: 100px;">
+                                        </td>
+                                        <td scope="row">
+                                            <%= productList[i].productName %>
+                                        </td>
+                                        <td class="align-middle">₹<%= productList[i].price %>
+                                        </td>
+                                        <td class="align-middle">
+
+                                            <div class="input-group quantity mx-auto" style="width: 100px;">
+                                                <div class="input-group-btn">
+                                                    <button
+                                                        onclick="decrementQuantity('<%= products.items[i].productId._id %>', '<%= products.userId %>')"
+                                                        class="btn btn-sm btn-success btn-minus" <%
+                                                        if(products.items[i].quantity==1) { %> disabled <% } %>>
+                                                            <i class="fa fa-minus"></i>
+                                                    </button>
+                                                </div>
+                                                <input type="text"
+                                                    class="form-control form-control-sm bg-white border-0 text-center quantity-value"
+                                                    id="quantity" style="min-width: 1.5rem; color: black;"
+                                                    value="<%= products.items[i].quantity %>">
+
+                                                <div class="input-group-btn">
+                                                    <button
+                                                        onclick="incrementQuantity('<%= products.items[i].productId._id %>', '<%= products.userId %>')"
+                                                        class="btn btn-sm btn-success btn-plus" <%
+                                                        if(productList[i].quantity <=products.items[i].quantity) { %>
+                                                        disabled <% } %>>
+                                                            <i class="fa fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                        </td>
+                                        <td class="align-middle">₹<%= products.items[i].totalPrice %>
+                                        </td>
+                                        <td class="align-middle">
+                                            <button
+                                                onclick="removeItemWithReload('<%= products.items[i].productId._id %>', '<%= products.userId %>')"
+                                                style="box-shadow: none;" class="btn btn-sm btn-danger"><i
+                                                    class="fa fa-times"></i></button>
+                                        </td>
+                                    </tr>
+                                    <% } %>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="bg-light mb-5">
+                            <div class="border-bottom pb-2">
+                                <h5 class="section-title position-relative text-uppercase">
+                                    <b>Cart Summary</b>
+                                </h5>
+                                <div class="d-flex justify-content-between">
+                                    <h6>Subtotal</h6>
+                                    <h6>₹<%= products.cartPrice %>
+                                    </h6>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="font-weight-medium">Shipping</h6>
+                                    <h6 class="font-weight-medium">₹0</h6>
+                                </div>
+                            </div>
+                            <div class="pt-2">
+                                <div class="d-flex justify-content-between mt-2">
+                                    <h5>Cart Total</h5>
+                                    <h5>₹<%= products.cartPrice %>
+                                    </h5>
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <a href="/checkout/address" style="background-color: #15A78F;box-shadow: none;"
+                                        class="col-6 btn btn-block btn-sm text-light font-weight-bold my-3">Proceed To
+                                        Checkout</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% }else{ %>
+                        <div class="col-12 mb-4 text-center">
+                            <img style="opacity: 0.8;"
+                                src="https://res.cloudinary.com/dtbohkfpy/image/upload/v1691148720/Capture-removebg-preview_izbgfj.png">
+                            <h3 style="color: #B7B7B7" ;">Yor cart Is Empty</h3>
+                        </div>
+                        <% } %>
+                            <% }else{ %>
+                                <div class="col-12 mb-4 text-center">
+                                    <img style="opacity: 0.8;"
+                                        src="https://res.cloudinary.com/dtbohkfpy/image/upload/v1691148720/Capture-removebg-preview_izbgfj.png">
+                                    <h3 style="color: #B7B7B7" ;">Yor cart Is Empty</h3>
+                                </div>
+                                <% } %>
+        </div>
+    </div>
+    <!-- Cart End -->
+
+    <!-- axios cdn -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"></script>
+
+    <script>
+        function decrementQuantity(productId, userId) {
+
+            axios.get(`/decrementQuantity?userId=${userId}&productId=${productId}`)
+                .then((result) => {
+                    if (result.data.response) {
+                        location.reload();
+                    }
+                })
+        }
+
+        function incrementQuantity(productId, userId) {
+            axios.get(`/incrementQuantity?userId=${userId}&productId=${productId}`)
+                .then((result) => {
+                    if (result.data.response) {
+                        location.reload();
+                    }
+                })
+        }
+
+        function removeItem(productId, userId) {
+            axios.delete(`/removeItem?userId=${userId}&productId=${productId}`)
+                .then((result) => {
+                    if (result.data.response) {
+                        // Delay the reload by 500 milliseconds (adjust as needed)
+                        setTimeout(() => {
+                            location.reload(true); // Add true to force a reload without cache
+                        }, 500);
+                    }
+                });
+        }
+
+        function removeItemWithReload(productId, userId) {
+            removeItem(productId, userId); // Call the original removeItem function
+            // Delay the reload by 500 milliseconds (adjust as needed)
+            setTimeout(() => {
+                location.reload(true); // Add true to force a reload without cache
+            }, 500);
+        }
+    </script>
+
+
+
+    <%- include('./partials/footer.ejs') %>

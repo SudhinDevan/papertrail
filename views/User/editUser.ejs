@@ -1,0 +1,44 @@
+<%- include('./partials/header.ejs')%>
+
+    <section class="gradient-custom container vh-100">
+        <div class="container py-5 h-100 row justify-content-center align-items-center">
+            <div class="col-12 col-lg-9 col-xl-8">
+                <div class="card shadow-2-strong card-registration">
+                    <div class="card-body shadow" style="background-color: #EBEBEB;border-radius: 5px;">
+
+                        <form action="/user/profile/edit?id=<%= user._id %>" method="post" id="form"
+                            class="d-flex flex-column align-items-center mt-3">
+
+                            <div class="mb-5">
+                                <div class="fw-bold text-center fs-5 text-uppercase mb-1">Update Name</div>
+                                <div class="text-center" style="font-size: 16px;">Please Enter The Name</div>
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="email">Username</label>
+                                    <input type="text" id="username" name="username" style="box-shadow: none;"
+                                        class="form-control" value="<%= user.username %>" required />
+                                </div>
+
+
+
+                            </div>
+
+                            <div id="error-field" class="text-danger"></div>
+
+
+                            <button type="submit" style="background-color: #15A78F;color: #fff;width: 200px;"
+                                class="btn fw-normal p-10 mb-3 mt-3">Submit</button>
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <%- include('./partials/footer.ejs')%>

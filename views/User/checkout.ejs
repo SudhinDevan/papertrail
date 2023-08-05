@@ -1,0 +1,314 @@
+<%- include('./partials/header.ejs') %>
+
+
+
+    <section class="checkout spad">
+        <div class="container">
+            <div class="checkout__form">
+                <h4>Billing Details</h4>
+                <div>
+                    <div class="row">
+                        <div class="col-lg-8 col-md-6">
+
+
+                            <div class="checkout__input">
+                                <p>Building Name<span>*</span></p>
+                                <input type="text" value="<%= address.buildingName %>"
+                                    class="font-weight-bold text-dark" readonly>
+                            </div>
+                            <div class="checkout__input">
+                                <p>Street<span>*</span></p>
+                                <input type="text" value="<%= address.street %>" class="font-weight-bold text-dark"
+                                    readonly>
+                            </div>
+                            <div class="checkout__input">
+                                <p>City<span>*</span></p>
+                                <input type="text" value="<%= address.city %>" class="font-weight-bold text-dark"
+                                    readonly>
+                            </div>
+                            <div class="checkout__input">
+                                <p>State<span>*</span></p>
+                                <input type="text" value="<%= address.state %>" class="font-weight-bold text-dark"
+                                    readonly>
+                            </div>
+                            <div class="checkout__input">
+                                <p>Pincode<span>*</span></p>
+                                <input type="text" value="<%= address.pincode %>" class="font-weight-bold text-dark"
+                                    readonly>
+                            </div>
+                            <div class="checkout__input">
+                                <p>Phone Number<span>*</span></p>
+                                <input type="text" value="<%= address.phonenumber %>" class="font-weight-bold text-dark"
+                                    readonly>
+                            </div>
+
+                            <input type="hidden" name="address" id="addressId" value="<%= address._id %>">
+
+
+                        </div>
+
+                        <div class="col-lg-4 col-md-6">
+                            <form class="mb-30" id="couponForm">
+                                <div class="input-group">
+                                    <input type="text" id="couponName" pattern="^(?!.*\s)[^\s]+(?<!\s)$"
+                                        class="form-control border-0 form-control-sm text-dark font-weight-bold"
+                                        style="box-shadow: none;background-color: #f5f5f5;" placeholder="Coupon Code"
+                                        required>
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-sm btn-dark">Apply Coupon</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="checkout__order mt-3">
+                                <h4>Your Order</h4>
+                                <div class="checkout__order__products">Products <span>Total</span></div>
+                                <ul>
+                                    <% for(let i=0;i<cart.items.length;i++){ %>
+                                        <li>
+                                            <%= productList[i].productName %> <span>₹<%=
+                                                        cart.items[i].totalPrice.toFixed(2) %></span>
+                                        </li>
+                                        <% } %>
+                                </ul>
+                                <div class="checkout__order__subtotal">Subtotal <span>₹<%= cart.cartPrice.toFixed(2) %>
+                                    </span></div>
+
+                                <div class="checkout__order__total">Coupon <span class="text-dark couponShow">₹0</span>
+                                </div>
+                                <div class="checkout__order__total">Total <span id="totalprice">₹<%=
+                                            cart.cartPrice.toFixed(2) %></span></div>
+
+                                <div class="bg-light p-30 " style="background-color: #f5f5f5 !important;">
+                                    <div class="form-group paymentx">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" class="custom-control-input" value="cod" name="payment"
+                                                id="cod">
+                                            <label class="custom-control-label" for="paypal">Cash on Delivery</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group paymentx">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" class="custom-control-input" value="online"
+                                                name="payment" id="online">
+                                            <label class="custom-control-label" for="directcheck">Pay Online</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-4 paymentx">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" class="custom-control-input" value="wallet"
+                                                name="payment" id="wallet" disabled>
+                                            <label class="custom-control-label" for="banktransfer">Wallet
+                                                Payment</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button id="address-btn" style="display: none;" type="button" onclick="placeorder()"
+                                    class="site-btn rounded">PLACE ORDER</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+    <!-- axios cdn -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"></script>
+
+    <!-- sweet alert cdn -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // $('input:radio').change(function () {//Clicking input radio
+            //     var radioClicked = $(this).attr('id');
+            //     unclickRadio();
+            //     removeActive();
+            //     clickRadio(radioClicked);
+            //     makeActive(radioClicked);
+            // });
+            $(".paymentx").click(function () {//Clicking the card
+                var inputElement = $(this).find('input[type=radio]').attr('id');
+                console.log(inputElement);
+                btnShow();
+                unclickRadio();
+                removeActive();
+                makeActive(inputElement);
+                clickRadio(inputElement);
+            });
+        });
+
+        function btnShow() {
+            $("#address-btn").css("display", "block");
+        }
+
+        function unclickRadio() {
+            $("input:radio").prop("checked", false);
+        }
+
+        function clickRadio(inputElement) {
+            $("#" + inputElement).prop("checked", true);
+        }
+
+        function removeActive() {
+            $(".card").removeClass("active");
+        }
+
+        function makeActive(element) {
+            $("#" + element + "-card").addClass("active");
+        }
+
+
+
+        const couponForm = document.getElementById('couponForm');
+
+        couponForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const coupon = document.getElementById('couponName');
+            const addressId = document.getElementById('addressId');
+
+            axios({
+                method: "post",
+                url: "/admin/coupon/apply",
+                data: {
+                    couponName: coupon.value,
+                    addressId: addressId.value,
+                    cartPrice: '<%= cart.cartPrice %>'
+                }
+            })
+                .then((result) => {
+                    if (result.data.response == false) {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Invalid coupon",
+                        })
+                        document.querySelector('.couponShow').innerHTML = `₹${0}`;
+                        document.querySelector('.couponShow').removeAttribute("id");
+                        document.getElementById('totalprice').innerHTML = `₹${'<%= cart.cartPrice %>'}`;
+                    } else if (result.data.response == "min") {
+
+                        Swal.fire({
+                            icon: "warning",
+                            title: "You can't apply this coupon",
+                        })
+
+                    } else {
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Coupon applied successfully',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+
+                        document.querySelector('.couponShow').innerHTML = `₹${result.data.coupon.discount}`;
+                        document.querySelector('.couponShow').setAttribute("id", result.data.coupon._id);
+                        document.getElementById('totalprice').innerHTML = `₹${('<%= cart.cartPrice %>' - result.data.coupon.discount)}`;
+                    }
+                })
+        })
+
+        function handleOnlinePayment() {
+            const payment = document.querySelector('input[name="payment"]:checked').value;
+            const addressId = document.getElementById('addressId').value;
+            const couponId = document.querySelector('.couponShow').id;
+
+            $.ajax({
+                url: "/razorpay",
+                type: "POST",
+                data: {
+                    coupon: couponId
+                },
+                success: function (res) {
+                    if (res.success) {
+                        var options = {
+                            "key": "" + res.key_id + "",
+                            "amount": "" + res.amount + "",
+                            "amount": "INR",
+                            "name": "papertrail",
+                            "image": "https://res.cloudinary.com/dtbohkfpy/image/upload/v1688294424/Pfavcion_teu4oi.png",
+                            "order_id": "" + res.order_id + "",
+                            "handler": function (response) {
+
+                                axios({
+                                    method: "post",
+                                    url: '/checkout',
+                                    data: {
+                                        payment: payment,
+                                        address: addressId,
+                                        payment_id: response.razorpay_payment_id,
+                                        couponId: couponId,
+                                    }
+                                })
+                                    .then((result) => {
+                                        if (result.data.response) {
+                                            location.href = `/order/success?orderId=${result.data.orderId}`;
+                                        }
+                                    })
+
+                            },
+                            "prefill": {
+                                "name": "" + res.name + "",
+                                "email": "" + res.email + ""
+                            },
+                            "theme": {
+                                "color": "#7fad39"
+                            }
+                        };
+                        var razorpayObject = new Razorpay(options);
+                        razorpayObject.on('payment.failed', function (response) {
+                            alert("Payment Failed");
+                        });
+                        razorpayObject.open();
+                    }
+                }
+            })
+
+
+
+
+        }
+
+
+        function placeorder() {
+            const payment = document.querySelector('input[name="payment"]:checked').value;
+            const addressId = document.getElementById('addressId').value;
+            const couponId = document.querySelector('.couponShow').id;
+
+            if (payment == "online") {
+
+                handleOnlinePayment();
+
+            } else {
+                axios({
+                    method: "post",
+                    url: '/checkout',
+                    data: {
+                        payment: payment,
+                        address: addressId,
+                        couponId: couponId,
+                    }
+                })
+                    .then((result) => {
+                        if (result.data.response) {
+                            location.href = `/order/success?orderId=${result.data.orderId}`;
+                        }
+                    })
+            }
+
+        }
+
+
+
+
+
+
+    </script>
+
+    <%- include('./partials/footer.ejs') %>

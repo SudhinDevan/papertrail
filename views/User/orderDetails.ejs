@@ -1,0 +1,212 @@
+<%- include('./partials/header.ejs') %>
+
+    <style>
+        .track-line {
+            height: 2px !important;
+            background-color: #488978;
+            opacity: 1;
+        }
+
+        .dot {
+            height: 10px;
+            width: 10px;
+            margin-left: 3px;
+            margin-right: 3px;
+            margin-top: 0px;
+            background-color: #488978;
+            border-radius: 50%;
+            display: inline-block
+        }
+
+        .big-dot {
+            height: 25px;
+            width: 25px;
+            margin-left: 0px;
+            margin-right: 0px;
+            margin-top: 0px;
+            background-color: #488978;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .big-dot i {
+            font-size: 12px;
+        }
+
+        .card-stepper {
+            z-index: 0
+        }
+    </style>
+
+    <div class="col-lg-12 mb-5">
+        <div class="card mt-4">
+            <div class="card-header bg-light py-4 ">
+                <h4 class="mb-0">#Order Details</h4>
+                <p class="mb-0">
+                    <%= order._id %>
+                </p>
+            </div>
+            <div class="card-body ">
+
+                <section>
+
+                    <div class="container py-5 h-100">
+                        <div class="row d-flex justify-content-center align-items-center h-100">
+                            <div class="col">
+                                <div class="card card-stepper" style="border-radius: 10px;">
+                                    <div class="card-body p-4">
+
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex flex-column">
+                                                <span class="lead fw-normal">Track Your Order</span>
+                                                <span class="text-muted small">Order Placed on
+                                                    <span>
+                                                        <%= order.order_date.toLocaleDateString('en-GB', {
+                                                            day: 'numeric' , month: 'numeric' , year: 'numeric' }); %>
+                                                    </span>
+
+                                            </div>
+                                            <!-- <div>
+                                <button class="btn btn-outline-primary" type="button">Track order details</button>
+                              </div> -->
+                                        </div>
+                                        <hr class="my-4">
+
+                                        <div
+                                            class="d-flex flex-row justify-content-between align-items-center align-content-center">
+                                            <span class="dot"></span>
+                                            <hr <% if(order.order_status=="shipped" ) {%> class="flex-fill track-line"
+                                            <%}else{%> class="flex-fill" <% } %> ><span class="dot"></span>
+                                                    <hr <% if(order.order_status=="delivered" ) {%> class="flex-fill
+                                                    track-line" <%}else{%> class="flex-fill" <% } %>><span
+                                                                class="d-flex justify-content-center align-items-center big-dot dot">
+                                                                <i class="fa fa-check text-white"></i></span>
+                                        </div>
+
+                                        <div class="d-flex flex-row justify-content-between align-items-center">
+                                            <div class="d-flex flex-column align-items-start"><span>Order placed</span>
+                                            </div>
+
+                                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                                <span>Order Shipped</span>
+                                            </div>
+
+                                            <div class="d-flex flex-column align-items-end"><span>Delivered</span></div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="card mx-3">
+                    <div class="card-header">
+                        Order details<br><small>Your ordered items</small>
+                    </div>
+                    <div class="card-body" style="overflow: auto;">
+                        <table class="table text-center">
+                            <colgroup>
+                                <col width="150" />
+                                <col />
+                                <col width="1" />
+                                <col />
+                                <col width="100" />
+                                <col />
+                                <col width="1" />
+                                <col />
+
+                            </colgroup>
+                            <thead class="bg-dark text-light">
+                                <tr>
+                                    <th class="first">Image</th>
+                                    <th class="text-center font-weight-500">Product</th>
+                                    <th class="text-center  font-weight-500">Price</th>
+                                    <th class="text-center  font-weight-500">Qty</th>
+                                    <th class="text-center  font-weight-500">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-bordered">
+                                <% for (let i=0; i < order.items.length; i++) { %>
+                                    <tr class="bg-light">
+                                        <td class="product-thumbnail text-start">
+                                            <a href="#">
+                                                <img src="<%= order.items[i].product.image[0].url %>" alt="..."
+                                                    class="img-fluid" width="100%">
+                                            </a>
+                                        </td>
+                                        <td class="text-center" style="font-size: 1.2vw;">
+                                            <b href="#" class="text-dark ">
+                                                <%=order.items[i].product.productName %> <br> <br>
+                                                    <%=order.items[i].product.blurb %>
+                                            </b>
+                                        </td>
+                                        <td class="text-center text-dark" style="font-size: 1vw;">
+                                            <%=order.items[i].product.price %>
+                                        </td>
+                                        <td class="text-center" style="font-size: 1vw;"><span>
+                                                <%=order.items[i].quantity %>
+                                            </span>
+                                        </td>
+                                        <td id="totalPrice" class="product-subtotal text-center"
+                                            style="font-size: 1vw;">
+                                            <span>₹<%= (order.items[i].quantity * order.items[i].product.price) %>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <% } %>
+                            </tbody>
+                        </table>
+                        <div class="col-12 d-flex justify-content-end">
+                            <div class="d-flex">
+                                <kbd class="font-weight-bolder">totalPrice: <span>₹<%= order.price %>
+                                    </span></kbd>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card m-3">
+                    <div class="card-header">
+                        Shipping Address
+                    </div>
+                    <div class="card-body">
+
+                        <%=address.phonenumber%>,<br>
+                            <%=address.buildingName%>,<%=address.street%>,<%=address.city%>,<br>
+                                        <%=address.state%>,<%=address.country%>,
+                                                <%=address.pincode%>,
+
+                    </div>
+                </div>
+                <div class="card m-3">
+                    <div class="card-header">
+                        Payment Mode
+                    </div>
+                    <div class="card-body">
+                        <% if(order.payment_method=="cod" ){ %> Cash On Delivery <% } else
+                                if(order.payment_method=="online" ){%>Online Payment<%}%>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- axios cdn -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"></script>
+
+    <!-- sweet alert cdn -->
+    <!-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+
+    <script>
+        function login() {
+            const currentUrl = location.href;
+            location.href = `/login?url=${currentUrl}`
+        }
+    </script>
+
+
+
+
+    <%- include('./partials/footer.ejs') %>

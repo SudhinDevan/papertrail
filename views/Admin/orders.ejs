@@ -1,0 +1,58 @@
+<%- include('./partials/header.ejs') %>
+
+    <%- include('./partials/sidebar.ejs') %>
+        <br>
+        <div class="container-fluid d-flex gap-4" style="background-color: #EDF1F5;">
+
+            <div style="overflow-y: auto;" class="w-100 d-flex align-items-center align-items-center">
+
+                <div class="table">
+                    <table class="table table-light table-striped table-responsive">
+                        <thead>
+
+                            <tr>
+                                <th>sl.no</th>
+                                <th>Order Id</th>
+                                <th>Date</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Payment</th>
+                                <th>view</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+                            <% for(let i=0;i<orders.length;i++){ %>
+                                <tr>
+                                    <td>
+                                        <%= i+1 %>
+                                    </td>
+                                    <td>
+                                        <%= orders[i]._id.toString().substring(0, 6) %>
+                                    </td>
+                                    <td><%=orders[i].order_date.toLocaleDateString('en-GB', { month: 'long' ,
+                                            day: 'numeric' , year: 'numeric' ,}); %></td>
+                                    <td>₹<%= orders[i].price.toFixed(2) %>
+                                    </td>
+                                    <td>
+                                        <%= orders[i].order_status %>
+                                    </td>
+                                    <td>
+                                        <%if(orders[i].payment_method){ %>Cash on delivery<% } %>
+                                    </td>
+                                    <td><a href="/admin/orderDetails?userId=<%=users[i].user._id %>&orderId=<%= users[i]._id %>"
+                                            class="btn btn-primary">view</a></td>
+
+                                </tr>
+                                <% } %>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+
+        <%- include('./partials/footer.ejs') %>

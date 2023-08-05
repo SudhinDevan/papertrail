@@ -1,0 +1,49 @@
+<%- include('./partials/header.ejs') %>
+
+    <%- include('./partials/sidebar.ejs')%>
+        <h2 class="text-center py-3">Categories</h2>
+        <div style="overflow-y: auto;" class="w-100 d-flex align-items-center align-items-center px-3">
+            <div class="table">
+                <table class="table table-light table-striped table-responsive">
+                    <thead>
+
+                        <tr>
+                            <th>sl.no</th>
+                            <th>Category Name</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <% categories.forEach((category,i)=>{ %>
+                            <tr>
+                                <td>
+                                    <%= i+1 %>
+                                </td>
+                                <td>
+                                    <%= category.categoryName %>
+                                </td>
+                                <td><a href="/admin/category/edit?id=<%= category._id %>"> <button type="button"
+                                            class="btn btn-success">Edit</button></a></td>
+                                <td><button style="width: 10rem;" onclick="redirectToPage()" <% if(productsValue[i]) {
+                                        %> disabled <% } %>
+                                            type="button" class="btn btn-danger"> <% if(productsValue[i]) { %> Can
+                                                Not Delete <% } else { %>Delete <% } %> </button></td>
+                            </tr>
+                            <script>
+                                function redirectToPage() {
+                                    window.location.href = "/admin/category/delete?id=<%= category._id %>"
+                                }
+                            </script>
+                            <% }) %>
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <%- include('./partials/footer.ejs')%>

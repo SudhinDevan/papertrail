@@ -1,0 +1,41 @@
+<%- include('./partials/header.ejs')%>
+
+    <%- include('./partials/sidebar.ejs')%>
+        <div class="col-12">
+
+
+            <div class="col-12">
+                <div class="container py-5 mt-5" style="height: 200px">
+                    <div class="row d-flex justify-content-center align-items-center h-100">
+                        <div class="col-lg-8 col-xl-8">
+                            <div class="card rounded-3">
+                                <form action="/admin/category/edit?id=<%= category._id %>" id="form" method="post"
+                                    class="px-md-2 mt-5 m-5">
+                                    <div class="row mb-4 mt-5">
+                                        <p>
+                                            Category: <%= category.categoryName %>
+                                        </p>
+                                        <div class="col-md-4">
+                                            <label class="form-label pt-2" for="form3Example1q">Edit Category
+                                                Name:</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" id="name" class="form-control" name="name"
+                                                value="<%=category.name%>" placeholder="Enter Category Name" required />
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-center mt-2">
+                                        <button type="submit" style="background-color: #88C8BC; width: 200px"
+                                            class="btn align-items-center p-2">
+                                            Update
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <%- include('./partials/footer.ejs')%>

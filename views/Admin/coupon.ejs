@@ -1,0 +1,62 @@
+<%- include('./partials/header.ejs') %>
+
+  <%- include('./partials/sidebar.ejs') %>
+
+    <div class="container-fluid d-flex gap-4 py-3" style="background-color: #EDF1F5;">
+
+
+      <div style="overflow-y: auto;" class="w-100 d-flex align-items-center align-items-center">
+        <div class="table">
+          <table class="table table-light table-striped table-responsive">
+            <thead>
+
+              <tr>
+                <th>sl.no</th>
+                <th>Coupon Name</th>
+                <th>Discount</th>
+                <th>Expiry Date</th>
+                <th>status</th>
+                <th>Edit</th>
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              <% coupons.forEach((coupon,i)=>{ %>
+                <tr>
+                  <td>
+                    <%= i+1 %>
+                  </td>
+                  <td>
+                    <%= coupon.couponName %>
+                  </td>
+                  <td>&#8377;<%= coupon.discount %>
+                  </td>
+                  <td>
+                    <%= coupon.expiryDate.toLocaleDateString('en-US', { month: 'long' , day: 'numeric' , year: 'numeric'
+                      ,}); %>
+                  </td>
+
+                  <% if(coupon.isActive){ %>
+                    <th><span class="text-success">Active</span></th>
+                    <% }else{ %>
+                      <th><span class="text-danger">Disabled</span></th>
+                      <% } %>
+
+                        <td><a href="/admin/coupon/edit?id=<%= coupon._id %>"><button type="button"
+                              class="btn btn-success">Edit</button></a></td>
+
+                </tr>
+
+                <% }) %>
+
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+    </div>
+
+    <%- include('./partials/footer.ejs') %>

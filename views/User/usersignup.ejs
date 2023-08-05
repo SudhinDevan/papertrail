@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>signup</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <style>
+        .form-outline input {
+            border: 2px solid #f0f0f0;
+            border-radius: 4px;
+            display: block;
+            font-size: 12px;
+            padding: 10px;
+            width: 100%;
+        }
+
+        .form-outline input:focus {
+            outline: 0;
+        }
+
+        .form-outline.success input {
+            border-color: #09c372;
+        }
+
+        .form-outline.error input {
+            border-color: #ff3860;
+        }
+
+        .form-outline .error {
+            color: #ff3860;
+            font-size: 9px;
+            height: 13px;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="vh-120" style="background-color: #eee;">
+        <div class="container h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-lg-12 col-xl-11">
+                    <div class="card text-black" style="border-radius: 25px;">
+                        <div class="card-body p-md-5">
+                            <div class="row justify-content-center">
+                                <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+
+                                    <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
+
+                                    <form class="mx-1 mx-md-4" method="post" action="/signup" id="form1">
+
+                                        <div class="d-flex flex-row align-items-center mb-4">
+                                            <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                                            <div class="form-outline flex-fill mb-0">
+                                                <label class="form-label" for="username">Username</label>
+                                                <input name="username" type="text" id="username" class="form-control" />
+                                                <div class="error"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex flex-row align-items-center mb-4">
+                                            <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                                            <div class="form-outline flex-fill mb-0">
+                                                <label class="form-label" for="email">Email</label>
+                                                <input name="email" type="email" id="email" class="form-control" />
+                                                <div class="error"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex flex-row align-items-center mb-4">
+                                            <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                                            <div class="form-outline flex-fill mb-0">
+                                                <label class="form-label" for="password1">Password</label>
+                                                <input name="password" type="password" id="password1"
+                                                    class="form-control" />
+                                                <div class="error"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex flex-row align-items-center mb-4">
+                                            <i class="fas fa-key fa-lg me-3 fa-fw"></i>
+                                            <div class="form-outline flex-fill mb-0">
+                                                <label class="form-label" for="password2">confirm
+                                                    password</label>
+                                                <input name="confirmPassword" type="password" id="password2"
+                                                    class="form-control" />
+                                                <div class="error"></div>
+                                            </div>
+                                        </div>
+
+                                        <!-- <div class="form-check d-flex justify-content-center mb-5">
+                                            <input class="form-check-input me-2" type="checkbox" value=""
+                                                id="form2Example3c" />
+                                            <label class="form-check-label" for="form2Example3">
+                                                I agree all statements in <a href="#!">Terms of service</a>
+                                            </label>
+                                        </div> -->
+
+                                        <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                                            <button type="submit" class="btn btn-primary btn-lg">Register</button>
+                                        </div>
+
+                                    </form>
+
+                                </div>
+                                <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+
+                                    <img src="https://res.cloudinary.com/dtbohkfpy/image/upload/v1687950151/logo_png_la2lo3.png"
+                                        class="img-fluid" alt="Sample image">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- validation script -->
+    <script>
+        const form = document.getElementById('form1');
+        const email = document.getElementById('email');
+        const username = document.getElementById('username');
+        const password1 = document.getElementById('password1');
+        const password2 = document.getElementById('password2');
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            validateInputs();
+        })
+
+        const setError = (element, message) => {
+            const inputControl = element.parentElement;
+            const errorDisplay = inputControl.querySelector('.error');
+
+            errorDisplay.innerText = message;
+            inputControl.classList.add('error');
+            inputControl.classList.remove('success')
+        }
+
+        const setSuccess = element => {
+            const inputControl = element.parentElement;
+            const errorDisplay = inputControl.querySelector('.error');
+
+            errorDisplay.innerText = '';
+            inputControl.classList.add('success')
+            inputControl.classList.remove('error')
+        }
+
+        const isValidEmail = email => {
+            const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLocaleLowerCase());
+        }
+
+        const validateInputs = () => {
+            const usernameValue = username.value.trim();
+            const emailValue = email.value.trim();
+            const passwordValue = password1.value.trim();
+            const password2Value = password2.value.trim();
+
+            if (usernameValue === '') {
+                setError(username, 'Username is required');
+            } else {
+                setSuccess(username)
+            }
+
+            if (emailValue === '') {
+                setError(email, 'Email is required');
+            } else if (!isValidEmail(emailValue)) {
+                setError(email, 'Provide a valid email address');
+            } else {
+                setSuccess(email);
+            }
+
+            if (passwordValue === '') {
+                setError(password1, 'Password is required');
+            } else if (passwordValue.length < 8) {
+                setError(password1, 'Password must be at least 8 characters long.')
+            } else {
+                setSuccess(password1);
+            }
+
+            if (password2Value === '') {
+                setError(password2, 'Please confirm your password');
+            } else if (password2Value !== passwordValue) {
+                setError(password2, "Passwords don't match");
+            } else {
+                setSuccess(password2);
+            }
+            if (
+                username.parentElement.classList.contains('success') &&
+                email.parentElement.classList.contains('success') &&
+                password1.parentElement.classList.contains('success') &&
+                password2.parentElement.classList.contains('success')
+            ) {
+                form.submit();
+            }
+        }
+    </script>
+
+</body>
+
+</html>

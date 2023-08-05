@@ -1,0 +1,339 @@
+<%- include('./partials/header.ejs') %>
+
+  <style>
+    #overlay {
+      width: 600px;
+      height: 500px;
+      display: none;
+      background-repeat: no-repeat;
+      position: absolute;
+      right: 150px;
+      z-index: 1;
+    }
+  </style>
+
+  <!-- Hero Section Begin -->
+  <section class="hero hero-normal">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3">
+          <div class="hero__categories">
+            <div class="hero__categories__all">
+              <i class="fa fa-bars"></i>
+              <span>All Categories</span>
+            </div>
+            <ul>
+              <% category.forEach((categoryItem)=> { %>
+                <li>
+                  <a href="/category/<%= categoryItem._id %>" style="text-decoration: none;">
+                    <%= categoryItem.categoryName %>
+                  </a>
+                </li>
+                <% }) %>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-9">
+          <div class="hero__search">
+            <div class="hero__search__form" style="margin-left: 6rem;">
+              <form action="#">
+
+                <input type="text" placeholder="What do yo u need?">
+                <button type="submit" class="site-btn">SEARCH</button>
+              </form>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Hero Section End -->
+  <!-- Breadcrumb Section Begin -->
+  <section class="breadcrumb-section set-bg" data-setbg="img/will-van-wingerden-dsvJgiBJTOs-unsplash.jpg  ">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <div class="breadcrumb__text">
+            <h2 style="color: black; text-shadow: 0px 0px 4px green;">
+              <%= product.productName %>
+            </h2>
+            <div class="breadcrumb__option">
+              <a href="/" style="text-decoration: none; color: black; text-shadow: 0px 0px 4px green; ">Home</a>
+              <span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Breadcrumb Section End -->
+
+  <!-- Product Details Section Begin -->
+  <section class="product-details spad">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-5 col-md-6">
+          <div class="product__details__pic">
+            <div class="product__details__pic__item ">
+              <img class="product__details__pic__item--large zoom" style="width: auto; height: auto;" id="izoom"
+                src="<%= product.image[0].url %>" alt="">
+            </div>
+            <div class="product__details__pic__slider owl-carousel">
+              <% product.image.forEach((img)=>{ %>
+                <img class="data-img" data-imgbigurl="<%= img.url %>" src="<%= img.url %>" alt="">
+                <% }) %>
+            </div>
+          </div>
+        </div>
+
+        <!-- <div id="overlay" onmousemove="zoomIn(event)"></div> -->
+
+        <div class="col-lg-6 col-md-6">
+          <div class="product__details__text">
+
+            <h3>
+              <%= product.productName %>
+            </h3>
+            <div class="product__details__rating">
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star-half-o"></i>
+              <span>(18 reviews)</span>
+            </div>
+            <div class="product__details__price">&#8377;<%= product.price %>
+            </div>
+            <p>
+              <%= product.blurb %>
+            </p>
+            <!-- <div class="product__details__quantity">
+                                <div class="quantity">
+                                    <div class="pro-qty">
+                                        <input type="text" name="quantity" id="quantity" value="1">
+                                    </div>
+                                </div>
+                            </div> -->
+
+            <div class="mb-2">
+              <% if(product.quantity !==0){ %>
+                <button style="box-shadow: none;background-color: #7fad39;" class=" btn primary-btn text-light" <%
+                  if(userId) {%> onclick="addToClick('<%=product._id%>')" <% }else{ %> onclick="notLogin()" <% } %> >ADD
+                        TO CART</button>
+                <button id="wishlist-icon" style="border: none;" class="heart-icon rounded" <% if(userId) {%>
+                  onclick="addToWishlist('<%=product._id%>')" <% }else{ %> onclick="notLogin()" <% } %> ><span
+                          class="icon_heart h5 <% if(userId &&wish ){ %>text-danger <% } %>"></span></button>
+                <% }else{ %>
+                  <kbd class="bg-danger text-dark"><b>No Stock Available</b></kbd>
+                  <div class="mt-2"><b>Please try after some time!</b></div>
+                  <% } %>
+            </div>
+
+            <% if(product.quantity !==0 && product.quantity < 5){ %>
+              <kbd>Only <%= product.quantity %> stock left</kbd>
+              <% } %>
+
+                <ul>
+
+                  <li><b>Shipping</b> <span>01 day shipping. <samp>Free pickup today</samp></span></li>
+                </ul>
+
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <div class="product__details__tab">
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
+                  aria-selected="true">Description</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab" aria-selected="false">Reviews
+                  <span>(0)</span></a>
+              </li>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                <div class="product__details__tab__desc">
+                  <h6>Products Infomation</h6>
+                  <p>
+                    <%= product.description %>
+                  </p>
+                </div>
+              </div>
+
+              <div class="tab-pane" id="tabs-3" role="tabpanel">
+                <div class="product__details__tab__desc">
+                  <h6>Products Infomation</h6>
+                  <p></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Product Details Section End -->
+
+  <!-- Related Product Section Begin -->
+  <section class="related-product">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="section-title related__product__title">
+            <h2>Related Product</h2>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <% let counter=0; relatedProducts.forEach((pro)=> {
+          if (counter < 4) { %>
+            <div class="col-lg-3 col-md-4 col-sm-6">
+              <div class="product__item">
+                <div class="product__item__pic set-bg" style="background-size: contain"
+                  data-setbg="<%= pro.image[0].url %>">
+                </div>
+                <div class="product__item__text">
+                  <a href="/productDetails?id=<%= pro._id %>" style="text-decoration: none;">
+                    <%= pro.productName %>
+                      <h5>₹<%= pro.price %>
+                      </h5>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <% counter++; }}); %>
+      </div>
+    </div>
+  </section>
+  <div id="snackbar">
+    <%= product.productName%> added to cart...
+  </div>
+  <div id="snackbar-error">
+    <%= product.productName%> has no stock left...
+  </div>
+  <!-- Related Product Section End -->
+
+  <!-- axios cdn -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"></script>
+
+  <!-- sweet alert cdn -->
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js'></script>
+  <a href="#">
+
+
+
+    <script>
+
+      $('.zoom').elevateZoom({
+        cursor: "crosshair",
+        zoomWindowFadeIn: 500,
+        zoomWindowFadeOut: 750,
+        zoomWindowOffetx: 10,
+      });
+
+      // $('.product__details__pic__item--large').hover(()=>{
+      //     const i = $('.product__details__pic__item--large').attr('src');
+      //     console.log(i);
+      // })
+
+      function addClass() {
+        $("#izoom").addClass("product__details__pic__item--large zoom")
+      }
+
+    </script>
+
+    <script>
+
+      function addToClick(id) {
+
+        axios.get(`/addToCart?productId=${id}`)
+          .then((result) => {
+            if (result.data.response) {
+              let x = document.getElementById("snackbar");
+              x.className = "show";
+              setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+              $.get(location.href, function (data) {
+                $("#cart").html($(data).find("#cart").html());
+              })
+            } else {
+              let x = document.getElementById("snackbar-error");
+              x.className = "show";
+              setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+            }
+
+          })
+
+      }
+
+      function addToWishlist(id) {
+        $.ajax({
+          type: "GET",
+          url: "/addToWishlist",
+          data: {
+            productId: id,
+          },
+          success: function (res) {
+            $.get(location.href, function (data) {
+              $("#wishlist").html($(data).find("#wishlist").html());
+              $("#wishlist-icon").html($(data).find("#wishlist-icon").html());
+            })
+          }
+        })
+      }
+
+      function notLogin() {
+        Swal.fire({
+          icon: "warning",
+          title: "You Are Not Login",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Login",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            const currentUrl = location.href;
+            location.href = `/login?url=${currentUrl}`
+          }
+        })
+      }
+
+      function login() {
+        const currentUrl = location.href;
+        location.href = `/login?url=${currentUrl}`
+      }
+
+
+
+      function zoomIn(event) {
+        var element = document.getElementById("overlay");
+        element.style.display = "inline-block";
+        var img = document.getElementById("imgZoom");
+        const src = img.getAttribute('src');
+        var posX = event.offsetX ? (event.offsetX) : event.pageX - img.offsetLeft;
+        var posY = event.offsetY ? (event.offsetY) : event.pageY - img.offsetTop;
+
+        element.style.backgroundImage = `url(${src})`;
+
+        element.style.backgroundPosition = (-posX * 2) + "px " + (-posY * 2) + "px";
+      }
+
+      function zoomOut() {
+        var element = document.getElementById("overlay");
+        element.style.display = "none";
+      }
+
+    </script>
+
+
+
+
+    <%- include('./partials/footer.ejs') %>

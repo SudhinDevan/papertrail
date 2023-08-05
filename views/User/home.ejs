@@ -1,0 +1,102 @@
+<%- include('./partials/header.ejs') %>
+
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Hero Section Begin -->
+    <section class="hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="hero__categories py-3">
+                        <div class="hero__categories__all">
+                            <i class="fa fa-bars"></i>
+                            <span>All Categories</span>
+                        </div>
+                        <ul>
+                            <% category.forEach((category)=> { %>
+                                <li><a href="#" style="text-decoration: none;">
+                                        <%= category.categoryName %>
+                                    </a></li>
+                                <% }) %>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="hero__search" style="margin-left: 7rem;">
+                        <div class="hero__search__form">
+                            <form action="#" class="col-lg-12">
+                                <input type="text" placeholder="your entries here"
+                                    class="col-lg-12 col-md-12 col-sm-12">
+                                <button type="submit" class="site-btn">SEARCH</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="hero__item set-bg" data-setbg="/img/bookwallpaper.jpg">
+                        <div class="hero__text">
+                            <span>papertrail</span>
+                            <h2>July Bestseller</h2>
+                            <p>Collections from Your favourite author</p>
+                            <a href="#" style="text-decoration: none;" class="primary-btn">SHOP NOW</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Hero Section End -->
+    <!-- Featured Section Begin -->
+    <section class="featured spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <h2>Featured Products</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row featured__filter">
+                <% for(let i=0;i<4;i++) { %>
+                    <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
+                        <div class="featured__item">
+                            <div class="featured__item__pic set-bg" style="background-size: contain;"
+                                data-setbg="<%= products[i].image[0].url %>">
+                            </div>
+                            <div class="featured__item__text">
+                                <h6><a href="/productDetails?id=<%= products._id %>" style="text-decoration: none;">
+                                        <%= products[i].productName %>
+                                    </a></h6>
+                                <h5>₹<%= products[i].price %>
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+
+            </div>
+        </div>
+    </section>
+    <!-- Featured Section End -->
+
+    <!-- Banner Begin -->
+    <!-- <div class="banner">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="banner__pic">
+                        <img src="/img/banner/banner-1.jpg" alt="">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="banner__pic">
+                        <img src="/img/banner/banner-2.jpg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><br> -->
+    <!-- Banner End -->
+
+    <%- include('./partials/footer.ejs') %>
