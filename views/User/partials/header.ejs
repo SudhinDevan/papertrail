@@ -120,7 +120,7 @@
             background-color: #c67605;
         }
 
-        #lblCartCount {
+        #cartCount {
             font-size: 12px;
             background: #15A78F;
             color: #fff;
@@ -133,7 +133,7 @@
             position: relative;
         }
 
-        #lblCartCount {
+        #cartCount {
             position: absolute;
             top: -2px;
             right: -12px;
@@ -201,7 +201,7 @@
                                             </li>
                                             <% } %>
                                                 <li><a href="/cart" style="text-decoration: none">Cart</a>
-                                                    <span class='badge badge-primary' id='lblCartCount'>
+                                                    <span class='badge badge-primary' id='cartCount'>
                                                         <% if(cart){ %>
                                                             <%= cart.items.length %>
                                                                 <% }else{ %>

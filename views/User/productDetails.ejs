@@ -263,6 +263,7 @@
               setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
               $.get(location.href, function (data) {
                 $("#cart").html($(data).find("#cart").html());
+                $("#cartCount").html($(data).find("#cartCount").html());
               })
             } else {
               let x = document.getElementById("snackbar-error");
@@ -293,7 +294,7 @@
       function notLogin() {
         Swal.fire({
           icon: "warning",
-          title: "You Are Not Login",
+          title: "You Are Not Logged In",
           showCancelButton: true,
           confirmButtonColor: "#15A78F",
           cancelButtonColor: "#d33",
@@ -332,8 +333,5 @@
       }
 
     </script>
-
-
-
 
     <%- include('./partials/footer.ejs') %>
