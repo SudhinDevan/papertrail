@@ -79,7 +79,7 @@ const productDetails = async (req, res) => {
         let wish = false;
         if (user && wishlist && wishlist.items.length > 0) {
             if (wishlist.items.includes(product._id)) {
-                wish: true;
+                wish = true;
             }
         }
         await productModel.findOne({ _id: id })
