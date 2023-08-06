@@ -126,27 +126,11 @@ const addToWishlist = async (req, res) => {
     }
 }
 
-const removeFromWishlist = async (req, res) => {
-    const productId = req.query.prodId
-    const user = req.session.User_id;
-    await userModel.updateOne({ _id: user },
-        {
-            $pull: {
-                wishlist: productId,
-            },
-        });
-
-    res.json({ success: true });
-}
-
-
-
 
 module.exports = {
     loadShop,
     productDetails,
     addToWishlist,
     loadWishlist,
-    removeFromWishlist,
     productInCategory,
 }

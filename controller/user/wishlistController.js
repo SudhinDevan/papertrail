@@ -11,7 +11,6 @@ const loadWishlist = async (req, res) => {
     const user = await userModel.findOne({ _id: id });
     const wishlist = await wishlistModel.findOne({ userId: id }).populate("items");
     const cart = await cartModel.findOne({ userId: id });
-    console.log(wishlist);
 
     res.render('User/wishlist', { id, user, wishlist, cart });
 
@@ -69,8 +68,37 @@ const addToWishlist = async (req, res) => {
 
 }
 
+
+const removeFromWishlist = async (req, res) => {
+  const productId = req.query.productId
+  const user = req.session.User_id;
+
+  try {
+    const wishlist = await wishlistModel.findOne({ userId: user })
+    console.log(wishlist);
+    if (wishlist) {
+      await wishlistModel.updateOne(
+        {
+          userId: user
+        },
+        {
+          $pull: {
+            items: productId,
+          }
+        }
+      );
+      res.json({ success: true })
+    }
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
 module.exports = {
   addToWishlist,
   loadWishlist,
+  removeFromWishlist,
 
 }

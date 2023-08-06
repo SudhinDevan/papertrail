@@ -75,6 +75,6 @@ routers.get('/order/success', userSess.isLogin, orderController.loadOrderSuccess
 
 routers.get('/addToWishlist', wishlistController.addToWishlist);
 routers.get('/wishlist', userSess.isLogin, wishlistController.loadWishlist)
-routers.get('/removeFromWishlist', userSess.isLogin, productController.removeFromWishlist)
+routers.get('/removeFromWishlist', userSess.isLogin, wishlistController.removeFromWishlist)
 
 module.exports = routers;
