@@ -1,4 +1,11 @@
 <%- include('./partials/header') %>
+    <style>
+        .product__item__pic.set-bg {
+            background-image: url('path/to/image.jpg');
+            background-size: contain;
+            /* or other values like cover, auto, 100%, etc. */
+        }
+    </style>
 
     <!-- Hero Section Begin -->
     <section class="hero hero-normal py-3">
@@ -66,7 +73,8 @@
                             <ul>
                                 <% category.forEach((categoryItem)=> { %>
                                     <li>
-                                        <a href="/category/<%= categoryItem._id %>" style="text-decoration: none;">
+                                        <a onclick="productsInCat('<%= categoryItem._id %>')"
+                                            style="text-decoration: none; cursor: pointer;">
                                             <%= categoryItem.categoryName %>
                                         </a>
                                     </li>
@@ -109,7 +117,7 @@
                             </div>
                             <div class="col-lg-4 col-md-4">
                                 <div class="filter__found">
-                                    <h6>
+                                    <h6 id="productCount">
                                         <%= products.length %> products in this page
                                     </h6>
                                 </div>
@@ -122,13 +130,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row mt-3" id="productsSection">
                         <% if (products.length> 0) { %>
                             <% products.forEach((product)=> { %>
                                 <div class="col-lg-4 col-md-6 col-sm-6">
                                     <div class="product__item">
-                                        <div class="product__item__pic set-bg" style="background-size: contain;"
-                                            data-setbg="<%= product.image[0].url %>"></div>
+                                        <img style="height: 18rem; width: 12rem; margin-left: 2.2rem;"
+                                            src="<%= product.image[0].url %>" alt="<%= product.productName %>">
                                         <div class="product__item__text">
                                             <h6><a href="/productDetails?id=<%= product._id %>"
                                                     style="text-decoration: none;">
@@ -145,7 +153,7 @@
                                         <% } %>
                     </div>
 
-                    <div class="product__pagination text-center">
+                    <div class="product__pagination text-center" id="pagination">
                         <% for (let i=1; i <=totalPages; i++) { %>
                             <% if (i===currentPage) { %>
                                 <span class="current-page">
@@ -168,5 +176,25 @@
         </div>
     </section>
     <!-- Product Section End -->
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+    <script>
+        function productsInCat(catId) {
+            $.ajax({
+                type: 'get',
+                url: '/category/' + catId,
+                data: {
+                    categoryId: catId,
+                },
+                success: function (res) {
+                    $("#productCount").html($(res).find("#productCount").html());
+                    $("#productsSection").html($(res).find("#productsSection").html());
+                    $("#pagination").html($(res).find("#pagination").html());
+                }
+
+            })
+        }
+    </script>
 
     <%- include('./partials/footer') %>
