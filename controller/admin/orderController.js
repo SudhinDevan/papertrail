@@ -34,14 +34,16 @@ const loadOrderDetails = async (req, res) => {
 
 
 
-
 const statusChange = async (req, res) => {
     const {
         id,
         status
     } = req.body;
 
-    if (status !== "None") {
+    if (status === "delivered") {
+        await orderModel.findByIdAndUpdate(id, { order_status: status, payment_status: true });
+
+    } else {
         await orderModel.findByIdAndUpdate(id, { order_status: status });
     }
 

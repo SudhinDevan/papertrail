@@ -1,212 +1,464 @@
-<%- include('./partials/header.ejs') %>
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>PaperTrail</title>
+
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
+    <!-- Favicon -->
+    <link href="https://res.cloudinary.com/dtbohkfpy/image/upload/v1688294424/Pfavcion_teu4oi.png" rel="icon">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- Css Styles -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="/css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
 
     <style>
-        .track-line {
-            height: 2px !important;
-            background-color: #488978;
-            opacity: 1;
+        #snackbar,
+        #snackbar-error {
+            visibility: hidden;
+            min-width: 250px;
+            margin-left: -125px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 2px;
+            padding: 10px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            bottom: 30px;
+            font-size: 17px;
+            border-radius: 15px;
         }
 
-        .dot {
-            height: 10px;
-            width: 10px;
-            margin-left: 3px;
-            margin-right: 3px;
-            margin-top: 0px;
-            background-color: #488978;
-            border-radius: 50%;
-            display: inline-block
+        #snackbar.show,
+        #snackbar-error.show {
+            visibility: visible;
+            -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
         }
 
-        .big-dot {
-            height: 25px;
-            width: 25px;
-            margin-left: 0px;
-            margin-right: 0px;
-            margin-top: 0px;
-            background-color: #488978;
-            border-radius: 50%;
-            display: inline-block;
+        @-webkit-keyframes fadein {
+            from {
+                bottom: 0;
+                opacity: 0;
+            }
+
+            to {
+                bottom: 30px;
+                opacity: 1;
+            }
         }
 
-        .big-dot i {
+        @keyframes fadein {
+            from {
+                bottom: 0;
+                opacity: 0;
+            }
+
+            to {
+                bottom: 30px;
+                opacity: 1;
+            }
+        }
+
+        @-webkit-keyframes fadeout {
+            from {
+                bottom: 30px;
+                opacity: 1;
+            }
+
+            to {
+                bottom: 0;
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeout {
+            from {
+                bottom: 30px;
+                opacity: 1;
+            }
+
+            to {
+                bottom: 0;
+                opacity: 0;
+            }
+        }
+
+        .badge {
+            padding-left: 9px;
+            padding-right: 9px;
+            -webkit-border-radius: 9px;
+            -moz-border-radius: 9px;
+            border-radius: 9px;
+        }
+
+        .label-warning[href],
+        .badge-warning[href] {
+            background-color: #c67605;
+        }
+
+        #cartCount {
             font-size: 12px;
+            background: #15A78F;
+            color: #fff;
+            padding: 0 5px;
+            vertical-align: top;
+            margin-left: -10px;
         }
 
-        .card-stepper {
-            z-index: 0
+        .header__menu li {
+            position: relative;
+        }
+
+        #cartCount {
+            position: absolute;
+            top: -2px;
+            right: -12px;
         }
     </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 
-    <div class="col-lg-12 mb-5">
-        <div class="card mt-4">
-            <div class="card-header bg-light py-4 ">
-                <h4 class="mb-0">#Order Details</h4>
-                <p class="mb-0">
-                    <%= order._id %>
-                </p>
-            </div>
-            <div class="card-body ">
+</head>
 
-                <section>
+<body>
 
-                    <div class="container py-5 h-100">
-                        <div class="row d-flex justify-content-center align-items-center h-100">
-                            <div class="col">
-                                <div class="card card-stepper" style="border-radius: 10px;">
-                                    <div class="card-body p-4">
-
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="d-flex flex-column">
-                                                <span class="lead fw-normal">Track Your Order</span>
-                                                <span class="text-muted small">Order Placed on
-                                                    <span>
-                                                        <%= order.order_date.toLocaleDateString('en-GB', {
-                                                            day: 'numeric' , month: 'numeric' , year: 'numeric' }); %>
-                                                    </span>
-
-                                            </div>
-                                            <!-- <div>
-                                <button class="btn btn-outline-primary" type="button">Track order details</button>
-                              </div> -->
-                                        </div>
-                                        <hr class="my-4">
-
-                                        <div
-                                            class="d-flex flex-row justify-content-between align-items-center align-content-center">
-                                            <span class="dot"></span>
-                                            <hr <% if(order.order_status=="shipped" ) {%> class="flex-fill track-line"
-                                            <%}else{%> class="flex-fill" <% } %> ><span class="dot"></span>
-                                                    <hr <% if(order.order_status=="delivered" ) {%> class="flex-fill
-                                                    track-line" <%}else{%> class="flex-fill" <% } %>><span
-                                                                class="d-flex justify-content-center align-items-center big-dot dot">
-                                                                <i class="fa fa-check text-white"></i></span>
-                                        </div>
-
-                                        <div class="d-flex flex-row justify-content-between align-items-center">
-                                            <div class="d-flex flex-column align-items-start"><span>Order placed</span>
-                                            </div>
-
-                                            <div class="d-flex flex-column justify-content-center align-items-center">
-                                                <span>Order Shipped</span>
-                                            </div>
-
-                                            <div class="d-flex flex-column align-items-end"><span>Delivered</span></div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
+    <!-- Header Section Begin -->
+    <header class="header">
+        <div class="header__top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="header__top__left">
+                            <ul>
+                                <li><i class="fa fa-envelope"></i> hello@papertrail.com</li>
+                                <li>Free Shipping for all Order of ₹499</li>
+                            </ul>
                         </div>
-                    </div>
-                </section>
-
-                <div class="card mx-3">
-                    <div class="card-header">
-                        Order details<br><small>Your ordered items</small>
-                    </div>
-                    <div class="card-body" style="overflow: auto;">
-                        <table class="table text-center">
-                            <colgroup>
-                                <col width="150" />
-                                <col />
-                                <col width="1" />
-                                <col />
-                                <col width="100" />
-                                <col />
-                                <col width="1" />
-                                <col />
-
-                            </colgroup>
-                            <thead class="bg-dark text-light">
-                                <tr>
-                                    <th class="first">Image</th>
-                                    <th class="text-center font-weight-500">Product</th>
-                                    <th class="text-center  font-weight-500">Price</th>
-                                    <th class="text-center  font-weight-500">Qty</th>
-                                    <th class="text-center  font-weight-500">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody class="table-bordered">
-                                <% for (let i=0; i < order.items.length; i++) { %>
-                                    <tr class="bg-light">
-                                        <td class="product-thumbnail text-start">
-                                            <a href="#">
-                                                <img src="<%= order.items[i].product.image[0].url %>" alt="..."
-                                                    class="img-fluid" width="100%">
-                                            </a>
-                                        </td>
-                                        <td class="text-center" style="font-size: 1.2vw;">
-                                            <b href="#" class="text-dark ">
-                                                <%=order.items[i].product.productName %> <br> <br>
-                                                    <%=order.items[i].product.blurb %>
-                                            </b>
-                                        </td>
-                                        <td class="text-center text-dark" style="font-size: 1vw;">
-                                            <%=order.items[i].product.price %>
-                                        </td>
-                                        <td class="text-center" style="font-size: 1vw;"><span>
-                                                <%=order.items[i].quantity %>
-                                            </span>
-                                        </td>
-                                        <td id="totalPrice" class="product-subtotal text-center"
-                                            style="font-size: 1vw;">
-                                            <span>₹<%= (order.items[i].quantity * order.items[i].product.price) %>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <% } %>
-                            </tbody>
-                        </table>
-                        <div class="col-12 d-flex justify-content-end">
-                            <div class="d-flex">
-                                <kbd class="font-weight-bolder">totalPrice: <span>₹<%= order.price %>
-                                    </span></kbd>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card m-3">
-                    <div class="card-header">
-                        Shipping Address
-                    </div>
-                    <div class="card-body">
-
-                        <%=address.phonenumber%>,<br>
-                            <%=address.buildingName%>,<%=address.street%>,<%=address.city%>,<br>
-                                        <%=address.state%>,<%=address.country%>,
-                                                <%=address.pincode%>,
-
-                    </div>
-                </div>
-                <div class="card m-3">
-                    <div class="card-header">
-                        Payment Mode
-                    </div>
-                    <div class="card-body">
-                        <% if(order.payment_method=="cod" ){ %> Cash On Delivery <% } else
-                                if(order.payment_method=="online" ){%>Online Payment<%}%>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-3">
+                    <div class="header__logo">
+                        <a href="/">
+                            <img src="https://res.cloudinary.com/dtbohkfpy/image/upload/v1687950151/logo_png_la2lo3.png"
+                                width="200" height="60">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-9 text-center">
+                            <nav class="header__menu">
+                                <ul>
+                                    <li><a href="/" style="text-decoration: none;">Home</a>
+                                    </li>
+                                    <li><a href="/shop" style="text-decoration: none">Shop</a></li>
+                                    <li><a href="" style="text-decoration: none">Contact</a></li>
+                                    <% if (user) { %>
+                                        <li>
+                                            <a href="#" style="text-decoration: none">
+                                                <%= user.username %>
+                                            </a>
+                                            <ul class="header__menu__dropdown">
+                                                <li><a href="/user/profile" style="text-decoration: none">Profile</a>
+                                                </li>
+                                                <li><a href="/order" style="text-decoration: none">Orders</a></li>
+                                                <li><a href="/wishlist" style="text-decoration: none">Wishlist</a></li>
+                                                <li><a href="/logout" style="text-decoration: none">Logout</a></li>
+                                            </ul>
+                                        </li>
+                                        <% } else { %>
+                                            <li>
+                                                <a href="/login" style="text-decoration: none">Login</a>
+                                            </li>
+                                            <% } %>
+                                                <li><a href="/cart" style="text-decoration: none">Cart</a>
+                                                    <span class='badge badge-primary' id='cartCount'>
+                                                        <% if(cart){ %>
+                                                            <%= cart.items.length %>
+                                                                <% }else{ %>
+                                                                    <% } %>
+                                                    </span>
+                                                </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="humberger__open">
+                <i class="fa fa-bars"></i>
+            </div>
+        </div>
+
+    </header>
+    <!-- Header Section End -->
+
+    <head>
 
 
-    <!-- axios cdn -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"></script>
+    </head>
 
-    <!-- sweet alert cdn -->
-    <!-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
 
-    <script>
-        function login() {
-            const currentUrl = location.href;
-            location.href = `/login?url=${currentUrl}`
+        body {
+            background-color: #eeeeee;
+            font-family: 'Open Sans', serif
         }
-    </script>
 
+        .card {
+            position: relative;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
 
+        .card-header:first-child {
+            border-radius: calc(0.37rem - 1px) calc(0.37rem - 1px) 0 0
+        }
 
+        .card-header {
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 0;
+            background-color: #fff;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+        }
+
+        .track {
+            position: relative;
+            background-color: #ddd;
+            height: 7px;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            margin-bottom: 60px;
+            margin-top: 50px
+        }
+
+        .track .step {
+            -webkit-box-flex: 1;
+            -ms-flex-positive: 1;
+            flex-grow: 1;
+            width: 25%;
+            margin-top: -18px;
+            text-align: center;
+            position: relative
+        }
+
+        .track .step.active:before {
+            background: #15A78F
+        }
+
+        .track .step::before {
+            height: 7px;
+            position: absolute;
+            content: "";
+            width: 100%;
+            left: 0;
+            top: 18px
+        }
+
+        .track .step.active .icon {
+            background: #15A78F;
+            color: #fff
+        }
+
+        .track .icon {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            position: relative;
+            border-radius: 100%;
+            background: #ddd
+        }
+
+        .track .step.active .text {
+            font-weight: 400;
+            color: #000
+        }
+
+        .track .text {
+            display: block;
+            margin-top: 7px
+        }
+
+        .itemside {
+            position: relative;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            width: 100%
+        }
+
+        .itemside .aside {
+            position: relative;
+            -ms-flex-negative: 0;
+            flex-shrink: 0
+        }
+
+        .img-sm {
+            width: 80px;
+            height: 100px;
+            padding: 3px
+        }
+
+        ul.row,
+        ul.row-sm {
+            list-style: none;
+            padding: 0
+        }
+
+        .itemside .info {
+            padding-left: 15px;
+            padding-right: 7px
+        }
+
+        .itemside .title {
+            display: block;
+            margin-bottom: 5px;
+            color: #212529
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 1rem
+        }
+
+        .btn-warning {
+            color: #ffffff;
+            background-color: #15A78F;
+            border-color: #15A78F;
+            border-radius: 1px
+        }
+
+        .btn-warning:hover {
+            color: #ffffff;
+            background-color: #0b7f6b;
+            border-color: #0b7f6b;
+            border-radius: 1px
+        }
+    </style>
+
+    <section class="mt-5 mb-5">
+        <div class="container">
+            <article class="card">
+                <header class="card-header"> My Orders / Tracking </header>
+                <div class="card-body">
+                    <h6>OrderId:<br>
+                        <%= order._id %>
+                    </h6>
+                    <article class="card">
+                        <div class="card-body row">
+                            <div class="col"> <strong>Order placed on:</strong> <br>
+                                <%= order.order_date.toLocaleDateString('en-GB', { day: 'numeric' , month: 'numeric' ,
+                                    year: 'numeric' }); %>
+                            </div>
+                            <div class="col"> <strong>Shipping BY:</strong> <br> BLUEDART, | <i class="fa fa-phone"></i>
+                                +1598675986 </div>
+                            <div class="col"> <strong>Payment:</strong> <br>
+                                <%=order.payment_method%>
+                            </div>
+                            <div class="col"> <strong>Tracking #:</strong> <br>
+                                <%= order._id.toString().substring(0, 6) %>
+                            </div>
+                        </div>
+                    </article>
+                    <div class="track">
+                        <div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span
+                                class="text">Order confirmed</span> </div>
+                        <div class="step active"> <span class="icon"> <i class="fa fa-user"></i> </span> <span
+                                class="text">
+                                Picked by courier</span> </div>
+                        <div class="step"> <span class="icon"> <i class="fa fa-truck"></i> </span> <span class="text">
+                                On
+                                the way </span> </div>
+                        <div class="step"> <span class="icon"> <i class="fa fa-box"></i> </span> <span
+                                class="text">Delivered</span> </div>
+                    </div>
+                    <hr>
+                    <ul class="row">
+                        <% for (let i=0; i < order.items.length; i++) { %>
+                            <%if(order.items.length>2){%>
+                                <li class="col-md-4">
+                                    <figure class="itemside mb-3">
+                                        <div class="aside"><img src="<%= order.items[i].product.image[0].url %>"
+                                                class="img-sm border"></div>
+                                        <figcaption class="info align-self-center">
+                                            <p class="title">
+                                                <%=order.items[i].product.productName %><br>
+                                                    <p>Qty: <%=order.items[i].quantity %>
+                                                    </p>
+                                            </p> <span class="text-muted">
+                                                ₹<%=order.items[i].product.price %>
+                                            </span>
+                                        </figcaption>
+                                    </figure>
+                                </li>
+                                <% }else if(order.items.length<3){%>
+                                    <li class="col-md-6">
+                                        <figure class="itemside mb-3">
+                                            <div class="aside"><img src="<%= order.items[i].product.image[0].url %>"
+                                                    class="img-sm border"></div>
+                                            <figcaption class="info align-self-center">
+                                                <p class="title">
+                                                    <%=order.items[i].product.productName %><br>
+                                                        <p>Qty: <%=order.items[i].quantity %>
+                                                        </p>
+                                                </p> <span class="text-muted">
+                                                    ₹<%=order.items[i].product.price %>
+                                                </span>
+                                            </figcaption>
+                                        </figure>
+                                    </li>
+                                    <%} %>
+                                        <%} %>
+                    </ul>
+                    <hr>
+                    <a href="/order" class="btn btn-warning" data-abc="true"> <i class="fa fa-chevron-left"></i> Back to
+                        orders</a>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
 
     <%- include('./partials/footer.ejs') %>

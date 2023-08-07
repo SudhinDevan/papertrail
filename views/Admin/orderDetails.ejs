@@ -28,7 +28,7 @@
                           <span>
                             <h5 class="mb-0 text-center" style="display: inline;">Order
                               Placed By: </h5><br>
-                            <h5 class="text-primary" style="display: inline;">
+                            <h5 class="text-success" style="display: inline;">
                               <%= user.username %>
                             </h5>
                           </span><br>
@@ -45,8 +45,7 @@
                       style="border-radius: 16px;">
                       <div class="card-body pt-5 pl-5">
                         <h5 style="display: inline;">Status:</h5>
-                        <a class="btn btn-small rounded-pill py-0 <%if(order.order_status== " pending"){%>
-                          btn-warning
+                        <a class="btn btn-small rounded-pill py-0 <%if(order.order_status== " pending"){%> btn-warning
                           <%}else if(order.order_status=="shipped" ){%>btn-secondary<%}else if(order.order_status=="pay"
                               ){%>
                               btn-light<%}else if(order.order_status=="delivered" ){%>btn-success<%}else{%>btn-danger
@@ -54,13 +53,18 @@
                                       <%=order.order_status%>
                                     </small>
                         </a>
-                        <%if(order.order_status=="pending"){%>
+                        <%if(order.order_status !="rejected" && order.order_status !="cancelled" && order.order_status
+                          !="delivered" ){%>
                           <br>
                           <select class="form-select col-8 mt-2" id="status-select">
-                            <option selected>None</option>
-                            <option value="shipped">Shipped</option>
-                            <option value="rejected">Reject</option>
-                            <option value="rejected">delivered</option>
+                            <option <% if(order.order_status==="pending" ) { %> selected <% } %> value="pending">
+                                Pending</option>
+                            <option <% if(order.order_status==="shipped" ) { %> selected <% } %> value="shipped">
+                                Shipped</option>
+                            <option <% if(order.order_status==="delivered" ) { %> selected <% } %> value="delivered">
+                                Delivered</option>
+                            <option <% if(order.order_status==="rejected" ) { %> selected <% } %> value="rejected">
+                                Reject</option>
                           </select>
                           <%}%>
                       </div>
@@ -148,6 +152,7 @@
               </div>
               <div class="card-body">
                 <% if(order.payment_method=="cod" ){ %> Cash On Delivery <% } %>
+                    <% if(order.payment_method=="online" ){ %> Online Payment <% } %>
               </div>
             </div>
             </section>
