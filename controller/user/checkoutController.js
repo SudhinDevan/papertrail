@@ -16,8 +16,9 @@ const loadCheckoutAddress = async (req, res) => {
     const contactAddress = await addressModel.findOne({ user: id, type: "contact" });
     const mainAddress = await addressModel.findOne({ user: id, type: "main" });
     const secondaryAddress = await addressModel.find({ user: id, type: "secondary" });
+    const cart = await cartModel.findOne({ userId: id })
 
-    res.render('User/checkoutAddress', { id, user: userData, contact: contactAddress, main: mainAddress, secondary: secondaryAddress, address });
+    res.render('User/checkoutAddress', { id, user: userData, contact: contactAddress, main: mainAddress, secondary: secondaryAddress, address, cart });
 }
 
 

@@ -20,7 +20,8 @@
                         <ul>
                             <% category.forEach((categoryItem)=> { %>
                                 <li>
-                                    <a href="/category/<%= categoryItem._id %>" style="text-decoration: none;">
+                                    <a onclick="productsInCat('<%= categoryItem._id %>')"
+                                        style="text-decoration: none; cursor: pointer;">
                                         <%= categoryItem.categoryName %>
                                     </a>
                                 </li>

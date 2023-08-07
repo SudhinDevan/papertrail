@@ -42,6 +42,7 @@ const loadOrderDetails = async (req, res) => {
 
         const userId = req.session.User_id;
         const { orderId } = req.query;
+        const cart = await cartModel.findOne({ userId: userId })
 
         const user = await userModel.findOne({ _id: userId });
 
@@ -57,7 +58,7 @@ const loadOrderDetails = async (req, res) => {
 
         const cartAddress = await orderModel.findOne({ _id: orderId }).populate("address");
 
-        res.render('user/orderDetails', { id: userId, user, order, address: cartAddress.address });
+        res.render('user/orderDetails', { id: userId, cart, user, order, address: cartAddress.address });
 
     } catch (error) {
         console.log(error.message);
@@ -99,12 +100,14 @@ const removeOrder = async (req, res) => {
 
 
 const loadOrderSuccessPage = async (req, res) => {
-
+    // const userId = req.Session.User_id
     const { orderId } = req.query;
 
     const order = await orderModel.findOne({ _id: orderId });
     const user = await userModel.findOne({ _id: order.user });
     const address = await addressModel.findOne({ _id: order.address });
+    const cart = await cartModel.findOne({ userId: user._Id })
+
 
     const product = await orderModel.findOne({ _id: orderId })
         .populate({
@@ -118,7 +121,7 @@ const loadOrderSuccessPage = async (req, res) => {
     const coupon = await couponModel.findOne({ _id: order.coupon })
     console.log(coupon);
 
-    res.render('User/orderSuccess', { user, order, address, product, coupon });
+    res.render('User/orderSuccess', { user, order, address, product, coupon, cart });
 }
 
 
