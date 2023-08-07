@@ -6,22 +6,19 @@ const addressModel = require("../../model/addressSchema")
 const couponModel = require("../../model/couponSchema")
 const cartModel = require('../../model/cartSchema')
 
+
+
 const loadorder = async (req, res) => {
     const userId = req.session.User_id;
     const userData = await userModel.findOne({ _id: userId });
-    const cart = await cartModel.findOne({ userId: userId })
-    const orders = await orderModel.find({ user: userId });
+    const cart = await cartModel.findOne({ userId: userId });
+    let orders = await orderModel.find({ user: userId });
 
-    // let products = [];
-    // if(orders){
+    // Sort orders based on the order_date as (newest orders first)
+    orders = orders.sort((a, b) => b.order_date - a.order_date);
 
-    //     for(const order of orders){
-    //         const product = await orderItemModel.findOne({user}).populate("product")
-    //         products.push(product)
-    //     }
-    // }
-
-    const products = await orderModel.find({ user: userId })
+    const products = await orderModel
+        .find({ user: userId })
         .populate({
             path: 'items',
             model: 'orderItem',
@@ -29,11 +26,30 @@ const loadorder = async (req, res) => {
                 path: 'product',
                 model: 'product'
             }
-        })
+        });
 
+    // Pagination variables
+    const page = parseInt(req.query.page) || 1;
+    const itemsPerPage = 3;
+    const totalOrders = orders.length;
+    const totalPages = Math.ceil(totalOrders / itemsPerPage);
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
 
-    res.render('user/orders', { id: userId, products, orders, user: userData, cart });
-}
+    const ordersToDisplay = orders.slice(startIndex, endIndex);
+
+    res.render('user/orders', {
+        id: userId,
+        products,
+        orders: ordersToDisplay,
+        user: userData,
+        cart,
+        currentPage: page,
+        totalPages,
+        itemsPerPage
+    });
+};
+
 
 
 
@@ -57,7 +73,6 @@ const loadOrderDetails = async (req, res) => {
             })
 
         const cartAddress = await orderModel.findOne({ _id: orderId }).populate("address");
-
         res.render('user/orderDetails', { id: userId, cart, user, order, address: cartAddress.address });
 
     } catch (error) {

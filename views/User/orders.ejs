@@ -2,188 +2,75 @@
 
 
   <style>
-    /* Custom Styles */
-    .profile-image {
-      height: 8rem;
-      width: 8rem;
-      border: .2rem solid #15A78F;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #f8f9fa;
-    }
-
-    .profile-image i {
-      font-size: 2.5rem;
-      color: #15A78F;
-    }
-
-    .profile-name {
-      font-size: 1.5rem;
-      font-weight: bold;
-      margin-top: 1rem;
-    }
-
-    .profile-joined-date {
-      font-size: 0.875rem;
-      color: #15A78F;
-    }
-
-    .profile-card {
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      background-color: #F4F5F7;
-    }
-
-    .profile-card .card-header {
-      background-color: #15A78F;
-      color: #fff;
-      border-radius: 10px 10px 0 0;
-    }
-
-    .profile-card .card-header h4 {
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    .profile-card .card-body {
-      padding: 20px;
-    }
-
-    .profile-card .btn {
-      border-radius: 5px;
-      font-weight: bold;
-    }
-
-    .btn-edit {
-      background-color: #15A78F;
-      color: #fff;
-    }
-
-    .btn-change-password {
-      background-color: #15A78F;
-      color: #fff;
-    }
-
     /* Styling for the card when hovered */
     .card:hover {
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1);
       /* Add shadow to the card when hovered */
-      transform: translateY(-1px);
-      /* Raise the card slightly when hovered */
+      transform: scale(0.99)
+        /* Raise the card slightly when hovered */
     }
   </style>
-
-
-  <div class="container-fluid vh-100">
-    <div class="row m-0 h-100">
-      <div class="col mt-4">
-        <div>
-          <div class="container mt-4">
-            <div class="row h-50 align-items-center">
-              <div class="col">
-                <div class="row h-75">
-                  <div class="col">
-                    <div class="row justify-content-center">
-                      <div class="col-6 d-flex justify-content-center">
-                        <div class="profile-image">
-                          <i class="fa fa-user"></i>
+  <section class="px-5">
+    <h2 style="text-align: center;">Order History</h2>
+    <div class="col-md-12 mt-4">
+      <div class="orders-container">
+        <% if (orders !==null && orders.length> 0) { %>
+          <% for (let i=0; i < orders.length; i++) { %>
+            <div class="row mb-3">
+              <div class="col-md-12 col-sm-12">
+                <div onclick="loadOrderDetails('<%= orders[i]._id %>')" class="card text-center">
+                  <div class="card-content">
+                    <div class="card-body d-flex justify-content-between col-md-6 col-sm-12">
+                      <img style="width: 6rem; height: 6rem;"
+                        src="https://png.pngtree.com/png-vector/20191129/ourmid/pngtree-fast-delivery-icon-delivery-icon-png-image_2047531.jpg">
+                      <div class="d-flex flex-column">
+                        <div class="d-flex flex-column align-items-start" style="font-size: .80rem;">
+                          <div>Order Id: <span class="font-weight-bold">
+                              <%= orders[i]._id.toString().substring(0, 6) %>
+                            </span></div>
+                          <div>Order Date: <span
+                              class="font-weight-bold"><%=orders[i].order_date.toLocaleDateString('en-US', {
+                                month: 'long' , day: 'numeric' , year: 'numeric' ,});%></span></div>
+                          <div>No. of Items: <span class="font-weight-bold">
+                              <%= orders[i].items.length %>
+                            </span></div>
                         </div>
                       </div>
-                    </div>
-                    <div class="row justify-content-center">
-                      <div class="col-6 d-flex flex-column align-items-center">
-                        <div class="profile-name">
-                          <%= user.username%> <br>
-                        </div>
-                        <div class="profile-joined-date">Created on
-                          <% const createdAtDate=new Date(user.createdAt); %>
-                            <%= createdAtDate.toDateString() %>
-
+                      <div class="d-flex flex-column align-items-center justify-content-center">
+                        <div style="font-size: .90rem;"
+                          class="<% if(orders.order_status=='pending') {%> text-warning <% }else if(orders.order_status=='rejected') {%> text-danger <% }else{ %> text-secondary <% } %>">
+                          <%= orders.order_status %>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div class="row justify-content-center mt-4">
-            <div class="col-10 d-flex flex-column">
-              <div
-                style="border: .005rem solid rgb(174, 171, 171);min-height: 3rem; display: flex; justify-content: center; align-items: center;">
-                <a href="/user/profile" class="nav-link text-dark">Profile</a>
-              </div>
-
-              <div
-                style="border: .005rem solid rgb(174, 171, 171);background-color: #15A78F;min-height: 3rem;display: flex; justify-content: center; align-items: center;">
-                <a href="/order" class="nav-link text-light">Orders</a>
-              </div>
-              <div
-                style="border: .005rem solid rgb(174, 171, 171);min-height: 3rem;display: flex; justify-content: center; align-items: center;">
-                <a href="/user/profile/address" class="nav-link text-dark">Address</a>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <div class="col-md-6 mt-4">
-        <div class="orders-container" style="max-height: 90vh; overflow-y: auto; overflow-x: hidden;">
-          <% if (orders !==null && orders.length> 0) { %>
-            <% for (let i=0; i < orders.length; i++) { %>
-              <div class="row mb-3">
-                <div class="col-md-12 col-sm-12">
-                  <div onclick="loadOrderDetails('<%= orders[i]._id %>')" class="card text-center">
-                    <div class="card-content">
-                      <div class="card-body d-flex justify-content-between">
-                        <div class="d-flex flex-column">
-                          <div class="d-flex flex-column align-items-start" style="font-size: .80rem;">
-                            <div>Order Id: <span class="font-weight-bold">
-                                <%= orders[i]._id.toString().substring(0, 6) %>
-                              </span></div>
-                            <div>Order Date: <span
-                                class="font-weight-bold"><%=orders[i].order_date.toLocaleDateString('en-US', {
-                                  month: 'long' , day: 'numeric' , year: 'numeric' ,});%></span></div>
-                            <div>No. of Items: <span class="font-weight-bold">
-                                <%= orders[i].items.length %>
-                              </span></div>
-                          </div>
-                        </div>
-                        <div class="d-flex flex-column align-items-center justify-content-center">
-                          <div style="font-size: .90rem;"
-                            class="<% if(orders.order_status=='pending') {%> text-warning <% }else if(orders.order_status=='rejected') {%> text-danger <% }else{ %> text-secondary <% } %>">
-                            <%= orders.order_status %>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <% if(orders[i].order_status=="pending" ){ %>
-                      <button style="border: none; border-radius: 5px;"
-                        onclick="showCancelConfirmation('<%= orders[i]._id %>', [<%= orders[i].items.map(id => `'${id}'`).join(',') %>])"
-                        class="btn-danger mt-2">cancel</button>
-                      <% } %>
-                  </div>
+                <div>
                 </div>
               </div>
-              <%}%>
-                <%}else{%>
-                  <div class="h-100 d-flex justify-content-center align-items-center">
-                    <div class="h1 text-danger">There Is No Orders</div>
-                  </div>
+            </div>
+            <%}%>
+              <div class="d-flex justify-content-center mt-3">
+                <% if (currentPage> 1) { %>
+                  <a href="?page=<%= currentPage - 1 %>" class="btn btn-success mr-2">Previous</a>
                   <% } %>
-        </div>
+                    <% if (currentPage < totalPages) { %>
+                      <a href="?page=<%= currentPage + 1 %>" class="btn btn-success">Next</a>
+                      <% } %>
+              </div>
+              <div class="d-flex justify-content-center mt-2">
+                <span>Page <%= currentPage %> of <%= totalPages %></span>
+              </div>
+              <%} else { %>
+                <div class="h-100 d-flex justify-content-center align-items-center">
+                  <div class="h1 text-danger">There Is No Orders</div>
+                </div>
+                <% } %>
       </div>
     </div>
+  </section>
 
 
-  </div>
-  </div>
-  </div>
 
   <!-- axios cdn -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"></script>
