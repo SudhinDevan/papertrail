@@ -430,9 +430,16 @@
             <article class="card">
                 <header class="card-header"> My Orders / Tracking </header>
                 <div class="card-body">
-                    <h6>OrderId:<br>
-                        <%= order._id %>
-                    </h6>
+                    <div class="row">
+                        <div class="col">
+                            <h6>OrderId:<br>
+                                <%= order._id %>
+                            </h6>
+                        </div>
+                        <div class="col-auto">
+                            <button class="btn btn-danger mb-3 mr-1">Cancel Order</button>
+                        </div>
+                    </div>
                     <article class="card">
                         <div class="card-body row">
                             <div class="col"> <strong>Order placed on:</strong> <br>
@@ -641,7 +648,8 @@
                                                                             class="img-sm border"></div>
                                                                     <figcaption class="info align-self-center">
                                                                         <p class="title">
-                                                                            <%=order.items[i].product.productName %><br>
+                                                                            <%=order.items[i].product.productName %>
+                                                                                <br>
                                                                                 <p>Qty: <%=order.items[i].quantity %>
                                                                                 </p>
                                                                         </p> <span class="text-muted">
@@ -658,10 +666,11 @@
                                                                                 class="img-sm border"></div>
                                                                         <figcaption class="info align-self-center">
                                                                             <p class="title">
+                                                                                <strong>Product:</strong><br>
                                                                                 <%=order.items[i].product.productName %>
                                                                                     <br>
-                                                                                    <p>Qty: <%=order.items[i].quantity
-                                                                                            %>
+                                                                                    <p><strong>Qty:</strong>
+                                                                                        <%=order.items[i].quantity %>
                                                                                     </p>
                                                                             </p> <span class="text-muted">
                                                                                 ₹<%=order.items[i].product.price %>
@@ -673,8 +682,8 @@
                                                                     <%} %>
                                                 </ul>
                                                 <hr>
-                                                <a href="/order" class="btn btn-warning" data-abc="true"> <i
-                                                        class="fa fa-chevron-left"></i>
+                                                <a href="/order" class="btn btn-warning" style="border-radius: 5px;"
+                                                    data-abc="true"> <i class="fa fa-chevron-left"></i>
                                                     Back to
                                                     orders</a>
                 </div>

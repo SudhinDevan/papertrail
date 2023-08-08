@@ -1,0 +1,176 @@
+<%- include('./partials/header.ejs') %>
+  <style>
+    .profile-image {
+      height: 8rem;
+      width: 8rem;
+      border: .2rem solid #15A78F;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f8f9fa;
+    }
+
+    .profile-image i {
+      font-size: 2.5rem;
+      color: #15A78F;
+    }
+
+    .profile-name {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+
+    .profile-joined-date {
+      font-size: 0.875rem;
+      color: #15A78F;
+    }
+  </style>
+
+  <div class="container-fluid">
+    <div class="row m-0 h-100">
+      <div class="col mt-4">
+        <div class="sticky-top">
+          <div class="container mt-4">
+            <div class="row h-50 align-items-center">
+              <div class="col">
+                <div class="row h-75">
+                  <div class="col">
+                    <div class="row justify-content-center">
+                      <div class="col-6 d-flex justify-content-center">
+                        <div class="profile-image">
+                          <i class="fa fa-user"></i>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row justify-content-center">
+                      <div class="col-6 d-flex flex-column align-items-center">
+                        <div class="profile-name">
+                          <%= user.username%>
+                        </div>
+                        <div class="profile-joined-date"> Created at
+                          <% const createdAtDate=new Date(user.createdAt); %>
+                            <%= createdAtDate.toDateString() %>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row justify-content-center mt-4 mb-5">
+            <div class="col-6 d-flex flex-column">
+              <div
+                style="border: .05rem solid rgb(174, 171, 171);min-height: 2rem; display: flex; align-items: center; justify-content: center;">
+                <a href="/profile" class="nav-link text-dark">Profile</a>
+              </div>
+              <div
+                style="border: .05rem solid rgb(174, 171, 171);min-height: 2rem; display: flex; align-items: center; justify-content: center;">
+                <a href="/order" class="nav-link text-dark">Orders</a>
+              </div>
+              <div
+                style="border: .05rem solid rgb(174, 171, 171);min-height: 2rem; display: flex; align-items: center; justify-content: center;">
+                <a href="/address" class="nav-link text-dark">Address</a>
+              </div>
+              <div
+                style="border: .05rem solid rgb(174, 171, 171);background-color: #15A78F;min-height: 2rem; display: flex; align-items: center; justify-content: center;">
+                <a href="/wallet" class="nav-link text-light">Wallet</a>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+
+      <div class="col-md-7  mt-4">
+        <% if(wallet !==null){ %>
+          <div class="row my-4">
+            <div class="col-12 py-5">
+              <div class="card rounded">
+
+                <div class="card-body d-flex justify-content-between py-0 pr-0">
+                  <span class="text-dark py-3">Available Wallet Balance</span>
+                  <div class="col-lg-2 col-4 bg-white py-3 border-left text-center"
+                    style="background-color: #15A78F !important;">
+                    <span class="text-dark font-weight-bold">&#x20B9;<%=wallet.balance%></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <% wallet.history.reverse().forEach((historyItem)=> { %>
+            <div class="row">
+              <div class="card col-2 mb-3">
+                <% if (historyItem.type==="add" ) { %>
+                  <img width="150" src="https://img.icons8.com/bubbles/200/plus.png" alt="plus" />
+                  <% } else { %>
+                    <img width="150" src="https://img.icons8.com/bubbles/150/minus.png" alt="minus" />
+                    <% } %>
+              </div>
+              <div class="card mb-3 col-10 p-0">
+                <div class="card-body">
+                  <h5 class="card-title">&#x20B9;<%= historyItem.amount %>
+                      <% if (historyItem.type==="add" ) { %>Credited to wallet<% } else { %>
+                          Debited From Wallet<% } %>
+                  </h5>
+
+                </div>
+                <div class="card-footer bg-white d-flex justify-content-between pb-0">
+                  <p>Updated Balance: &#x20B9;<%= historyItem.newBalance %>
+                  </p>
+                  <p>Updated Date: <%= historyItem.updatedDate.toLocaleDateString('en-US', { year: 'numeric' ,
+                      month: 'long' , day: 'numeric' }) %>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <% }) %>
+              <% } else {%>
+                <div class="row mt-4">
+                  <div class="col-12 py-5">
+                    <div class="card rounded"
+                      style="border-color: #15A78F;background-color: rgb(245, 222, 222) !important;">
+
+                      <div class="card-body d-flex justify-content-between py-0 pr-0">
+                        <span class="text-dark py-3">Available wallet Balance</span>
+                        <div class="col-lg-2 col-4 bg-white py-3 border-left text-center"
+                          style="border-color: #15A78F !important;">
+                          <span class="text-dark">&#x20B9;0</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <% } %>
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-md-12 d-flex justify-content-center py-3">
+                        <button class="btn btn-primary" style="background-color: #15A78F;">Add to wallet</button>
+                      </div>
+                    </div>
+                  </div>
+      </div>
+    </div>
+  </div>
+
+
+  </div>
+  </div>
+  </div>
+
+  <!-- ajax -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+  <!-- sweet alert cdn -->
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+
+
+  </script>
+
+  <%- include('./partials/footer.ejs') %>

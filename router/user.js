@@ -6,6 +6,7 @@ const cartController = require('../controller/user/cartController')
 const checkoutController = require('../controller/user/checkoutController')
 const orderController = require('../controller/user/orderController')
 const wishlistController = require('../controller/user/wishlistController')
+const walletController = require('../controller/user/walletController')
 
 
 const express = require('express');
@@ -76,5 +77,7 @@ routers.get('/order/success', userSess.isLogin, orderController.loadOrderSuccess
 routers.get('/addToWishlist', wishlistController.addToWishlist);
 routers.get('/wishlist', userSess.isLogin, wishlistController.loadWishlist)
 routers.get('/removeFromWishlist', userSess.isLogin, wishlistController.removeFromWishlist)
+
+routers.get('/user/profile/wallet', userSess.isLogin, walletController.loadWallet)
 
 module.exports = routers;
