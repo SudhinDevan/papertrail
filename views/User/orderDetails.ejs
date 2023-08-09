@@ -430,83 +430,46 @@
             <article class="card">
                 <header class="card-header"> My Orders / Tracking </header>
                 <div class="card-body">
-                    <div class="row">
+                    <div class="row d-flex">
                         <div class="col">
                             <h6>OrderId:<br>
                                 <%= order._id %>
                             </h6>
                         </div>
-                        <div class="col-auto">
-                            <button class="btn btn-danger mb-3 mr-1">Cancel Order</button>
+                        <div class="d-flex justify-content-end" id="crButton">
+                            <% if (order.order_status=="pending" || order.order_status=="shipped" ) { %>
+                                <div class="col-auto">
+                                    <button class="btn btn-danger mb-3 mr-1"
+                                        onclick="cancelOrder('<%= order._id %>')">Cancel Order</button>
+                                </div>
+                                <% } else if (order.order_status=="delivered" ) { %>
+                                    <div class="col-auto">
+                                        <button class="btn btn-danger mb-3 mr-1"
+                                            onclick="returnOrder('<%= order._id %>')">Return Order</button>
+                                    </div>
+                                    <% } else if (order.order_status=="returnInitiated" ) { %>
+                                        <!-- You can add content here if needed for this case -->
+                                        <% } %>
                         </div>
-                    </div>
-                    <article class="card">
-                        <div class="card-body row">
-                            <div class="col"> <strong>Order placed on:</strong> <br>
-                                <%= order.order_date.toLocaleDateString('en-GB', { day: 'numeric' , month: 'numeric' ,
-                                    year: 'numeric' }); %>
-                            </div>
-                            <div class="col"> <strong>Shipping BY:</strong> <br> BLUEDART | <i class="fa fa-phone"></i>
-                                +1598675986 </div>
-                            <div class="col"> <strong>Payment:</strong> <br>
-                                <%=order.payment_method%>
-                            </div>
-                            <div class="col"> <strong>Tracking #:</strong> <br>
-                                <%= order._id.toString().substring(0, 6) %>
-                            </div>
-                        </div>
-                    </article>
-                    <%if(order.order_status=="pending"){%>
-                        <div class="row  p-0 m-0">
-                            <div class="card  mb-1">
-                                <div class="track">
-                                    <div class="step active">
-                                        <span class="icon">
-                                            <i class="fa fa-check"></i>
-                                        </span>
-                                        <span class="text">Ordered</span>
-                                    </div>
-                                    <div class="step">
-                                        <span class="icon">
-                                            <i class="fa fa-truck"></i>
-                                        </span>
-                                        <span class="text">Shipped</span>
-                                    </div>
-                                    <div class="step">
-                                        <span class="icon">
-                                            <i class="fa fa-box"></i>
-                                        </span>
-                                        <span class="text">Delivered</span>
-                                    </div>
+                        <article class="card">
+                            <div class="card-body row">
+                                <div class="col"> <strong>Order placed on:</strong> <br>
+                                    <%= order.order_date.toLocaleDateString('en-GB', { day: 'numeric' , month: 'numeric'
+                                        , year: 'numeric' }); %>
+                                </div>
+                                <div class="col"> <strong>Shipping BY:</strong> <br> BLUEDART | <i
+                                        class="fa fa-phone"></i>
+                                    +1598675986 </div>
+                                <div class="col"> <strong>Payment:</strong> <br>
+                                    <%=order.payment_method%>
+                                </div>
+                                <div class="col"> <strong>Tracking #:</strong> <br>
+                                    <%= order._id.toString().substring(0, 6) %>
                                 </div>
                             </div>
-                        </div>
-                        <%}else if(order.order_status=="shipped" ){%>
-                            <div class="row  p-0 m-0">
-                                <div class="card  mb-1">
-                                    <div class="track">
-                                        <div class="step active">
-                                            <span class="icon">
-                                                <i class="fa fa-check"></i>
-                                            </span>
-                                            <span class="text">Ordered</span>
-                                        </div>
-                                        <div class="step active">
-                                            <span class="icon">
-                                                <i class="fa fa-truck"></i>
-                                            </span>
-                                            <span class="text">Shipped</span>
-                                        </div>
-                                        <div class="step">
-                                            <span class="icon">
-                                                <i class="fa fa-box"></i>
-                                            </span>
-                                            <span class="text">Delivered</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <%}else if(order.order_status=="delivered" ){%>
+                        </article>
+                        <div id="tracking">
+                            <%if(order.order_status=="pending"){%>
                                 <div class="row  p-0 m-0">
                                     <div class="card  mb-1">
                                         <div class="track">
@@ -516,13 +479,13 @@
                                                 </span>
                                                 <span class="text">Ordered</span>
                                             </div>
-                                            <div class="step active">
+                                            <div class="step">
                                                 <span class="icon">
                                                     <i class="fa fa-truck"></i>
                                                 </span>
                                                 <span class="text">Shipped</span>
                                             </div>
-                                            <div class="step active">
+                                            <div class="step">
                                                 <span class="icon">
                                                     <i class="fa fa-box"></i>
                                                 </span>
@@ -531,7 +494,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <%}else if(order.order_status=="return" ){%>
+                                <%}else if(order.order_status=="shipped" ){%>
                                     <div class="row  p-0 m-0">
                                         <div class="card  mb-1">
                                             <div class="track">
@@ -547,28 +510,16 @@
                                                     </span>
                                                     <span class="text">Shipped</span>
                                                 </div>
-                                                <div class="step active">
+                                                <div class="step">
                                                     <span class="icon">
                                                         <i class="fa fa-box"></i>
                                                     </span>
                                                     <span class="text">Delivered</span>
                                                 </div>
-                                                <div class="step active">
-                                                    <span class="icon">
-                                                        <i class="fa fa-spinner"></i>
-                                                    </span>
-                                                    <span class="text">Return Validation</span>
-                                                </div>
-                                                <div class="step">
-                                                    <span class="icon">
-                                                        <i class="fa fa-undo"></i>
-                                                    </span>
-                                                    <span class="text">Returned</span>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <%}else if(order.order_status=="returnComplete" ){%>
+                                    <%}else if(order.order_status=="delivered" ){%>
                                         <div class="row  p-0 m-0">
                                             <div class="card  mb-1">
                                                 <div class="track">
@@ -590,22 +541,10 @@
                                                         </span>
                                                         <span class="text">Delivered</span>
                                                     </div>
-                                                    <div class="step active">
-                                                        <span class="icon">
-                                                            <i class="fa fa-spinner"></i>
-                                                        </span>
-                                                        <span class="text">Return Validation</span>
-                                                    </div>
-                                                    <div class="step active">
-                                                        <span class="icon">
-                                                            <i class="fa fa-undo"></i>
-                                                        </span>
-                                                        <span class="text">Returned</span>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <%}else if(order.order_status=="rejected" ){%>
+                                        <%}else if(order.order_status=="returnComplete" ){%>
                                             <div class="row  p-0 m-0">
                                                 <div class="card  mb-1">
                                                     <div class="track">
@@ -617,76 +556,149 @@
                                                         </div>
                                                         <div class="step active">
                                                             <span class="icon">
-                                                                <i class="fa fa-close"></i>
-                                                            </span>
-                                                            <span class="text">Cancelled</span>
-                                                        </div>
-                                                        <div class="step">
-                                                            <span class="icon">
                                                                 <i class="fa fa-truck"></i>
                                                             </span>
                                                             <span class="text">Shipped</span>
                                                         </div>
-                                                        <div class="step">
+                                                        <div class="step active">
                                                             <span class="icon">
                                                                 <i class="fa fa-box"></i>
                                                             </span>
                                                             <span class="text">Delivered</span>
                                                         </div>
+                                                        <div class="step active">
+                                                            <span class="icon">
+                                                                <i class="fa fa-spinner"></i>
+                                                            </span>
+                                                            <span class="text">Return Initiated</span>
+                                                        </div>
+                                                        <div class="step active">
+                                                            <span class="icon">
+                                                                <i class="fa fa-undo"></i>
+                                                            </span>
+                                                            <span class="text">Returned</span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <%}%>
-                                                <hr>
-                                                <ul class="row">
-                                                    <% for (let i=0; i < order.items.length; i++) { %>
-                                                        <%if(order.items.length>2){%>
-                                                            <li class="col-md-4">
-                                                                <figure class="itemside mb-3">
-                                                                    <div class="aside"><img
-                                                                            src="<%= order.items[i].product.image[0].url %>"
-                                                                            class="img-sm border"></div>
-                                                                    <figcaption class="info align-self-center">
-                                                                        <p class="title">
-                                                                            <%=order.items[i].product.productName %>
-                                                                                <br>
-                                                                                <p>Qty: <%=order.items[i].quantity %>
-                                                                                </p>
-                                                                        </p> <span class="text-muted">
-                                                                            ₹<%=order.items[i].product.price %>
-                                                                        </span>
-                                                                    </figcaption>
-                                                                </figure>
-                                                            </li>
-                                                            <% }else if(order.items.length<3){%>
-                                                                <li class="col-md-6">
-                                                                    <figure class="itemside mb-3">
-                                                                        <div class="aside"><img
-                                                                                src="<%= order.items[i].product.image[0].url %>"
-                                                                                class="img-sm border"></div>
-                                                                        <figcaption class="info align-self-center">
-                                                                            <p class="title">
-                                                                                <strong>Product:</strong><br>
-                                                                                <%=order.items[i].product.productName %>
-                                                                                    <br>
-                                                                                    <p><strong>Qty:</strong>
-                                                                                        <%=order.items[i].quantity %>
-                                                                                    </p>
-                                                                            </p> <span class="text-muted">
-                                                                                ₹<%=order.items[i].product.price %>
-                                                                            </span>
-                                                                        </figcaption>
-                                                                    </figure>
-                                                                </li>
-                                                                <%} %>
-                                                                    <%} %>
-                                                </ul>
-                                                <hr>
-                                                <a href="/order" class="btn btn-warning" style="border-radius: 5px;"
-                                                    data-abc="true"> <i class="fa fa-chevron-left"></i>
-                                                    Back to
-                                                    orders</a>
-                </div>
+                                            <%}else if(order.order_status=="cancelled" ){%>
+                                                <div class="row  p-0 m-0">
+                                                    <div class="card  mb-1">
+                                                        <div class="track">
+                                                            <div class="step active">
+                                                                <span class="icon">
+                                                                    <i class="fa fa-check"></i>
+                                                                </span>
+                                                                <span class="text">Ordered</span>
+                                                            </div>
+                                                            <div class="step active">
+                                                                <span class="icon">
+                                                                    <i class="fa fa-close"></i>
+                                                                </span>
+                                                                <span class="text">Cancelled</span>
+                                                            </div>
+                                                            <div class="step">
+                                                                <span class="icon">
+                                                                    <i class="fa fa-truck"></i>
+                                                                </span>
+                                                                <span class="text">Shipped</span>
+                                                            </div>
+                                                            <div class="step">
+                                                                <span class="icon">
+                                                                    <i class="fa fa-box"></i>
+                                                                </span>
+                                                                <span class="text">Delivered</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <%}else if(order.order_status=="returnInitiated" ){%>
+                                                    <div class="row  p-0 m-0">
+                                                        <div class="card  mb-1">
+                                                            <div class="track">
+                                                                <div class="step active">
+                                                                    <span class="icon">
+                                                                        <i class="fa fa-check"></i>
+                                                                    </span>
+                                                                    <span class="text">Ordered</span>
+                                                                </div>
+                                                                <div class="step active">
+                                                                    <span class="icon">
+                                                                        <i class="fa fa-truck"></i>
+                                                                    </span>
+                                                                    <span class="text">Shipped</span>
+                                                                </div>
+                                                                <div class="step active">
+                                                                    <span class="icon">
+                                                                        <i class="fa fa-box"></i>
+                                                                    </span>
+                                                                    <span class="text">Delivered</span>
+                                                                </div>
+                                                                <div class="step active">
+                                                                    <span class="icon">
+                                                                        <i class="fa fa-spinner"></i>
+                                                                    </span>
+                                                                    <span class="text">Return Initiated</span>
+                                                                </div>
+                                                                <div class="step">
+                                                                    <span class="icon">
+                                                                        <i class="fa fa-undo"></i>
+                                                                    </span>
+                                                                    <span class="text">Returned</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <%}%>
+                        </div>
+                        <hr>
+                        <ul class="row">
+                            <% for (let i=0; i < order.items.length; i++) { %>
+                                <%if(order.items.length>2){%>
+                                    <li class="col-md-4">
+                                        <figure class="itemside mb-3">
+                                            <div class="aside"><img src="<%= order.items[i].product.image[0].url %>"
+                                                    class="img-sm border"></div>
+                                            <figcaption class="info align-self-center">
+                                                <p class="title">
+                                                    <%=order.items[i].product.productName %>
+                                                        <br>
+                                                        <p>Qty: <%=order.items[i].quantity %>
+                                                        </p>
+                                                </p> <span class="text-muted">
+                                                    ₹<%=order.items[i].product.price %>
+                                                </span>
+                                            </figcaption>
+                                        </figure>
+                                    </li>
+                                    <% }else if(order.items.length<3){%>
+                                        <li class="col-md-6">
+                                            <figure class="itemside mb-3">
+                                                <div class="aside"><img src="<%= order.items[i].product.image[0].url %>"
+                                                        class="img-sm border"></div>
+                                                <figcaption class="info align-self-center">
+                                                    <p class="title">
+                                                        <strong>Product:</strong><br>
+                                                        <%=order.items[i].product.productName %>
+                                                            <br>
+                                                            <p><strong>Qty:</strong>
+                                                                <%=order.items[i].quantity %>
+                                                            </p>
+                                                    </p> <span class="text-muted">
+                                                        ₹<%=order.items[i].product.price %>
+                                                    </span>
+                                                </figcaption>
+                                            </figure>
+                                        </li>
+                                        <%} %>
+                                            <%} %>
+                        </ul>
+                        <hr>
+                        <a href="/order" class="btn btn-warning" style="border-radius: 5px;" data-abc="true"> <i
+                                class="fa fa-chevron-left"></i>
+                            Back to
+                            orders</a>
+                    </div>
             </article>
         </div>
     </section>
@@ -695,5 +707,39 @@
         integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+    <script>
 
+        function returnOrder(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to return the Order, the order amount will be credited to your wallet.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Return Order'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.get(`/returnOrder?orderId=${id}`)
+                        .then((result) => {
+                            if (result.data.response) {
+                                Swal.fire(
+                                    'return Initiated!',
+                                    'Your Order will be picked up soon',
+                                    'success'
+                                )
+                                $.get(location.href, function (data) {
+                                    $("#tracking").html($(data).find("#tracking").html());
+                                    $("#crButton").html($(data).find("#crButton").html());
+                                })
+                            }
+                        })
+                }
+            })
+        }
+
+
+    </script>
     <%- include('./partials/footer.ejs') %>

@@ -40,11 +40,18 @@ const statusChange = async (req, res) => {
         status
     } = req.body;
 
-    if (status === "delivered") {
+    if (status === "shipped") {
         await orderModel.findByIdAndUpdate(id, { order_status: status, payment_status: true });
 
-    } else {
-        await orderModel.findByIdAndUpdate(id, { order_status: status });
+    } else if (status === "delivered") {
+        await orderModel.findByIdAndUpdate(id, { order_status: status, payment_status: true });
+
+    } else if (status === "cancelled") {
+        await orderModel.findByIdAndUpdate(id, { order_status: status, payment_status: true });
+
+    } else if (status === "returnComplete") {
+        await orderModel.findByIdAndUpdate(id, { order_status: status, payment_status: true });
+
     }
 
     const order = await orderModel.findOne({ _id: id });

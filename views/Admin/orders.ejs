@@ -36,7 +36,29 @@
                                     <td>₹<%= orders[i].price.toFixed(2) %>
                                     </td>
                                     <td>
-                                        <%= orders[i].order_status %>
+                                        <%if(orders[i].order_status==="returnInitiated"){%>
+                                            <strong class="text-danger">
+                                                <%= orders[i].order_status %>
+                                            </strong>
+                                            <%}else if(orders[i].order_status==="delivered" ){%>
+                                                <strong class="text-success">
+                                                    <%= orders[i].order_status %>
+                                                </strong>
+                                                <%}else if(orders[i].order_status==="returnComplete" ){%>
+                                                    <strong class="text-primary">
+                                                        <%= orders[i].order_status %>
+                                                    </strong>
+                                                    <%}else if(orders[i].order_status==="cancelled" ){%>
+                                                        <strong style="color: rgb(251, 186, 67);">
+                                                            <%= orders[i].order_status %>
+                                                        </strong>
+                                                        <%}else if(orders[i].order_status==="pending" ){%>
+                                                            <strong style="color: #15A78F;">
+                                                                <%= orders[i].order_status %>
+                                                            </strong>
+                                                            <%}else{%>
+                                                                <%= orders[i].order_status %>
+                                                                    <%}%>
                                     </td>
                                     <td>
                                         <% if(orders[i].payment_method=="cod" ){ %> Cash On Delivery <% } %>

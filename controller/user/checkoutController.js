@@ -5,6 +5,7 @@ const orderModel = require("../../model/orderSchema");
 const orderItemModel = require("../../model/orderItemSchema")
 const productModel = require("../../model/productSchema")
 const couponModel = require("../../model/couponSchema")
+const walletModel = require("../../model/walletSchema");
 
 const Razorpay = require('razorpay');
 

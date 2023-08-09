@@ -139,6 +139,17 @@ const loadOrderSuccessPage = async (req, res) => {
     res.render('User/orderSuccess', { user, order, address, product, coupon, cart });
 }
 
+const returnOrder = async (req, res) => {
+    try {
+        const orderId = req.query.orderId
+        const order = await orderModel.updateOne({ _id: orderId }, { order_status: "returnInitiated" })
+        res.json({ response: true });
+
+    } catch (error) {
+        console.log(error)
+    }
+
+}
 
 
 module.exports = {
@@ -146,4 +157,5 @@ module.exports = {
     loadOrderDetails,
     removeOrder,
     loadOrderSuccessPage,
+    returnOrder,
 }
