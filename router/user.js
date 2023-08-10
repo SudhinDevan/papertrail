@@ -71,7 +71,7 @@ routers.post('/razorpay', checkoutController.razorPayPaymet);
 
 routers.get('/order', userSess.isLogin, orderController.loadorder)
 routers.get('/order/details', userSess.isLogin, orderController.loadOrderDetails)
-routers.post('/order/cancel', orderController.removeOrder);
+routers.post('/order/cancel', orderController.cancelOrder);
 routers.get('/order/success', userSess.isLogin, orderController.loadOrderSuccessPage)
 routers.get('/returnOrder', userSess.isLogin, orderController.returnOrder)
 

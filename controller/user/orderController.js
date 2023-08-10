@@ -5,7 +5,7 @@ const userModel = require("../../model/userSchema");
 const addressModel = require("../../model/addressSchema")
 const couponModel = require("../../model/couponSchema")
 const cartModel = require('../../model/cartSchema')
-
+const walletModel = require('../../model/walletSchema');
 
 
 const loadorder = async (req, res) => {
@@ -83,35 +83,50 @@ const loadOrderDetails = async (req, res) => {
 
 
 
-const removeOrder = async (req, res) => {
-    const { orderId, ordersItemsId } = req.body;
+const cancelOrder = async (req, res) => {
+    try {
 
-    // Update the order document to remove the specified order items
-    await orderModel.findOneAndUpdate(
-        { _id: orderId },
-        { $pull: { items: { $in: ordersItemsId } } }
-    );
-
-    // Loop through each order item ID and perform the necessary updates
-    for (const itemId of ordersItemsId) {
-        const cartProduct = await orderItemModel.findOne({ _id: itemId });
-
-        if (cartProduct) {
-            await productModel.findOneAndUpdate(
-                { _id: cartProduct.product },
-                { $inc: { quantity: cartProduct.quantity } }
-            );
-
-            await orderItemModel.deleteOne({ _id: itemId });
-        } else {
-            console.log(`Cart Product not found for item ID: ${itemId}`);
+        const orderId = req.query.orderId;
+        const order = await orderModel.findOne({ _id: orderId }).populate('items')
+        if (order.payment_method === "online" || order.payment_method === "wallet") {
+            const wallet = await walletModel.findOne({ user: order.user })
+            if (!wallet) {
+                wallet = new walletModel({
+                    user: order.user,
+                    balance: order.price,
+                    history: ({
+                        type: "add",
+                        amount: order.price,
+                        newBalance: order.price
+                    })
+                })
+                await wallet.save();
+            } else {
+                let balance = wallet.balance;
+                const newBalance = balance + order.price;
+                const history = {
+                    type: "add",
+                    amount: order.price,
+                    newBalance: newBalance,
+                }
+                wallet.balance = newBalance;
+                wallet.history.push(history);
+                wallet.save();
+            }
         }
-        await orderModel.deleteOne({ _id: orderId })
+        await orderModel.findByIdAndUpdate(orderId, { order_status: "cancelled" })
 
+        for (const item of order.items) {
+            await productModel.updateOne({ _id: item.product },
+                {
+                    $inc: { quantity: item.quantity }
+                })
+        }
+        res.send({ response: true });
+    } catch (error) {
+        console.log(error);
     }
-
-    res.json({ response: true });
-};
+}
 
 
 const loadOrderSuccessPage = async (req, res) => {
@@ -134,7 +149,6 @@ const loadOrderSuccessPage = async (req, res) => {
             }
         })
     const coupon = await couponModel.findOne({ _id: order.coupon })
-    console.log(coupon);
 
     res.render('User/orderSuccess', { user, order, address, product, coupon, cart });
 }
@@ -155,7 +169,7 @@ const returnOrder = async (req, res) => {
 module.exports = {
     loadorder,
     loadOrderDetails,
-    removeOrder,
+    cancelOrder,
     loadOrderSuccessPage,
     returnOrder,
 }
