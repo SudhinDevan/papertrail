@@ -33,8 +33,9 @@
                     <div class="hero__search">
                         <div class="hero__search__form" style="margin-left: 6rem;">
                             <form action="#">
-                                <input type="text" placeholder="What do yo u need?">
-                                <button type="submit" class="site-btn">SEARCH</button>
+                                <input type="text" id="search" name="search" class="text-dark font-weight-bold"
+                                    placeholder="What do yo u need?" value="<%= search %>">
+                                <button type="button" onclick="advanceSearch()" class="site-btn">SEARCH</button>
                             </form>
                         </div>
 
@@ -99,6 +100,20 @@
                                 </div>
                             </div>
                         </div> -->
+                        <form class="sidebar__item">
+                            <h4>Price</h4>
+                            <div class="price-range-wrap">
+                                <div id="price-range" class="price-slider"></div>
+                                <div class="range-slider">
+                                    <div class="price-input">
+                                        <input type="text" name="minamount" id="minamount">
+                                        <input type="text" name="maxamount" id="maxamount">
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" onclick="advanceSearch()"
+                                class="btn btn-danger btn-sm mt-3">Apply</button>
+                        </form>
                     </div>
                 </div>
 
@@ -181,20 +196,95 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 
     <script>
-        function productsInCat(catId) {
-            $.ajax({
-                type: 'get',
-                url: '/category/' + catId,
-                data: {
-                    categoryId: catId,
-                },
-                success: function (res) {
-                    $("#productCount").html($(res).find("#productCount").html());
-                    $("#productsSection").html($(res).find("#productsSection").html());
-                    $("#pagination").html($(res).find("#pagination").html());
-                }
 
-            })
+        document.addEventListener("DOMContentLoaded", function () {
+            // Set default values for the min and max price inputs
+            document.getElementById("minamount").value = "<%= minamount %>";
+            document.getElementById("maxamount").value = "<%= maxamount %>";
+
+            // Initialize the slider with default values
+            $("#price-range").slider({
+                range: true, // Enables the two-way range slider
+                min: 0,
+                max: 1000,
+                values: ["<%= minamount %>", "<%= maxamount %>"], // Set default slider range
+                slide: function (event, ui) {
+                    $("#minamount").val(ui.values[0]);
+                    $("#maxamount").val(ui.values[1]);
+                }
+            });
+
+            // Update slider and input values when input changes
+            $("#minamount, #maxamount").on("change", function () {
+                var minVal = parseInt($("#minamount").val());
+                var maxVal = parseInt($("#maxamount").val());
+
+                // Ensure the input values are within the valid range
+                if (minVal < 0) minVal = 0;
+                if (maxVal > 1000) maxVal = 1000;
+                if (minVal > maxVal) minVal = maxVal;
+                if (maxVal < minVal) maxVal = minVal;
+
+                // Update the slider position
+                $("#price-range").slider("values", [minVal, maxVal]);
+                $("#minamount").val(minVal);
+                $("#maxamount").val(maxVal);
+            });
+        });
+
+        function productsInCat(catId) {
+            const search = $("#search").val();
+            const minamount = $("#minamount").val();
+            const maxamount = $("#maxamount").val();
+
+            location.href = `/category?categoryId=${catId}&search=${search}&minamount=${minamount}&maxamount=${maxamount}`
+
+            // $.ajax({
+            //     type: 'get',
+            //     url: '/category/' + catId,
+            //     data: {
+            //         categoryId: catId,
+            //         search: search,
+            //         minamount: minamount,
+            //         maxamount: maxamount,
+            //     },
+            //     success: function (res) {
+            //         $("#productCount").html($(res).find("#productCount").html());
+            //         $("#productsSection").html($(res).find("#productsSection").html());
+            //         $("#pagination").html($(res).find("#pagination").html());
+            //     }
+
+            // })
+        }
+
+
+        document.addEventListener("keydown", function (event) {
+            var keycode = event.keyCode || event.which;
+            if (keycode === 13) {
+                event.preventDefault();
+                advanceSearch();
+            }
+        });
+
+
+        function advanceSearch() {
+            const search = $("#search").val();
+            const minamount = $("#minamount").val();
+            const maxamount = $("#maxamount").val();
+
+
+            if (location.pathname == "/category") {
+
+                const query = new URLSearchParams(location.search);
+                const catId = query.get('categoryId')
+                location.href = `/category?categoryId=${catId}&search=${search}&minamount=${minamount}&maxamount=${maxamount}`
+                // productsInCat(catId)
+
+            } else {
+
+                location.href = `/shop?search=${search}&minamount=${minamount}&maxamount=${maxamount}`;
+            }
+
         }
     </script>
 

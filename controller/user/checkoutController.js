@@ -71,6 +71,7 @@ const selectAddress = async (req, res) => {
     if (userId) {
         const address = await addressModel.findOne({ _id: addressId })
         const cart = await cartModel.findOne({ userId });
+        const wallet = await walletModel.findOne({ user: userId })
         let productList = [];
         const product = await cartModel
             .findOne({ userId: userId })
@@ -80,7 +81,7 @@ const selectAddress = async (req, res) => {
             productList.push(item.productId)
         })
 
-        res.render('User/checkout', { cart, productList, user, address, coupon: null });
+        res.render('User/checkout', { cart, productList, user, address, coupon: null, wallet });
 
     } else {
 
@@ -94,126 +95,132 @@ const selectAddress = async (req, res) => {
 
 
 const checkout = async (req, res) => {
-    const userId = req.session.User_id;
+    try {
+        const userId = req.session.User_id;
+        const {
+            payment,
+            address,
+            couponId,
+            payment_id,
+        } = req.body;
 
-    const {
-        payment,
-        address,
-        couponId,
-        payment_id,
-    } = req.body;
-    const cart = await cartModel.findOne({ userId: userId });
+        const cart = await cartModel.findOne({ userId: userId });
 
-    const orderItemIdList = Promise.all(cart.items.map(async (item) => {
-        const newItem = new orderItemModel({
-            product: item.productId,
-            quantity: item.quantity,
-        })
+        const orderItemIdList = Promise.all(cart.items.map(async (item) => {
+            const product = await productModel.findOne({ _id: item.productId });
+            const newItem = new orderItemModel({
+                product: item.productId,
+                quantity: item.quantity,
+                productPrice: product.price,
+            })
 
-        const newOrderItem = await newItem.save();
-        return newOrderItem._id;
-    }))
+            const newOrderItem = await newItem.save();
+            return newOrderItem._id;
+        }))
 
-    const items = await orderItemIdList;
+        const items = await orderItemIdList;
 
-
-    let newOrder = orderModel({
-        user: userId,
-        address: address,
-        items: items,
-        price: cart.cartPrice,
-        payment_status: false,
-        payment_method: payment,
-    })
-    if (couponId) {
-
-        const coupon = await couponModel.findOne({ _id: couponId });
-        coupon.owners.push({
+        let newOrder = orderModel({
             user: userId,
-            quantity: 1,
+            address: address,
+            items: items,
+            price: cart.cartPrice,
+            payment_status: false,
+            payment_method: payment,
         });
 
-        // Save the coupon with the updated owners array and userId field
-        await coupon.save();
+        if (payment == "wallet") {
+            const wallet = await walletModel.findOne({ user: userId });
+
+            if (!wallet) {
+                res.json({ wallet: "false" });
+                return;
+            }
+
+            let cartTotalPrice = cart.cartPrice;
+
+            if (couponId) {
+                const coupon = await couponModel.findOne({ _id: couponId });
+                if (wallet.balance < (cartTotalPrice - coupon.discount)) {
+                    res.json({ wallet: "noprice" })
+                    return;
+                }
+
+                cartTotalPrice -= coupon.discount
+
+            } else {
+
+                if (wallet.balance < cartTotalPrice) {
+                    res.json({ wallet: "noprice" })
+                    return;
+                }
+            }
+
+            let balance = wallet.balance;
+            const newBalance = balance - cartTotalPrice;
+            const history = {
+                type: "subtract",
+                amount: cartTotalPrice,
+                newBalance: newBalance
+            }
+
+            wallet.balance = newBalance;
+            wallet.history.push(history);
+            await wallet.save();
+            newOrder.payment_status = true;
+
+        }
 
 
-        if (payment_id) {
+        if (couponId) {
 
-            newOrder = orderModel({
-                user: userId,
-                address: address,
-                items: items,
-                price: cart.cartPrice - coupon.discount,
-                payment_status: true,
-                payment_method: payment,
-                coupon: couponId,
-                razorpay_order_id: payment_id,
+            const coupon = await couponModel.findOne({ _id: couponId });
 
-            });
+            if (payment_id) {
+
+                newOrder.price = cart.cartPrice - coupon.discount;
+                newOrder.payment_status = true;
+                newOrder.razorpay_order_id = payment_id;
+                newOrder.coupon = coupon._id;
+
+            } else {
+
+                newOrder.price = cart.cartPrice - coupon.discount;
+                newOrder.coupon = coupon._id;
+
+            }
 
         } else {
 
-            newOrder = orderModel({
-                user: userId,
-                address: address,
-                items: items,
-                price: cart.cartPrice - coupon.discount,
-                payment_status: false,
-                payment_method: payment,
-                coupon: couponId,
-            });
+            if (payment_id) {
 
-        }
-        coupon.owners.push({
-            user: userId,
-            quantity: 1,
-        });
+                newOrder.payment_status = true;
+                newOrder.razorpay_order_id = payment_id;
 
-    } else {
-        if (payment_id) {
-
-            newOrder = orderModel({
-                user: userId,
-                address: address,
-                items: items,
-                price: cart.cartPrice,
-                payment_status: true,
-                payment_method: payment,
-                razorpay_order_id: payment_id,
-            });
+            }
 
         }
 
-    }
-    await newOrder.save()
 
-    cart.items.forEach(async (item) => {
-        const product = await productModel.findOne({ _id: item.productId });
-        await productModel.updateMany({ _id: item.productId },
-            { $set: { quantity: product.quantity - item.quantity } })
-    })
+        const saveOrder = await newOrder.save()
 
-    cart.items.forEach(async (item) => {
-        const product = await productModel.findOne({ _id: item.productId });
-        await cartModel.updateMany(
-            {
-                "items.productId": item.productId,
-                "items.quantity": { $gt: product.quantity },
-            },
-            { $set: { "items.$.quantity": product.quantity } }
-        );
 
-        await cartModel.updateMany({
-            $or: [
-                { "items.productId": item.productId }
-            ]
+        cart.items.forEach(async (item) => {
+            const product = await productModel.findOne({ _id: item.productId });
+            await productModel.updateMany({ _id: item.productId },
+                { $set: { quantity: product.quantity - item.quantity } })
         })
 
-    })
-    await cartModel.deleteOne({ userId: userId });
-    res.json({ response: true, orderId: newOrder._id });
-}
 
+        await cartModel.deleteOne({ userId: userId });
+
+        res.json({ response: true, orderId: saveOrder._id });
+
+    } catch (error) {
+        console.log(error);
+    }
+
+}
 
 const razorpayInstance = new Razorpay({
     key_id: process.env.RAZOR_KEY_ID,

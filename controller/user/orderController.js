@@ -30,7 +30,7 @@ const loadorder = async (req, res) => {
 
     // Pagination variables
     const page = parseInt(req.query.page) || 1;
-    const itemsPerPage = 3;
+    const itemsPerPage = 5;
     const totalOrders = orders.length;
     const totalPages = Math.ceil(totalOrders / itemsPerPage);
     const startIndex = (page - 1) * itemsPerPage;
@@ -81,15 +81,13 @@ const loadOrderDetails = async (req, res) => {
 }
 
 
-
-
 const cancelOrder = async (req, res) => {
     try {
 
         const orderId = req.query.orderId;
         const order = await orderModel.findOne({ _id: orderId }).populate('items')
         if (order.payment_method === "online" || order.payment_method === "wallet") {
-            const wallet = await walletModel.findOne({ user: order.user })
+            let wallet = await walletModel.findOne({ user: order.user })
             if (!wallet) {
                 wallet = new walletModel({
                     user: order.user,

@@ -27,7 +27,7 @@ routers.get('/', user.loadHome);
 
 routers.get('/shop', productController.loadShop);
 routers.get('/productdetails', productController.productDetails);
-routers.get('/category/:categoryId', productController.productInCategory)
+routers.get('/category', productController.productInCategory)
 
 routers.get('/user/profile', userSess.isLogin, profileController.loadUserProfile)
 

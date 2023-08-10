@@ -7,14 +7,27 @@ const wishlistModel = require('../../model/wishlistSchema')
 
 const productInCategory = async (req, res) => {
     const userId = req.session.User_id;
-    const categoryId = req.params.categoryId;
+    const categoryId = req.query.categoryId;
+    const search = req.query.search || '';
+    const minamount = parseInt(req.query.minamount) || 0;
+    const maxamount = parseInt(req.query.maxamount) || 1000;
+
     const PAGE_SIZE = 6;
     const page = parseInt(req.query.page) || 1;
     const skip = (page - 1) * PAGE_SIZE;
 
+
     try {
         const products = await productModel
-            .find({ isActive: true, category: categoryId })
+            .find({
+                isActive: true,
+                category: categoryId,
+                productName: { $regex: new RegExp(search, 'i') },
+                $and: [
+                    { price: { $gt: minamount } },
+                    { price: { $lt: maxamount } },
+                ]
+            })
             .skip(skip)
             .limit(PAGE_SIZE)
             .exec();
@@ -34,6 +47,10 @@ const productInCategory = async (req, res) => {
             totalCount,
             currentPage: page,
             totalPages: Math.ceil(totalCount / PAGE_SIZE),
+            search,
+            minamount,
+            maxamount,
+            catId: categoryId,
         });
     } catch (err) {
         console.error('Error fetching products by category:', err);
@@ -45,20 +62,31 @@ const productInCategory = async (req, res) => {
 
 const loadShop = async (req, res) => {
     const id = req.session.User_id;
+    const search = req.query.search || '';
     const user = await userModel.findOne({ _id: id });
+    const minamount = parseInt(req.query.minamount) || 0;
+    const maxamount = parseInt(req.query.maxamount) || 1000;
 
     const PAGE_SIZE = 6;
     const page = parseInt(req.query.page) || 1;
     const skip = (page - 1) * PAGE_SIZE;
 
-    const products = await productModel.find({ isActive: true }).skip(skip).limit(PAGE_SIZE);
+    const products = await productModel.find({
+        isActive: true,
+        productName: { $regex: new RegExp(search, 'i') },
+        $and: [
+            { price: { $gt: minamount } },
+            { price: { $lt: maxamount } },
+        ]
+    }).skip(skip).limit(PAGE_SIZE);
+
     const category = await categoryModel.find();
     const cart = await cartModel.findOne({ userId: id })
 
 
     const totalCount = await productModel.countDocuments({ isActive: true });
 
-    res.render('User/shop', { category, products, user, cart, totalCount, currentPage: page, totalPages: Math.ceil(totalCount / PAGE_SIZE) });
+    res.render('User/shop', { category, products, user, cart, totalCount, currentPage: page, totalPages: Math.ceil(totalCount / PAGE_SIZE), search, minamount, maxamount });
 };
 
 
