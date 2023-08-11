@@ -1,0 +1,76 @@
+<%- include('./partials/header.ejs') %>
+
+  <%- include('./partials/sidebar.ejs') %>
+
+    <div class="container-fluid d-flex gap-4">
+
+      <div style="overflow-y: auto;" class="w-100 d-flex align-items-center align-items-center">
+
+        <div class="table my-3">
+          <table id="dtBasicExample" class="table table-light table-striped table-responsive">
+            <thead>
+
+              <tr>
+                <th>sl.no</th>
+                <th>Banner</th>
+                <th>Title</th>
+                <th>Target Category</th>
+                <th>Description</th>
+                <th>Edit</th>
+                <th>Delete</th>
+              </tr>
+
+            </thead>
+
+            <tbody id="tableVa">
+
+              <% banners.forEach((banner, i)=>{ %>
+
+                <tr>
+                  <td>
+                    <%= i+1 %>
+                  </td>
+                  <td><img style="width: 1.5rem;height: 1.5rem;" src="<%= banner.bannerImage.url %>" alt=""></td>
+                  <td>
+                    <%= banner.title %>
+                  </td>
+                  <td>
+                    <%= banner.targetCategory.categoryName %>
+                  </td>
+                  <td>
+                    <%= banner.description %>
+                  </td>
+                  <td><a href="/admin/banner/edit?bannerId=<%= banner._id %>"> <button type="button"
+                        class="btn btn-success">Edit</button></a></td>
+                  <td><a href="/admin/banner/delete?bannerId=<%=banner._id%>"> <button type="button"
+                        class="btn btn-danger">Delete</button></a></td>
+
+                </tr>
+
+                <% }) %>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript" src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap4.min.js"></script>
+
+
+    <script>
+      // var table = $('#dtBasicExample').DataTable({
+      //   dom: 'Bfrtip',
+      //   pageLength: 6,
+      // });
+
+      // $('.dataTables_length').addClass('bs-select');
+    </script>
+
+    <%- include('./partials/footer.ejs') %>

@@ -34,12 +34,55 @@
                             </form>
                         </div>
                     </div>
-                    <div class="hero__item set-bg" data-setbg="/img/bookwallpaper.jpg">
-                        <div class="hero__text">
-                            <span>papertrail</span>
-                            <h2>July Bestseller</h2>
-                            <p>Collections from Your favourite author</p>
-                            <a href="#" style="text-decoration: none;" class="primary-btn">SHOP NOW</a>
+
+                    <div id="demo" class="carousel slide" data-ride="carousel">
+
+                        <!-- The slideshow -->
+
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="hero__item set-bg" data-setbg="<%= banners[0].bannerImage.url %>">
+                                    <div class="hero__text">
+                                        <!-- <span class="text-light">
+                                            <%= banners[0].title %>
+                                        </span> -->
+                                        <h2 class="text-light">
+                                            <%= banners[0].title %> <br />
+                                                <%= banners[0].description %>
+                                        </h2>
+                                        <!-- <p>Free Pickup and Delivery Available</p> -->
+                                        <a href="/category?categoryId=<%= banners[0].targetCategory._id %>"
+                                            class="primary-btn" style="text-decoration: none;">SHOP NOW</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <% for(i=1;i<banners.length;i++){ %>
+                                <div class="carousel-item">
+                                    <div class="hero__item set-bg" data-setbg="<%= banners[i].bannerImage.url %>">
+                                        <div class="hero__text">
+                                            <!-- <span class="text-light">
+                                                <%= banners[i].title %>
+                                            </span> -->
+                                            <h2 class="text-light">
+                                                <%= banners[i].title %> <br />
+                                                    <%= banners[i].description %>
+                                            </h2>
+                                            <!-- <p>Free Pickup and Delivery Available</p> -->
+                                            <a href="/category?categoryId=<%= banners[i].targetCategory._id %>"
+                                                class="primary-btn" style="text-decoration: none;">SHOP NOW</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
+
+                                    <!-- Left and right controls -->
+                                    <a class="carousel-control-prev" href="#demo" data-slide="prev">
+                                        <span class="carousel-control-prev-icon"></span>
+                                    </a>
+                                    <a class="carousel-control-next" href="#demo" data-slide="next">
+                                        <span class="carousel-control-next-icon"></span>
+                                    </a>
                         </div>
                     </div>
                 </div>
@@ -98,5 +141,31 @@
         </div>
     </div><br> -->
     <!-- Banner End -->
+
+    <!-- axios cdn -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"></script>
+
+
+    <script>
+
+        document.addEventListener("keydown", function (event) {
+            var keycode = event.keyCode || event.which;
+            if (keycode === 13) {
+                event.preventDefault();
+                advanceSearch();
+            }
+        });
+
+        function advanceSearch() {
+            const search = $("#search").val();
+
+            location.href = `/shop?search=${search}`;
+        }
+
+        function login() {
+            const currentUrl = location.href;
+            location.href = `/login?url=${currentUrl}`
+        }
+    </script>
 
     <%- include('./partials/footer.ejs') %>

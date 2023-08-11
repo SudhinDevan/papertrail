@@ -4,6 +4,10 @@ const mail = require("../../utility/sendEmail")
 const Product = require('../../model/productSchema')
 const Category = require('../../model/categorySchema')
 const cartModel = require('../../model/cartSchema')
+const bannerModel = require('../../model/bannerSchema')
+const { log } = require('console')
+
+
 
 // Load Signup page
 const signup = async (req, res) => {
@@ -78,14 +82,20 @@ const verifyLogin = async (req, res) => {
     }
 }
 
-// Home if session, else Login
+
 const loadHome = async (req, res) => {
-    const id = req.session.User_id;
-    const user = await User.findOne({ _id: id });
-    const category = await Category.find();
-    const products = await Product.find({ isActive: true })
-    const cart = await cartModel.findOne({ userId: id })
-    res.render('User/home', { category, products, user, cart });
+    try {
+        const id = req.session.User_id;
+        const user = await User.findOne({ _id: id });
+        const cart = await cartModel.findOne({ userId: id })
+        const category = await Category.find();
+        const products = await Product.find({ isActive: true })
+        const banners = await bannerModel.find()
+
+        res.render('User/home', { category, products, user, cart, banners });
+    } catch (error) {
+        res.render('user/404page');
+    }
 }
 
 

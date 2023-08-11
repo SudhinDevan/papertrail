@@ -6,7 +6,8 @@ const category = require("../controller/admin/categoryController");
 const product = require("../controller/admin/productOperations");
 const admin = require("../controller/admin/adminController");
 const order = require("../controller/admin/orderController");
-const coupon = require("../controller/admin/couponController")
+const coupon = require("../controller/admin/couponController");
+const banner = require("../controller/admin/bannerController");
 
 const adminSesh = require("../middleware/admin");
 
@@ -46,7 +47,12 @@ routers.get('/coupon/edit', adminSesh.isLogin, coupon.loadEditCoupon);
 routers.post('/coupon/edit', coupon.editCoupon);
 routers.post('/coupon/apply', coupon.applyCoupon);
 
-
+routers.get('/banner', adminSesh.isLogin, banner.loadBanner);
+routers.get('/banner/add', adminSesh.isLogin, banner.loadAddBanner);
+routers.post('/banner/add', banner.addBanner);
+routers.get('/banner/edit', adminSesh.isLogin, banner.loadEditBanner);
+routers.post('/banner/edit', banner.editBanner);
+routers.get('/banner/delete', banner.deleteBanner);
 
 
 

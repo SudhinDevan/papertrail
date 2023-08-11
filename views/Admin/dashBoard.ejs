@@ -1,11 +1,278 @@
 <%- include('./partials/header.ejs') %>
 
-
-
     <%- include('./partials/sidebar.ejs') %>
 
+        <div class="container-fluid d-flex gap-4" style="background-color: #EDF1F5;">
 
-        <h1 class="text-center py-5">Hello</h1>
+            <div style="overflow-y: auto;" class="w-100 d-flex align-items-center align-items-center ">
+                <div class="row mt-3 ml-lg-4">
+                    <div class="col-lg-6 col-12 mb-3">
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <div class="container-fluid bg-white pt-3 pb-5">
+                                    <h5 class="text-success px-3 pt-3 pb-0"> Daily Orders</h5>
+                                    <p class="pl-3 pt-0 pb-3"><small>Our orders for the past month</small> </p>
+                                    <div class="d-flex justify-content-end">
+                                        <form>
+                                            <select class="selectpicker" id="filter1" onchange="filter()">
+                                                <option value="30" selected>Last 30 days</option>
+                                                <option value="14">Last 14 days</option>
+                                                <option value="7">Last 7 days</option>
+                                            </select>
+                                        </form>
+                                    </div>
+                                    <canvas id="daily"></canvas>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="container bg-white pt-3 pb-3 mt-1">
+                                    <h5 class="text-success px-3 pt-3 pb-0">Category Distribution</h5>
+                                    <p class="pl-3 pt-0 pb-0"><small>Our orders per category</small> </p>
+                                    <div class="col-10">
+                                        <canvas id="categories"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="row mb-3">
+                            <div class="col-5 p-0 mr-3 mb-3">
+                                <div class="card border-0 p-3">
+                                    <h4 class="text-success">Customers</h4>
+                                    <h4 class="text-success"><i class="fa fa-user text-success"></i>
+                                        <%= userCount %>
+                                    </h4>
+                                </div>
+                            </div>
+                            <div class="col-5 px-lg-4 mb-3" style="box-sizing: content-box !important;">
+                                <div class="card border-0 p-3">
+                                    <h4 class="text-success">Orders</h4>
+                                    <h4 class="text-success"><i class="fa fa-user text-success"></i>
+                                        <%= orderCount %>
+                                    </h4>
+                                </div>
+                            </div>
+                            <div class="col-lg-11 bg-white mb-2">
+                                <div class="container bg-white py-3 pb-4">
+                                    <h5 class="text-success px-3 pt-3 pb-0"> Users joined</h5>
+                                    <p class="pl-3 pt-0 pb-3"><small>Our users this month vs last month</small> </p>
+                                    <canvas id="user"></canvas>
+                                </div>
 
+                            </div>
+                            <div class="col-lg-11 p-2">
+                                <div class="container bg-white pt-2 pb-0">
+                                    <h5 class="text-success px-3 pt-1 pb-0">Recent Transactions</h5>
+                                    <p class="pl-3 pt-0 pb-3"><small>Last few orders</small> </p>
+                                    <table class="table bg-white">
+                                        <thead>
+                                            <tr>
+                                                <th>Order No.</th>
+                                                <th>Order Date</th>
+                                                <th>Customer</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% for (let i=0; i < 4; i++) { %>
+                                                <tr>
+                                                    <td>
+                                                        <%= i+1 %>
+                                                    </td>
+                                                    <td>
+                                                        <%= orders[i].order_date.toLocaleDateString() %>
+                                                    </td>
+                                                    <td>
+                                                        <%= orders[i].user.username %>
+                                                    </td>
+                                                    <td>
+                                                        <%= orders[i].order_status %>
+                                                    </td>
+                                                </tr>
+
+                                                <% } %>
+                                        </tbody>
+                                    </table>
+                                    <a class="btn btn-sm btn-dark" href="/admin/order">Go to orders &rarr;</a>
+                                </div>
+                                <div
+                                    class="container bg-white p-2 mt-2 rounded d-flex justify-content-between align-items-center">
+                                    <h6 class=" px-2"> Go to Sales report </h6>
+                                    <a href="/admin/sale" class="btn btn-success rounded text-white">Sales Report</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+
+            <script>
+                if (new URLSearchParams(window.location.search).get('filter1')) {
+                    document.getElementById('filter1').value = new URLSearchParams(window.location.search).get('filter1');
+                }
+
+                async function filter() {
+                    const filter1 = document.getElementById('filter1').value;
+                    window.location.href = `/admin/dashboard?filter1=${filter1}`
+                }
+
+                (async function () {
+                    const filter1 = document.getElementById('filter1').value;
+                    const dailyOrderCount = JSON.parse('<%- JSON.stringify(daily) %>');
+                    const user = JSON.parse('<%- JSON.stringify(user) %>');
+                    const category = JSON.parse('<%- JSON.stringify(category) %>');
+
+                    const startDate = new Date();
+                    startDate.setDate(startDate.getDate() - filter1); // Subtract the filter1Value from the current date
+                    const endDate = new Date();
+
+                    const chartLabels = [];
+                    let currentDate = new Date(startDate);
+                    while (currentDate <= endDate) {
+                        const dateString = currentDate.toISOString().split('T')[0];
+                        chartLabels.push(dateString);
+                        currentDate.setDate(currentDate.getDate() + 1);
+                    }
+
+                    const dailyCounts = {};
+                    dailyOrderCount.forEach((daily) => {
+                        dailyCounts[daily._id] = daily.count;
+                    });
+
+                    const chartData = chartLabels.map((date) => dailyCounts[date] || 0);
+
+                    new Chart(
+                        document.getElementById('daily'),
+                        {
+                            type: 'line',
+                            data: {
+                                labels: chartLabels,
+                                datasets: [
+                                    {
+                                        label: 'Daily Order Count',
+                                        data: chartData,
+                                        backgroundColor: 'rgba(170, 128, 252, 0.2)', // Customize the area color
+                                        borderColor: 'rgba(170, 128, 252, 1)',
+                                        borderWidth: 1,
+                                        fill: 'origin', // Fill the area below the line
+                                    }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        position: 'bottom',
+                                    },
+                                },
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        grid: {
+                                            display: false,
+                                        },
+                                    },
+                                    x: {
+                                        beginAtZero: true,
+                                        grid: {
+                                            display: false,
+                                        },
+                                        ticks: {
+                                            font: {
+                                                size: 10, // Set the font size for the chart labels
+                                            }
+                                        }
+                                    },
+
+                                },
+                            }
+                        }
+                    );
+
+                    const categoryLabels = category.map(item => item.categoryName);
+                    const categoryCounts = category.map(item => item.count);
+
+                    new Chart(
+                        document.getElementById('categories'),
+                        {
+                            type: 'pie',
+                            data: {
+                                labels: categoryLabels,
+                                datasets: [
+                                    {
+                                        label: 'Categories',
+                                        data: categoryCounts,
+                                        backgroundColor: [
+                                            'rgba(255, 99, 132, 0.8)',
+                                            'rgba(54, 162, 235, 0.8)',
+                                            'rgba(255, 206, 86, 0.8)',
+                                            'rgba(75, 192, 192, 0.8)',
+                                            'rgba(153, 102, 255, 0.8)',
+                                        ],
+                                        borderColor: 'rgba(255, 255, 255, 1)',
+                                        borderWidth: 1,
+                                    }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        position: 'right',
+                                    },
+                                },
+                            }
+                        }
+                    );
+
+                    const userLabels = user.map(item => item._id);
+                    const userCounts = user.map(item => item.count);
+                    console.log(userCounts);
+                    console.log(userLabels);
+                    new Chart(
+                        document.getElementById('user'),
+                        {
+                            type: 'bar',
+                            data: {
+                                labels: userLabels,
+                                datasets: [
+                                    {
+                                        label: 'User Count',
+                                        data: userCounts,
+                                        backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                                        borderColor: 'rgba(54, 162, 235, 1)',
+                                        borderWidth: 1,
+                                    }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        grid: {
+                                            display: false, // Remove the y-axis grid lines
+                                        },
+                                    },
+                                    x: {
+                                        grid: {
+                                            display: false, // Remove the x-axis grid lines
+                                        },
+                                    },
+                                },
+                            }
+                        }
+                    );
+
+                })();
+            </script>
+
+        </div>
 
         <%- include('./partials/footer.ejs') %>

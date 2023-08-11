@@ -135,7 +135,7 @@ const loadImages = async (req, res) => {
 
 const deleteProductImage = async (req, res) => {
     const { public_id, productId } = req.query;
-    console.log(public_id);
+ 
     // console.log(productId);
     await deleteImage(public_id);
 
