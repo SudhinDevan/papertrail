@@ -3,9 +3,9 @@ const bcrypt = require('bcrypt')
 
 
 // Get Admin Login
-const adminlogin = async (req, res) => {
-    res.render('Admin/dashBoard', { message: "" });
-}
+// const adminlogin = async (req, res) => {
+//     res.render('Admin/dashBoard', { message: "" });
+// }
 
 // verify admin credentials
 const verifyAdminLogin = async (req, res) => {
@@ -18,7 +18,7 @@ const verifyAdminLogin = async (req, res) => {
         if (passMatch) {
             if (userData.isAdmin) {
                 req.session.Admin = userData.email
-                res.render('Admin/dashBoard', { admin: userData.username })
+                res.redirect('Admin/dashBoard')
             } else {
                 res.render('Admin/adminLogin', { message: "Access Denied" })
             }
@@ -53,7 +53,7 @@ const blockUser = async (req, res) => {
 }
 
 module.exports = {
-    adminlogin,
+    // adminlogin,
     verifyAdminLogin,
     adminLogout,
     blockUser,

@@ -8,10 +8,15 @@ const admin = require("../controller/admin/adminController");
 const order = require("../controller/admin/orderController");
 const coupon = require("../controller/admin/couponController");
 const banner = require("../controller/admin/bannerController");
+const dashBoard = require("../controller/admin/dashBoardController")
 
 const adminSesh = require("../middleware/admin");
 
-routers.get('/', adminSesh.isLogin, adminAuth.adminlogin);
+
+
+routers.get('/dashboard', adminSesh.isLogin, dashBoard.loadDashboard);
+
+routers.get('/', adminSesh.isLogin, dashBoard.loadDashboard);
 routers.post('/', adminAuth.verifyAdminLogin);
 routers.get('/signOut', adminAuth.adminLogout);
 routers.get('/userData', adminSesh.isLogin, admin.userTable);

@@ -108,7 +108,7 @@
                                 data-setbg="<%= products[i].image[0].url %>">
                             </div>
                             <div class="featured__item__text">
-                                <h6><a href="/productDetails?id=<%= products._id %>" style="text-decoration: none;">
+                                <h6><a href="/productDetails?id=<%= products[i]._id %>" style="text-decoration: none;">
                                         <%= products[i].productName %>
                                     </a></h6>
                                 <h5>₹<%= products[i].price %>

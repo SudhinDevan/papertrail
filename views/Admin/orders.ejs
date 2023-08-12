@@ -63,6 +63,8 @@
                                     <td>
                                         <% if(orders[i].payment_method=="cod" ){ %> Cash On Delivery <% } %>
                                                 <% if(orders[i].payment_method=="online" ){ %> Online Payment <% } %>
+                                                        <% if(orders[i].payment_method=="wallet" ){ %> Wallet Payment <%
+                                                                } %>
                                     </td>
                                     <td><a href="/admin/orderDetails?userId=<%=users[i].user._id %>&orderId=<%= users[i]._id %>"
                                             class="btn btn-primary">view</a></td>

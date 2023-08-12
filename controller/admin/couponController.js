@@ -115,11 +115,9 @@ const applyCoupon = async (req, res) => {
     }
 
     // Check if the user already owns the coupon
-    const userCoupon = coupon.owners.find(owner => owner.user.equals(user));
-
+    const userCoupon = await couponModel.findOne({couponName: couponName, "owners.user": user});
     if (userCoupon) {
-      return res.json({ response: false, message: 'Coupon already used' });
-
+      return res.json({ response: 'applied' });
     }
 
     // Check if the cart price meets the minimum amount required by the coupon

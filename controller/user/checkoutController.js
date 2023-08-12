@@ -175,6 +175,13 @@ const checkout = async (req, res) => {
         if (couponId) {
 
             const coupon = await couponModel.findOne({ _id: couponId });
+            coupon.owners.push({
+                user: userId,
+                quantity: 1,
+            });
+
+            // Save the coupon with the updated owners array and userId field
+            await coupon.save();
 
             if (payment_id) {
 

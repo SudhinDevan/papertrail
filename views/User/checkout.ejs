@@ -72,6 +72,7 @@
                                     </div>
                                 </div>
                             </form>
+
                             <div class="pay-option mt-1 mb-4">
                                 <div class="pay-option mt-4 mb-4">
                                     <label for="wallet" class="checkoutWallet">
@@ -79,14 +80,25 @@
                                             <i class="ri-wallet-2-line me-2"></i>
                                             <b>Wallet Balance:</b>
                                         </div>
-                                        <div class="cw-cash">
-                                            <b>
-                                                ₹
-                                                <span id="walletAmount">
-                                                    <%= wallet.balance %>
-                                                </span>
-                                            </b>
-                                        </div>
+                                        <%if(wallet){%>
+                                            <div class="cw-cash">
+                                                <b>
+                                                    ₹
+                                                    <span id="walletAmount">
+                                                        <%= wallet.balance %>
+                                                    </span>
+                                                </b>
+                                            </div>
+                                            <%}else{%>
+                                                <div class="cw-cash">
+                                                    <b>
+                                                        ₹
+                                                        <span id="walletAmount">
+                                                            0
+                                                        </span>
+                                                    </b>
+                                                </div>
+                                                <%}%>
                                     </label>
                                 </div>
                                 <div class="checkout__order mt-3">
@@ -108,7 +120,8 @@
                                             class="text-dark couponShow">₹0</span>
                                     </div>
                                     <div class="checkout__order__total">Total <span id="totalprice">₹<%=
-                                                cart.cartPrice%></span></div>
+                                                cart.cartPrice%>
+                                        </span></div>
 
                                     <div class="bg-light p-30 " style="background-color: #f5f5f5 !important;">
                                         <div class="form-group paymentx">
@@ -127,7 +140,7 @@
                                                     Online</label>
                                             </div>
                                         </div>
-                                        <% if (cart.cartPrice<=wallet.balance) { %>
+                                        <% if (wallet && cart.cartPrice<=wallet.balance) { %>
                                             <div class="form-group mb-4 paymentx">
                                                 <div class="custom-control custom-radio">
                                                     <input type="radio" class="custom-control-input" value="wallet"
@@ -219,8 +232,11 @@
                 .then((result) => {
                     if (result.data.response == false) {
                         Swal.fire({
-                            icon: "warning",
-                            title: "Invalid coupon",
+                            position: 'canter',
+                            icon: 'error',
+                            title: 'Invalid Coupon',
+                            showConfirmButton: false,
+                            timer: 1500
                         })
                         document.querySelector('.couponShow').innerHTML = `₹${0}`;
                         document.querySelector('.couponShow').removeAttribute("id");
@@ -228,10 +244,22 @@
                     } else if (result.data.response == "min") {
 
                         Swal.fire({
-                            icon: "warning",
-                            title: "You can't apply this coupon",
+                            position: 'canter',
+                            icon: 'error',
+                            title: 'Cart Amount low',
+                            showConfirmButton: false,
+                            timer: 1500
                         })
 
+                    } else if (result.data.response == "applied") {
+
+                        Swal.fire({
+                            position: 'canter',
+                            icon: 'error',
+                            title: 'Coupon already applied',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
                     } else {
                         Swal.fire({
                             position: 'center',
@@ -310,6 +338,7 @@
             const payment = document.querySelector('input[name="payment"]:checked').value;
             const addressId = document.getElementById('addressId').value;
             const couponId = document.querySelector('.couponShow').id;
+            console.log(couponId);
 
             if (payment == "online") {
 

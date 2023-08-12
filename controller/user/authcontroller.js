@@ -92,6 +92,7 @@ const loadHome = async (req, res) => {
         const products = await Product.find({ isActive: true })
         const banners = await bannerModel.find()
 
+
         res.render('User/home', { category, products, user, cart, banners });
     } catch (error) {
         res.render('user/404page');
