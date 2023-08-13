@@ -453,6 +453,14 @@
                                         <!-- You can add content here if needed for this case -->
                                         <% } %>
                         </div>
+                        <div class="mb-3">
+                            <span>Order Amount Total: <strong>₹<%=order.price%></strong>
+                            </span><br>
+                            <%if(coupon){%>
+                                <span>Coupon Discount: <strong>₹<%=coupon.discount%></strong>
+                                </span>
+                                <%}%>
+                        </div>
                         <article class="card">
                             <div class="card-body row">
                                 <div class="col"> <strong>Order placed on:</strong> <br>

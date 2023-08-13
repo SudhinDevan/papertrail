@@ -73,6 +73,55 @@
                                 </div>
                             </form>
 
+                            <div class="d-flex justify-content-center align-items-center mt-3">
+
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-secondary btn-sm shadow-none " data-toggle="modal"
+                                    data-target="#exampleModalCenter">
+                                    Availabe coupons
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade " id="exampleModalCenter" tabindex="-1" role="dialog"
+                                    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">Coupons</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body" style="overflow-y: scroll; height: 250px;">
+                                                <% for (coupon of coupons) { %>
+                                                    <div class="card mb-3">
+                                                        <div class="card-body">
+                                                            <div class="font-weight-bold">Coupon:<span
+                                                                    class="mx-1 text-secondary" id="couponName">
+                                                                    <%= coupon.couponName %>
+                                                                </span></div>
+                                                            <div class="font-weight-bold">Minimum Amount:<span
+                                                                    class="mx-2 text-secondary">&#8377;<%=
+                                                                        coupon.minAmount %></span></div>
+                                                            <div class="font-weight-bold">Discount Amount:<span
+                                                                    class="mx-2 text-secondary">&#8377;<%=
+                                                                        coupon.discount %></span></div>
+                                                        </div>
+                                                    </div>
+                                                    <% } %>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Modal end -->
+
+                            </div>
+
                             <div class="pay-option mt-1 mb-4">
                                 <div class="pay-option mt-4 mb-4">
                                     <label for="wallet" class="checkoutWallet">
@@ -103,7 +152,7 @@
                                 </div>
                                 <div class="checkout__order mt-3">
                                     <h4>Your Order</h4>
-                                    <div class="checkout__order__products">Products <span>Total</span></div>
+                                    <div class="checkout__order__products">Products: <span>Total</span></div>
                                     <ul>
                                         <% for(let i=0;i<cart.items.length;i++){ %>
                                             <li>
@@ -174,6 +223,7 @@
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <script>
+
         $(document).ready(function () {
             // $('input:radio').change(function () {//Clicking input radio
             //     var radioClicked = $(this).attr('id');
@@ -192,25 +242,32 @@
                 clickRadio(inputElement);
             });
         });
+
+
         function btnShow() {
             $("#address-btn").css("display", "block");
         }
+
 
         function unclickRadio() {
             $("input:radio").prop("checked", false);
         }
 
+
         function clickRadio(inputElement) {
             $("#" + inputElement).prop("checked", true);
         }
+
 
         function removeActive() {
             $(".card").removeClass("active");
         }
 
+
         function makeActive(element) {
             $("#" + element + "-card").addClass("active");
         }
+
 
         const couponForm = document.getElementById('couponForm');
 
@@ -256,7 +313,7 @@
                         Swal.fire({
                             position: 'canter',
                             icon: 'error',
-                            title: 'Coupon already applied',
+                            title: 'You cannot apply a coupon twice',
                             showConfirmButton: false,
                             timer: 1500
                         })

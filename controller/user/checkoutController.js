@@ -72,6 +72,7 @@ const selectAddress = async (req, res) => {
         const address = await addressModel.findOne({ _id: addressId })
         const cart = await cartModel.findOne({ userId });
         const wallet = await walletModel.findOne({ user: userId })
+        const coupons = await couponModel.find()
         let productList = [];
         const product = await cartModel
             .findOne({ userId: userId })
@@ -81,7 +82,7 @@ const selectAddress = async (req, res) => {
             productList.push(item.productId)
         })
 
-        res.render('User/checkout', { cart, productList, user, address, coupon: null, wallet });
+        res.render('User/checkout', { cart, productList, user, address, coupons, wallet });
 
     } else {
 

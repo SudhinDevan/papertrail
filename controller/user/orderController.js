@@ -58,7 +58,9 @@ const loadOrderDetails = async (req, res) => {
 
         const userId = req.session.User_id;
         const { orderId } = req.query;
+
         const cart = await cartModel.findOne({ userId: userId })
+
 
         const user = await userModel.findOne({ _id: userId });
 
@@ -72,8 +74,11 @@ const loadOrderDetails = async (req, res) => {
                 }
             })
 
+
+        const coupon = await couponModel.findOne({ _id: order.coupon })
+
         const cartAddress = await orderModel.findOne({ _id: orderId }).populate("address");
-        res.render('user/orderDetails', { id: userId, cart, user, order, address: cartAddress.address });
+        res.render('user/orderDetails', { id: userId, cart, coupon, user, order, address: cartAddress.address });
 
     } catch (error) {
         console.log(error.message);
