@@ -91,7 +91,6 @@ const loadShop = async (req, res) => {
 
 
 const productDetails = async (req, res) => {
-
     try {
 
         const userId = req.session.User_id;

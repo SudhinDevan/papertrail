@@ -133,13 +133,13 @@ const cancelOrder = async (req, res) => {
 
 
 const loadOrderSuccessPage = async (req, res) => {
-    // const userId = req.Session.User_id
+    const userId = req.session.User_id;
     const { orderId } = req.query;
 
     const order = await orderModel.findOne({ _id: orderId });
     const user = await userModel.findOne({ _id: order.user });
     const address = await addressModel.findOne({ _id: order.address });
-    const cart = await cartModel.findOne({ userId: user._Id })
+    const cart = await cartModel.findOne({ userId: userId })
 
 
     const product = await orderModel.findOne({ _id: orderId })

@@ -16,6 +16,12 @@ const adminSesh = require("../middleware/admin");
 
 routers.get('/dashboard', adminSesh.isLogin, dashBoard.loadDashboard);
 
+routers.get('/sale', adminSesh.isLogin, dashBoard.loadSalesReport);
+routers.post('/sale/monthly', dashBoard.monthlySaleReport);
+routers.post('/sale/daily', dashBoard.dailySalesReport);
+
+
+
 routers.get('/', adminSesh.isLogin, dashBoard.loadDashboard);
 routers.post('/', adminAuth.verifyAdminLogin);
 routers.get('/signOut', adminAuth.adminLogout);

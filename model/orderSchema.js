@@ -37,6 +37,9 @@ const orderSchema = schema({
     coupon: {
         type: String,
     },
+    couponDiscount: {
+        type: Number,
+    },
     order_date: {
         type: Date,
         default: Date.now(),

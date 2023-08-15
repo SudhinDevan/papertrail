@@ -30,6 +30,7 @@ const addCoupon = async (req, res) => {
       discount,
       expiryDate,
       minimumAmount,
+      maxDiscount,
     } = req.body;
 
     let name = req.body.name.toUpperCase();
@@ -47,6 +48,7 @@ const addCoupon = async (req, res) => {
         discount: discount,
         expiryDate: expiryDate,
         minAmount: minimumAmount,
+        maxDiscount: maxDiscount,
       });
 
       await newCoupon.save();
@@ -115,14 +117,19 @@ const applyCoupon = async (req, res) => {
     }
 
     // Check if the user already owns the coupon
-    const userCoupon = await couponModel.findOne({couponName: couponName, "owners.user": user});
+    const userCoupon = await couponModel.findOne({ couponName: couponName, "owners.user": user });
     if (userCoupon) {
       return res.json({ response: 'applied' });
     }
 
     // Check if the cart price meets the minimum amount required by the coupon
     if (cartPrice >= coupon.minAmount) {
-      // Apply the coupon discount to the cartPrice (You may implement this part based on your logic)
+      let couponDiscount = (cartPrice * coupon.discount) / 100;
+      if (couponDiscount > coupon.maxDiscount) {
+        couponDiscount = coupon.maxDiscount;
+      }
+      coupon.couponDiscount = couponDiscount;
+      coupon.discount = couponDiscount;
       const discountedPrice = cartPrice - coupon.discount;
       return res.json({ response: true, coupon: coupon, discountedPrice: discountedPrice });
     } else {

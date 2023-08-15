@@ -113,6 +113,7 @@ const checkout = async (req, res) => {
                 product: item.productId,
                 quantity: item.quantity,
                 productPrice: product.price,
+
             })
 
             const newOrderItem = await newItem.save();
@@ -142,6 +143,12 @@ const checkout = async (req, res) => {
 
             if (couponId) {
                 const coupon = await couponModel.findOne({ _id: couponId });
+                let couponDiscount = (cartPrice * coupon.discount) / 100;
+                if (couponDiscount > coupon.maxDiscount) {
+                    couponDiscount = coupon.maxDiscount;
+                }
+                coupon.discount = couponDiscount;
+                order.couponDiscount = couponDiscount;
                 if (wallet.balance < (cartTotalPrice - coupon.discount)) {
                     res.json({ wallet: "noprice" })
                     return;
@@ -169,7 +176,7 @@ const checkout = async (req, res) => {
             wallet.history.push(history);
             await wallet.save();
             newOrder.payment_status = true;
-
+            newOrder.couponDiscount = couponDiscount;
         }
 
 
@@ -185,17 +192,27 @@ const checkout = async (req, res) => {
             await coupon.save();
 
             if (payment_id) {
-
+                let couponDiscount = (cart.cartPrice * coupon.discount) / 100;
+                if (couponDiscount > coupon.maxDiscount) {
+                    couponDiscount = coupon.maxDiscount;
+                }
+                coupon.discount = couponDiscount;
                 newOrder.price = cart.cartPrice - coupon.discount;
                 newOrder.payment_status = true;
                 newOrder.razorpay_order_id = payment_id;
                 newOrder.coupon = coupon._id;
+                newOrder.couponDiscount = couponDiscount
+
 
             } else {
-
+                let couponDiscount = (cart.cartPrice * coupon.discount) / 100;
+                if (couponDiscount > coupon.maxDiscount) {
+                    couponDiscount = coupon.maxDiscount;
+                }
+                coupon.discount = couponDiscount;
                 newOrder.price = cart.cartPrice - coupon.discount;
                 newOrder.coupon = coupon._id;
-
+                newOrder.couponDiscount = couponDiscount;
             }
 
         } else {
@@ -230,6 +247,7 @@ const checkout = async (req, res) => {
 
 }
 
+
 const razorpayInstance = new Razorpay({
     key_id: process.env.RAZOR_KEY_ID,
     key_secret: process.env.RAZOR_KEY_SECRET,
@@ -250,6 +268,11 @@ const razorPayPaymet = async (req, res) => {
 
         if (coupon) {
             const coupon = await couponModel.findOne({ _id: req.body.coupon });
+            let couponDiscount = (cart.cartPrice * coupon.discount) / 100;
+            if (couponDiscount > coupon.maxDiscount) {
+                couponDiscount = coupon.maxDiscount;
+            }
+            coupon.discount = couponDiscount;
             amount = (cart.cartPrice - coupon.discount) * 100;
         }
 

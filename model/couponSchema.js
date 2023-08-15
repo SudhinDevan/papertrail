@@ -19,6 +19,10 @@ const couponSchema = schema({
     type: Number,
     required: true,
   },
+  maxDiscount: {
+    type: Number,
+    required: true,
+  },
   isActive: {
     type: Boolean,
     required: true,

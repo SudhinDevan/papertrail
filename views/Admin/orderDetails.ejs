@@ -147,6 +147,20 @@
                 </table>
               </div>
             </div>
+            <div class="card m-3">
+              <div class="card-header">
+                Order Details
+              </div>
+              <div class="card-body">
+
+                <h6>Order Amount:
+                  <strong style="margin-left: 1rem;">₹<%=order.price%></strong>
+                </h6><br>
+                <h6>Coupon Discount:
+                  <strong style="margin-left: 1rem;">₹<%=order.couponDiscount%></strong>
+                </h6>
+              </div>
+            </div>
 
             <div class="card m-3">
               <div class="card-header">
@@ -170,7 +184,7 @@
               <div class="card-body">
                 <% if(order.payment_method=="cod" ){ %> Cash On Delivery <% } %>
                     <% if(order.payment_method=="online" ){ %> Online Payment <% } %>
-                    <% if(order.payment_method=="wallet" ){ %> Wallet Payment <% } %>
+                        <% if(order.payment_method=="wallet" ){ %> Wallet Payment <% } %>
               </div>
             </div>
             </section>

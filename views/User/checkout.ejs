@@ -104,9 +104,14 @@
                                                             <div class="font-weight-bold">Minimum Amount:<span
                                                                     class="mx-2 text-secondary">&#8377;<%=
                                                                         coupon.minAmount %></span></div>
-                                                            <div class="font-weight-bold">Discount Amount:<span
-                                                                    class="mx-2 text-secondary">&#8377;<%=
-                                                                        coupon.discount %></span></div>
+                                                            <div class="font-weight-bold">Discount Percent:<span
+                                                                    class="mx-2 text-secondary">
+                                                                    <%= coupon.discount %>%
+                                                                </span></div>
+                                                            <div class="font-weight-bold">Max discount:<span
+                                                                    class="mx-2 text-secondary">
+                                                                    <%= coupon.maxDiscount %>₹
+                                                                </span></div>
                                                         </div>
                                                     </div>
                                                     <% } %>
@@ -395,7 +400,6 @@
             const payment = document.querySelector('input[name="payment"]:checked').value;
             const addressId = document.getElementById('addressId').value;
             const couponId = document.querySelector('.couponShow').id;
-            console.log(couponId);
 
             if (payment == "online") {
 
