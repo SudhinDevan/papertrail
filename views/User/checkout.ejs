@@ -94,27 +94,34 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body" style="overflow-y: scroll; height: 250px;">
-                                                <% for (coupon of coupons) { %>
-                                                    <div class="card mb-3">
-                                                        <div class="card-body">
-                                                            <div class="font-weight-bold">Coupon:<span
-                                                                    class="mx-1 text-secondary" id="couponName">
-                                                                    <%= coupon.couponName %>
-                                                                </span></div>
-                                                            <div class="font-weight-bold">Minimum Amount:<span
-                                                                    class="mx-2 text-secondary">&#8377;<%=
-                                                                        coupon.minAmount %></span></div>
-                                                            <div class="font-weight-bold">Discount Percent:<span
-                                                                    class="mx-2 text-secondary">
-                                                                    <%= coupon.discount %>%
-                                                                </span></div>
-                                                            <div class="font-weight-bold">Max discount:<span
-                                                                    class="mx-2 text-secondary">
-                                                                    <%= coupon.maxDiscount %>₹
-                                                                </span></div>
+                                                <%if(coupons.length>0){%>
+                                                    <% for (coupon of coupons) { %>
+                                                        <div class="card mb-3">
+                                                            <div class="card-body">
+                                                                <div class="font-weight-bold">Coupon:<span
+                                                                        class="mx-1 text-secondary" id="couponName">
+                                                                        <%= coupon.couponName %>
+                                                                    </span></div>
+                                                                <div class="font-weight-bold">Minimum Amount:<span
+                                                                        class="mx-2 text-secondary">&#8377;<%=
+                                                                            coupon.minAmount %></span></div>
+                                                                <div class="font-weight-bold">Discount Percent:<span
+                                                                        class="mx-2 text-secondary">
+                                                                        <%= coupon.discount %>%
+                                                                    </span></div>
+                                                                <div class="font-weight-bold">Max discount:<span
+                                                                        class="mx-2 text-secondary">
+                                                                        <%= coupon.maxDiscount %>₹
+                                                                    </span></div>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <% } %>
+                                                        <% } %>
+                                                            <%}else{%>
+                                                                <div class="font-weight-bold">No coupons Available<span
+                                                                        class="mx-2 text-secondary">
+                                                                    </span></div>
+                                                                <%}%>
+
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"

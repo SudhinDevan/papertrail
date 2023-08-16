@@ -156,9 +156,11 @@
                 <h6>Order Amount:
                   <strong style="margin-left: 1rem;">₹<%=order.price%></strong>
                 </h6><br>
-                <h6>Coupon Discount:
-                  <strong style="margin-left: 1rem;">₹<%=order.couponDiscount%></strong>
-                </h6>
+                <%if(order.couponDiscount){%>
+                  <h6>Coupon Discount:
+                    <strong style="margin-left: 1rem;">₹<%=order.couponDiscount%></strong>
+                  </h6>
+                  <%}%>
               </div>
             </div>
 

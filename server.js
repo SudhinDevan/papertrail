@@ -64,7 +64,7 @@ app.use((req, res,) => {
     res.status(404).render('User/404page');
 });
 
-const port = 3000;
+const port = process.env.PORT;
 app.listen(port, () => {
     console.log("server started at " + port);
 })

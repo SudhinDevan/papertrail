@@ -18,16 +18,19 @@ const productInCategory = async (req, res) => {
 
 
     try {
+
+        const query = {
+            isActive: true,
+            category: categoryId,
+            productName: { $regex: new RegExp(search, 'i') },
+            $and: [
+                { price: { $gt: minamount } },
+                { price: { $lt: maxamount } },
+            ]
+        }
+
         const products = await productModel
-            .find({
-                isActive: true,
-                category: categoryId,
-                productName: { $regex: new RegExp(search, 'i') },
-                $and: [
-                    { price: { $gt: minamount } },
-                    { price: { $lt: maxamount } },
-                ]
-            })
+            .find(query)
             .skip(skip)
             .limit(PAGE_SIZE)
             .exec();
@@ -37,7 +40,7 @@ const productInCategory = async (req, res) => {
         const user = await userModel.findOne({ _id: userId })
 
         const totalCount = await productModel
-            .countDocuments({ isActive: true, category: categoryId })
+            .countDocuments(query)
             .exec();
         res.render('User/shop', {
             category,
@@ -71,20 +74,22 @@ const loadShop = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const skip = (page - 1) * PAGE_SIZE;
 
-    const products = await productModel.find({
+    const query = {
         isActive: true,
         productName: { $regex: new RegExp(search, 'i') },
         $and: [
             { price: { $gt: minamount } },
             { price: { $lt: maxamount } },
         ]
-    }).skip(skip).limit(PAGE_SIZE);
+    }
+
+    const products = await productModel.find(query).skip(skip).limit(PAGE_SIZE);
 
     const category = await categoryModel.find();
     const cart = await cartModel.findOne({ userId: id })
 
 
-    const totalCount = await productModel.countDocuments({ isActive: true });
+    const totalCount = await productModel.countDocuments(query);
 
     res.render('User/shop', { category, products, user, cart, totalCount, currentPage: page, totalPages: Math.ceil(totalCount / PAGE_SIZE), search, minamount, maxamount });
 };

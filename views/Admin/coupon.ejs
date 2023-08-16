@@ -6,7 +6,7 @@
       <a href="/admin/coupon/add" class="btn btn-success">Add New</a>
     </div>
 
-    <div class="container-fluid d-flex gap-4 py-3" style="background-color: #EDF1F5;">
+    <div class="container-fluid d-flex gap-4 py-3" style="background-color: #EDF1F5;" id="container">
 
 
       <div style="overflow-y: auto;" class="w-100 d-flex align-items-center align-items-center">
@@ -19,9 +19,11 @@
                 <th>Coupon Name</th>
                 <th>Discount</th>
                 <th>Max. Discount</th>
+                <th>Min. Discount</th>
                 <th>Expiry Date</th>
                 <th>status</th>
                 <th>Edit</th>
+                <th>Delete</th>
               </tr>
 
             </thead>
@@ -36,9 +38,13 @@
                   <td>
                     <%= coupon.couponName %>
                   </td>
-                  <td><%= coupon.discount %>%
+                  <td>
+                    <%= coupon.discount %>%
                   </td>
                   <td>&#8377;<%= coupon.maxDiscount %>
+                  </td>
+                  </td>
+                  <td>&#8377;<%= coupon.minAmount %>
                   </td>
                   <td>
                     <%= coupon.expiryDate.toLocaleDateString('en-US', { month: 'long' , day: 'numeric' , year: 'numeric'
@@ -53,6 +59,8 @@
 
                         <td><a href="/admin/coupon/edit?id=<%= coupon._id %>"><button type="button"
                               class="btn btn-success">Edit</button></a></td>
+                        <td><a href="#"><button type="button" class="btn btn-danger"
+                              onclick="deleteCoupon('<%=coupon._id%>')">Delete</button></a></td>
 
                 </tr>
 
@@ -65,5 +73,40 @@
       </div>
 
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+    <script>
+      function deleteCoupon(id) {
+        Swal.fire({
+          title: 'Are you sure,',
+          text: "you want to delete this coupon?",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            axios.get(`/admin/coupon/delete?couponId=${id}`)
+              .then((result) => {
+                if (result.data.response) {
+                  Swal.fire(
+                    'Deleted!',
+                    'Your Coupon is deleted.',
+                    'success'
+                  )
+                  $.get(location.href, function (data) {
+                    $("#container").html($(data).find("#container").html());
+                  })
+                }
+              })
+          }
+        })
+          .catch((error) => {
+            console.error(error);
+
+          });
+      }
+    </script>
 
     <%- include('./partials/footer.ejs') %>

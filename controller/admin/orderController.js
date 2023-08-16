@@ -1,6 +1,7 @@
 const orderModel = require("../../model/orderSchema")
 const orderItemModel = require('../../model/orderItemSchema');
 const userModel = require("../../model/userSchema");
+const walletModel = require("../../model/walletSchema");
 
 
 const loadorder = async (req, res) => {
@@ -51,7 +52,31 @@ const statusChange = async (req, res) => {
 
     } else if (status === "returnComplete") {
         await orderModel.findByIdAndUpdate(id, { order_status: status, payment_status: true });
-
+        let orderId = await orderModel.findOne({_id: id})
+        let wallet = await walletModel.findOne({user: orderId.user})
+        if (!wallet) {
+            wallet = new walletModel({
+                user: orderId.user,
+                balance: orderId.price,
+                history: ({
+                    type: "add",
+                    amount: orderId.price,
+                    newBalance: orderId.price
+                })
+            })
+            await wallet.save();
+        } else {
+            let balance = wallet.balance;
+            const newBalance = balance + orderId.price;
+            const history = {
+                type: "add",
+                amount: orderId.price,
+                newBalance: newBalance,
+            }
+            wallet.balance = newBalance;
+            wallet.history.push(history);
+            wallet.save();
+        }
     }
 
     const order = await orderModel.findOne({ _id: id });

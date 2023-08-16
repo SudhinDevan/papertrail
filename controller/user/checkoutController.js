@@ -176,7 +176,7 @@ const checkout = async (req, res) => {
             wallet.history.push(history);
             await wallet.save();
             newOrder.payment_status = true;
-            newOrder.couponDiscount = couponDiscount;
+           
         }
 
 

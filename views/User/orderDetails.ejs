@@ -456,7 +456,7 @@
                         <div class="mb-3">
                             <span>Order Amount Total: <strong>₹<%=order.price%></strong>
                             </span><br>
-                            <%if(coupon){%>
+                            <%if(order.couponDiscount){%>
                                 <span>Coupon Discount: <strong>₹<%=order.couponDiscount%></strong>
                                 </span>
                                 <%}%>
@@ -720,6 +720,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+
+    
     <script>
 
         function returnOrder(id) {

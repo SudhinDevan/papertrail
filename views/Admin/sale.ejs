@@ -166,7 +166,8 @@
           <div class="col-xl-5 col-lg-6 col-11 px-1">
             <div class="input-group input-daterange">
               <label class="">Select Date Range :</label>
-              <input type="text" id="dateRange" name="daterange" value="01/01/2018 - 01/15/2018" readonly />
+              <!-- <input type="text" id="dateRange" name="daterange" value="01/01/2018 - 01/15/2018" readonly /> -->
+              <input type="text" class="form-control" id="date-range" placeholder="Select Date Range">
             </div>
           </div>
         </div>
@@ -212,6 +213,7 @@
 
       </table>
 
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"></script>
@@ -232,8 +234,15 @@
     <script type="text/javascript" src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap4.min.js"></script>
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    <script src="moment.js"></script>
+    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script> -->
+    <!-- <script src="moment.js"></script> -->
+
+
+    <!-- Include daterangepicker CSS and JS -->
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker@3.0.3/daterangepicker.min.js" defer></script>
+
+
+    
 
 
     <script>
@@ -244,7 +253,7 @@
           const endDate = moment().format('DD/MM/YYYY');
           const startDate = moment().subtract(7, 'days').format('DD/MM/YYYY');
 
-          $('input[name="daterange"]').daterangepicker({
+          $('input[id="date-range"]').daterangepicker({
             "startDate": startDate,
             "endDate": endDate,
             opens: 'center',
@@ -254,6 +263,17 @@
           });
         });
       });
+
+    //   $(document).ready(function() {
+    //     $('#date-range').daterangepicker({
+    //         opens: 'left',
+    //         startDate: moment().subtract(7, 'days'),
+    //         endDate: moment(),
+    //         // More customization options...
+    //     });
+    // });
+
+
 
       var table = $('#dtBasicExample').DataTable({
         dom: 'Bfrtip',
@@ -331,7 +351,7 @@
       }
 
       function saleByDate() {
-        const dateRange = $("#dateRange").val();
+        const dateRange = $("#date-range").val();
         axios({
           method: "post",
           url: "/admin/sale/date",

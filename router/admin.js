@@ -19,8 +19,7 @@ routers.get('/dashboard', adminSesh.isLogin, dashBoard.loadDashboard);
 routers.get('/sale', adminSesh.isLogin, dashBoard.loadSalesReport);
 routers.post('/sale/monthly', dashBoard.monthlySaleReport);
 routers.post('/sale/daily', dashBoard.dailySalesReport);
-
-
+routers.post('/sale/date', dashBoard.byDateSaleReport);
 
 routers.get('/', adminSesh.isLogin, dashBoard.loadDashboard);
 routers.post('/', adminAuth.verifyAdminLogin);
@@ -56,6 +55,7 @@ routers.get('/coupon/add', adminSesh.isLogin, coupon.loadAddCoupon);
 routers.post('/coupon/add', coupon.addCoupon);
 routers.get('/coupon/edit', adminSesh.isLogin, coupon.loadEditCoupon);
 routers.post('/coupon/edit', coupon.editCoupon);
+routers.get('/coupon/delete',adminSesh.isLogin, coupon.deleteCoupon)
 routers.post('/coupon/apply', coupon.applyCoupon);
 
 routers.get('/banner', adminSesh.isLogin, banner.loadBanner);

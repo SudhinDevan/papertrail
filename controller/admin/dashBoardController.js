@@ -316,6 +316,7 @@ const byDateSaleReport = async (req, res) => {
 };
 
 
+
 module.exports = {
   loadDashboard,
   loadSalesReport,

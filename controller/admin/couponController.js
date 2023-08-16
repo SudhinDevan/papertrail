@@ -88,10 +88,11 @@ const editCoupon = async (req, res) => {
       discount,
       expiryDate,
       minimumAmount,
+      maxDiscount,
     } = req.body;
 
 
-    await couponModel.findByIdAndUpdate(id, { discount: discount, expiryDate: expiryDate, minAmount: minimumAmount });
+    await couponModel.findByIdAndUpdate(id, { discount: discount, expiryDate: expiryDate, minAmount: minimumAmount, maxDiscount: maxDiscount });
     res.json({ response: true });
 
   } catch (error) {
@@ -142,6 +143,17 @@ const applyCoupon = async (req, res) => {
   }
 };
 
+const deleteCoupon = async(req,res) => {
+  try {
+  const id = req.query.couponId;
+  const couponId = await couponModel.deleteOne({_id:id})
+  res.json({response:true})
+    
+  } catch (error) {
+    console.log(error.message);
+  }
+  
+}
 
 
 module.exports = {
@@ -151,4 +163,5 @@ module.exports = {
   loadEditCoupon,
   editCoupon,
   applyCoupon,
+  deleteCoupon,
 }
