@@ -461,6 +461,14 @@
                                 </span>
                                 <%}%>
                         </div>
+                        <div>
+                            <%if(order.order_status=="delivered"){%>
+                                <a class="btn btn-block btn-secondary mb-3"
+                                    style="width: 11rem; background-color:#afafaf;"
+                                    href="/order/download?orderId=<%= order._id %>"
+                                    class="btn btn-sm btn-secondary">Download Reciept</a>
+                                <%}%>
+                        </div>
                         <article class="card">
                             <div class="card-body row">
                                 <div class="col"> <strong>Order placed on:</strong> <br>
@@ -721,7 +729,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
 
-    
+
     <script>
 
         function returnOrder(id) {

@@ -74,6 +74,7 @@ routers.get('/order/details', userSess.isLogin, orderController.loadOrderDetails
 routers.post('/order/cancel', orderController.cancelOrder);
 routers.get('/order/success', userSess.isLogin, orderController.loadOrderSuccessPage)
 routers.get('/returnOrder', userSess.isLogin, orderController.returnOrder)
+routers.get('/order/download', userSess.isLogin, orderController.downloadInvoive)
 
 routers.get('/addToWishlist', wishlistController.addToWishlist);
 routers.get('/wishlist', userSess.isLogin, wishlistController.loadWishlist)

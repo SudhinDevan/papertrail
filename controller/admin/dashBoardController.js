@@ -2,7 +2,6 @@ const categoryModel = require("../../model/categorySchema");
 const orderModel = require("../../model/orderSchema");
 const userModel = require("../../model/userSchema");
 
-
 const loadDashboard = async (req, res) => {
   try {
     let filterValue = 30;
@@ -120,6 +119,7 @@ const loadDashboard = async (req, res) => {
     res.render("user/404page");
   }
 };
+
 
 
 

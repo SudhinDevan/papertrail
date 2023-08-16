@@ -168,6 +168,34 @@ const returnOrder = async (req, res) => {
 
 }
 
+const downloadInvoive = async (req,res) => {
+    try {
+        const orderId = req.query.orderId
+        const order = await orderModel.findOne({ _id: orderId }).populate([
+            {
+                path: 'user',
+                model: 'user'
+            },
+            {
+                path: 'address',
+                model: 'address'
+            },
+            {
+                path: 'items',
+                model: 'orderItem',
+                populate: {
+                    path: 'product',
+                    model: 'product'
+                }
+            }
+        ]);
+        res.render('User/invoiceDownload',{order})
+    } catch (error) {
+        console.error("Error generating PDF:", error);
+        res.render("user/404page");
+    }
+}
+
 
 module.exports = {
     loadorder,
@@ -175,4 +203,5 @@ module.exports = {
     cancelOrder,
     loadOrderSuccessPage,
     returnOrder,
+    downloadInvoive,
 }

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Invoice</title>
+<!-- Favicon -->
+<link href="https://res.cloudinary.com/dtbohkfpy/image/upload/v1688294424/Pfavcion_teu4oi.png" rel="icon">
+  <style>
+    body {
+      margin-top: 20px;
+      background-color: #eee;
+    }
+
+    .card {
+      box-shadow: 0 20px 27px 0 rgb(0 0 0 / 5%);
+    }
+
+    .card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      word-wrap: break-word;
+      background-color: #fff;
+      background-clip: border-box;
+      border: 0 solid rgba(0, 0, 0, .125);
+      border-radius: 1rem;
+    }
+  </style>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+
+<body>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css"
+    integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
+
+  <div class="mb-5 mt-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="invoice-title">
+                <h4 class="float-end font-size-15">Order Id: <%=order._id.toString().substring(0, 6)%> <span
+                      class="badge bg-success font-size-12 ms-2">Paid</span></h4>
+                <div class="mb-4">
+                  <h2 class="mb-1 text-muted"><img style="width: 15rem;height: auto;"
+                      src="https://res.cloudinary.com/dtbohkfpy/image/upload/v1687950151/logo_png_la2lo3.png"></h2>
+                </div>
+                <div class="text-muted">
+                  <p class="mb-1"> Hi-Lite Business Park, Kozhikode</p>
+                  <p class="mb-1"><i class="uil uil-envelope-alt me-1"></i> papertrailsudhin@gmail.com</p>
+                  <p><i class="uil uil-phone me-1"></i> 012-345-6789</p>
+                </div>
+              </div>
+
+              <hr class="my-4">
+
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="text-muted">
+                    <h5 class="font-size-16 mb-3">Billed To:</h5>
+                    <h5 class="font-size-15 mb-2">
+                      <%=order.user.username%>
+                    </h5>
+                    <p class="mb-1">
+                      <%=order.address.buildingName%>,<%=order.address.street%>,
+                          <%=order.address.city%>,<%=order.address.state%>,<%=order.address.pincode%>
+                    </p>
+                    <p class="mb-1">
+                      <%=order.user.email%>
+                    </p>
+                    <p>
+                      <%=order.address.phonenumber%>
+                    </p>
+                  </div>
+                </div>
+                <!-- end col -->
+                <div class="col-sm-6">
+                  <div class="text-muted text-sm-end">
+                    <div>
+                      <h5 class="font-size-15 mb-1">Order No:</h5>
+                      <p>
+                        <%=order._id.toString().substring(0, 8)%>
+                      </p>
+                    </div>
+                    <div class="mt-4">
+                      <h5 class="font-size-15 mb-1">Order Date:</h5>
+                      <p>
+                        <%= order.order_date.toLocaleDateString('en-GB', { day: 'numeric' , month: 'numeric' ,
+                          year: 'numeric' }); %>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <!-- end col -->
+              </div>
+              <!-- end row -->
+
+              <div class="py-2">
+                <h5 class="font-size-15">Order Summary</h5>
+
+                <div class="table-responsive">
+                  <table class="table align-middle table-nowrap table-centered mb-0">
+                    <thead>
+                      <tr>
+                        <th style="width: 70px;">No.</th>
+                        <th>Item</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th class="text-end" style="width: 120px;">Total</th>
+                      </tr>
+                    </thead><!-- end thead -->
+                    <tbody>
+                      <% for (let i=0; i < order.items.length; i++) { %>
+                        <tr>
+                          <th scope="row">
+                            <%=i+1%>
+                          </th>
+                          <td>
+                            <div>
+                              <h6 class="text-truncate font-size-14 mb-1">
+                                <%=order.items[i].product.productName %>
+                              </h6>
+                            </div>
+                          </td>
+                          <td> ₹<%=order.items[i].product.price %>
+                          </td>
+                          <td>
+                            <%=order.items[i].quantity %>
+                          </td>
+                          <td class="text-end">₹<%=order.items[i].product.price * order.items[i].quantity %>
+                          </td>
+                        </tr>
+                        <%}%>
+
+                          <%if(order.couponDiscount){%>
+                            <tr>
+                              <th scope="row" colspan="4" class="text-end">Sub Total</th>
+                              <td class="text-end">
+                                ₹<%=order.price + order.couponDiscount%>
+                              </td>
+                            </tr>
+                            <%}%>
+                              <tr>
+                                <th scope="row" colspan="4" class="text-end">Sub Total</th>
+                                <td class="text-end">
+                                  ₹<%=order.price%>
+                                </td>
+                              </tr>
+                              <!-- end tr -->
+                              <%if(order.couponDiscount){%>
+                                <tr>
+                                  <th scope="row" colspan="4" class="border-0 text-end">
+                                    Coupon Discount :</th>
+                                  <td class="border-0 text-end">- ₹<%=order.couponDiscount%>
+                                  </td>
+                                </tr>
+                                <%}else{%>
+                                  <tr>
+                                    <th scope="row" colspan="4" class="border-0 text-end">
+                                      Coupon Discount :</th>
+                                    <td class="border-0 text-end">- ₹0
+                                    </td>
+                                  </tr>
+                                  <%}%>
+                                    <!-- end tr -->
+                                    <tr>
+                                      <th scope="row" colspan="4" class="border-0 text-end">Total</th>
+                                      <td class="border-0 text-end">
+                                        <h4 class="m-0 fw-semibold">₹<%=order.price%>
+                                        </h4>
+                                      </td>
+                                    </tr>
+
+                                    <!-- end tr -->
+                    </tbody><!-- end tbody -->
+                  </table><!-- end table -->
+                </div><!-- end table responsive -->
+                <div class="d-print-none mt-4">
+                  <div class="float-end">
+                    <a href="javascript:window.print()" class="btn btn-success me-1"><i class="fa fa-download"></i></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><!-- end col -->
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
