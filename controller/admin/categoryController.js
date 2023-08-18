@@ -10,7 +10,7 @@ const loadCategory = async (req, res) => {
         for (let i = 0; i < categories.length; i++) {
             productsValue[i] = await productModel.findOne({ category: categories[i]._id })
         }
-        res.render('admin/categories', { categories, productsValue });
+        res.render('Admin/categories', { categories, productsValue });
     } catch (error) {
         console.log(error.message);
     }
@@ -18,7 +18,7 @@ const loadCategory = async (req, res) => {
 
 
 const loadAddCategory = async (req, res) => {
-    res.render("admin/addCategory", { message: "" })
+    res.render("Admin/addCategory", { message: "" })
 }
 
 const addCategory = async (req, res) => {
@@ -28,7 +28,7 @@ const addCategory = async (req, res) => {
         const catergoryData = await categoryModel.findOne({ categoryName: { $regex: new RegExp(`^${req.body.name}$`, "i") } })
 
         if (catergoryData) {
-            res.render('admin/addCategory', { message: "This category already exists" });
+            res.render('Admin/addCategory', { message: "This category already exists" });
         } else {
             const newCategory = new categoryModel({
                 categoryName: categoryName
@@ -49,7 +49,7 @@ const loadEditCategory = async (req, res) => {
         console.log(id);
         const categoryData = await categoryModel.findOne({ _id: id });
 
-        res.render('admin/editCategory', { message: null, category: categoryData })
+        res.render('Admin/editCategory', { message: null, category: categoryData })
     } catch (error) {
         console.log(error.message);
     }

@@ -52,7 +52,7 @@ const loadEditBanner = async (req, res) => {
   try {
     const { bannerId } = req.query;
     const banner = await bannerModel.findOne({ _id: bannerId });
-    res.render("admin/editBanner", { banner });
+    res.render("Admin/editBanner", { banner });
   } catch (error) {
     console.log(error);
   }

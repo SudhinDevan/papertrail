@@ -14,7 +14,7 @@ const loadProducts = async (req, res) => {
 
 const loadAddProducts = async (req, res) => {
     const categories = await categoryModel.find();
-    res.render('admin/addProduct', { categories: categories })
+    res.render('Admin/addProduct', { categories: categories })
 }
 
 const addProduct = async (req, res) => {
@@ -56,7 +56,7 @@ const loadEditProduct = async (req, res) => {
     const idb = req.query.id;
     const categories = await categoryModel.find();
     const product = await productModel.findOne({ _id: idb })
-    res.render('admin/editProduct', { categories, product });
+    res.render('Admin/editProduct', { categories, product });
 }
 
 

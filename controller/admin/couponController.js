@@ -14,7 +14,7 @@ const loadCoupon = async (req, res) => {
 const loadAddCoupon = (req, res) => {
   try {
 
-    res.render('admin/addCoupon');
+    res.render('Admin/addCoupon');
 
   } catch (error) {
     throw new Error(error)
