@@ -34,7 +34,7 @@ const createUser = async (req, res) => {
         const password = req.body.password
         const userData = await User.findOne({ username: userName })
         if (userData) {
-            res.render('user/usersignup', {
+            res.render('User/usersignup', {
                 message: "User already Exists"
             })
         } else {

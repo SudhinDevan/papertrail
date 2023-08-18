@@ -8,10 +8,10 @@ const isLogin = async(req, res, next) => {
             if (user.isAccess===true) {
                 next()
             }else {
-                res.render('user/userlogin', { message: "" });
+                res.render('User/userlogin', { message: "" });
             }
         } else {
-            res.render('user/userlogin', { message: "" });
+            res.render('User/userlogin', { message: "" });
         }
 
     } catch (error) {
