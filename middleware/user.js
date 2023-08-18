@@ -1,7 +1,15 @@
-const isLogin = (req, res, next) => {
+const userSchema = require("../model/userSchema");
+
+const isLogin = async(req, res, next) => {
     try {
-        if (req.session.User_id) {
-            next()
+        if(req.session.User_id){
+            const userId = req.session.User_id
+            const user = await userSchema.findOne({_id: userId})
+            if (user.isAccess===true) {
+                next()
+            }else {
+                res.render('user/userlogin', { message: "" });
+            }
         } else {
             res.render('user/userlogin', { message: "" });
         }

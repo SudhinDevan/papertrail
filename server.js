@@ -4,6 +4,8 @@ const app = express()
 const user = require("./router/user")
 const admin = require("./router/admin")
 const session = require('express-session')
+const cookieParser = require('cookie-parser');
+const nocache = require('nocache');
 const mongoose = require("mongoose")
 const cloudinary = require('cloudinary').v2;
 const bodyParser = require('body-parser');
@@ -35,6 +37,8 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cookieParser());
+
 app.use(fileUpload({
     useTempFiles: true,
     limits: { fileSize: 50 * 2024 * 1024 }
@@ -49,13 +53,7 @@ app.use(session({
     resave: false
 }))
 
-app.use((req, res, next) => {
-    res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate');
-    res.header('Expires', '0');
-    res.header('Pragma', 'no-cache');
-    next();
-});
-
+app.use(nocache());
 
 app.use("/admin", admin)
 app.use("/", user)

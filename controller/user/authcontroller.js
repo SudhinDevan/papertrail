@@ -1,12 +1,13 @@
-const User = require('../../model/userSchema')
-const bcrypt = require('bcrypt')
-const mail = require("../../utility/sendEmail")
-const Product = require('../../model/productSchema')
-const Category = require('../../model/categorySchema')
-const cartModel = require('../../model/cartSchema')
-const bannerModel = require('../../model/bannerSchema')
-const { log } = require('console')
-
+const User = require('../../model/userSchema');
+const bcrypt = require('bcrypt');
+const hash = require('../../utility/hashFunction');
+const otp = require('../../utility/sendOTP');
+const mail = require("../../utility/sendEmail");
+const Product = require('../../model/productSchema');
+const Category = require('../../model/categorySchema');
+const cartModel = require('../../model/cartSchema');
+const bannerModel = require('../../model/bannerSchema');
+const userModel = require('../../model/userSchema');
 
 
 // Load Signup page
@@ -106,6 +107,79 @@ const successEmail = async (req, res) => {
     await User.findOneAndUpdate({ username: username }, { $set: { isVerified: true } })
 }
 
+const loadForgotPassword = (req, res) => {
+    try {
+      res.render("Authentication/forgotPassword", { message: null, user: null, cart: null});
+    } catch (error) {
+      res.render("user/404page");
+    }
+  };
+
+  
+const forgotPassword = async (req, res) => {
+    try {
+      const email = req.body.email;
+      const emailMatch = await User.findOne({ email: email });
+      if (!emailMatch) {
+        res.render("Authentication/forgotPassword", {
+          message: "Account for this email does'nt exist", user: null, cart: null
+        });
+      } else {
+        const result = await otp.sendOtp(emailMatch);
+        res.cookie("forgotHash", result, { httpOnly: true });
+        res.render("Authentication/otp", {
+          id: emailMatch._id,
+          message: null,
+          user: null,
+          cart: null,
+          localAction: `/forgotPassword/otp?id=${emailMatch._id}`,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      res.render("user/404page");
+    }
+  };
+
+  
+const verifyForgotPasswordOtp = async (req, res) => {
+    try {
+      const userId = req.query.id;
+      const secret = req.cookies["forgotHash"];
+      const OTP = req.body.otp;
+      const verified = await bcrypt.compare(OTP, secret);
+      if (verified) {
+        console.log("otp verification success");
+        res.cookie("id", userId, { httpOnly: true });
+        res.render("Authentication/newForgotPassword", { action: "/forgotPassword/newForgotPassword", user: null, cart: null });
+      } else {
+        console.log("otp verification failed");
+        res.render("Authentication/otp", {
+          user: null,
+          cart: null,
+          id: userId,
+          message: "Incorrect OTP",
+          localAction: `/forgotPassword/otp?id=${userId}`,
+        });
+      }
+    } catch (error) {
+      res.render("user/404page");
+    }
+  };
+  
+  
+const newPassword = async (req, res) => {
+    try {
+      const id = req.cookies["id"];
+      const newPassword = req.body.password;
+      const hashNewPassword = await hash(newPassword);
+      await userModel.findByIdAndUpdate(id, { password: hashNewPassword });
+      res.render("User/userlogin", {message: "Password successfully reset"});
+    } catch (error) {
+      res.render("user/404page");
+    }
+  };
+  
 
 
 module.exports = {
@@ -114,4 +188,8 @@ module.exports = {
     verifyLogin,
     loadHome,
     successEmail,
+    loadForgotPassword,
+    forgotPassword,
+    verifyForgotPasswordOtp,
+    newPassword,
 }

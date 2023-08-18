@@ -35,49 +35,29 @@ const verifyEmail = async (body) => {
     }
 };
 
-// async function sendOTP(email, otp) {
-//     try {
-//         // Configure the email transport settings
-//         const transporter = nodemailer.createTransport({
-//             host: 'smtp.gmail.com',
-//             port: 465,
-//             secure: true,
-//             auth: {
-//                 user: 'papertrailsudhin@gmail.com',
-//                 pass: 'bvpavxcaqgjlpkvd',
-//             },
-//             tls: {
-//                 rejectUnauthorized: false
-//             }
-//         });
 
-//         // Compose the email message
-//         const mailOptions = {
-//             from: process.env.AU_EMAIL,
-//             to: email,
-//             subject: 'OTP Verification',
-//             text: `Your OTP: ${otp}`
-//         };
 
-//         // Send the email
-//         const info = await transporter.sendMail(mailOptions);
-//         console.log('Email sent:', info.response);
-//     } catch (error) {
-//         console.error('Error sending email:', error);
-//     }
-// }
+const sendMail = async (option)=>{
+    const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        auth: {
+            user: process.env.AU_EMAIL,
+            pass: process.env.AU_PASS,
+        },
+        tls: {
+            rejectUnauthorized: false,
+        },
+    })
 
-// // Generate a random 4-digit OTP
-// function generateOTP() {
-//     return Math.floor(1000 + Math.random() * 9000).toString();
-// }
+
+    const info = await transporter.sendMail(option)
+}
 
 
 module.exports = {
     verifyEmail,
-    // sendOTP,
-    // generateOTP,
+    sendMail,
+   
 }
-
-
-// bvpavxcaqgjlpkvd
