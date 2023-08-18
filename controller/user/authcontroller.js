@@ -12,7 +12,7 @@ const userModel = require('../../model/userSchema');
 
 // Load Signup page
 const signup = async (req, res) => {
-    res.render("User/usersignup")
+    res.render("User/userSignup")
 }
 
 // Function to hash password
@@ -34,7 +34,7 @@ const createUser = async (req, res) => {
         const password = req.body.password
         const userData = await User.findOne({ username: userName })
         if (userData) {
-            res.render('User/usersignup', {
+            res.render('User/userSignup', {
                 message: "User already Exists"
             })
         } else {
@@ -69,7 +69,7 @@ const verifyLogin = async (req, res) => {
                     req.session.User_id = userData._id
                     res.redirect('/')
                 } else {
-                    res.render('User/userlogin', { message: "Access Denied" })
+                    res.render('User/userLogin', { message: "Access Denied" })
                 }
             } else {
                 const verify = await mail.verifyEmail(userData)
@@ -174,7 +174,7 @@ const newPassword = async (req, res) => {
       const newPassword = req.body.password;
       const hashNewPassword = await hash(newPassword);
       await userModel.findByIdAndUpdate(id, { password: hashNewPassword });
-      res.render("User/userlogin", {message: "Password successfully reset"});
+      res.render("User/userLogin", {message: "Password successfully reset"});
     } catch (error) {
       res.render("User/404page");
     }

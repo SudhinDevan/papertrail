@@ -10,7 +10,7 @@ const loadUserProfile = async (req, res) => {
     const cart = await cartModel.findOne({ userId: id })
 
 
-    res.render('User/userprofile', { user, id, cart })
+    res.render('User/userProfile', { user, id, cart })
 
 }
 

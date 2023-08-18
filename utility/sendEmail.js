@@ -10,8 +10,8 @@ const verifyEmail = async (body) => {
             port: 465,
             secure: true,
             auth: {
-                user: 'papertrailsudhin@gmail.com',
-                pass: 'bvpavxcaqgjlpkvd',
+                user: process.env.AU_EMAIL,
+                pass: process.env.AU_PASS,
             },
             tls: {
                 rejectUnauthorized: false
@@ -23,7 +23,7 @@ const verifyEmail = async (body) => {
             from: process.env.AU_EMAIL,
             to: body.email,
             subject: 'Welcome to papertrail',
-            html: `<p>Hello <strong>${body.username}</strong>, Please click the link below to verify your papertrail account. If this is not done by you, you can safely ignore this email.</p><a href="http://localhost:3000/successemail/${body.username}">Verify now</a>`
+            html: `<p>Hello <strong>${body.username}</strong>, Please click the link below to verify your papertrail account. If this is not done by you, you can safely ignore this email.</p><a href="https://www.papertrail.sudhindevan.com/successemail/${body.username}">Verify now</a>`
         };
 
         const info = await transporter.sendMail(mailOptions);
