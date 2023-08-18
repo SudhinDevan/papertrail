@@ -96,7 +96,7 @@ const loadHome = async (req, res) => {
 
         res.render('User/home', { category, products, user, cart, banners });
     } catch (error) {
-        res.render('user/404page');
+        res.render('User/404page');
     }
 }
 
@@ -111,7 +111,7 @@ const loadForgotPassword = (req, res) => {
     try {
       res.render("Authentication/forgotPassword", { message: null, user: null, cart: null});
     } catch (error) {
-      res.render("user/404page");
+      res.render("User/404page");
     }
   };
 
@@ -137,7 +137,7 @@ const forgotPassword = async (req, res) => {
       }
     } catch (error) {
       console.log(error);
-      res.render("user/404page");
+      res.render("User/404page");
     }
   };
 
@@ -163,7 +163,7 @@ const verifyForgotPasswordOtp = async (req, res) => {
         });
       }
     } catch (error) {
-      res.render("user/404page");
+      res.render("User/404page");
     }
   };
   
@@ -176,7 +176,7 @@ const newPassword = async (req, res) => {
       await userModel.findByIdAndUpdate(id, { password: hashNewPassword });
       res.render("User/userlogin", {message: "Password successfully reset"});
     } catch (error) {
-      res.render("user/404page");
+      res.render("User/404page");
     }
   };
   

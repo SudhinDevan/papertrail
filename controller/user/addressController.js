@@ -11,7 +11,7 @@ const loadAddress = async (req, res) => {
     const secondaryAddress = await addressModel.find({ user: id, type: "secondary" });
     const cart = await cartModel.findOne({ userId: id })
 
-    res.render("user/address", { id, user: userData, contact: contactAddress, main: mainAddress, secondary: secondaryAddress, cart });
+    res.render("User/address", { id, user: userData, contact: contactAddress, main: mainAddress, secondary: secondaryAddress, cart });
 }
 
 
@@ -22,7 +22,7 @@ const loadAddAddress = async (req, res) => {
     const cart = await cartModel.findOne({ userId: id })
 
 
-    res.render("user/addAddress", { user, type, cart });
+    res.render("User/addAddress", { user, type, cart });
 }
 
 
@@ -69,7 +69,7 @@ const loadEditAddress = async (req, res) => {
     const { type, id } = req.query;
     const cart = await cartModel.findOne({ userId: id })
     const address = await addressModel.findOne({ _id: id });
-    res.render("user/editAddress", { user, type, address, cart });
+    res.render("User/editAddress", { user, type, address, cart });
 }
 
 

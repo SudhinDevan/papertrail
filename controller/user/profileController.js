@@ -19,7 +19,7 @@ const loadEditUser = async (req, res) => {
     const user = await userModel.findOne({ _id: id });
     const cart = await cartModel.findOne({ userId: id })
 
-    res.render("user/editUser", { user, cart });
+    res.render("User/editUser", { user, cart });
 }
 
 
@@ -35,7 +35,7 @@ const oldPassword = async (req, res) => {
     const user = await userModel.findOne({ _id: id })
     const cart = await cartModel.findOne({ userId: id })
 
-    res.render('user/oldPassword', { user, id, message: "", cart })
+    res.render('User/oldPassword', { user, id, message: "", cart })
 
 }
 
@@ -51,9 +51,9 @@ const verifyOldPassword = async (req, res) => {
         const passMatch = await bcrypt.compare(oldPassword, user.password);
 
         if (!passMatch) {
-            res.render('user/oldPassword', { user, id, message: "The old password is incorrect" });
+            res.render('User/oldPassword', { user, id, message: "The old password is incorrect" });
         } else {
-            res.render('Authentication/newPassword', { user, action: "/user/profile/newPassword" })
+            res.render('Authentication/newPassword', { user, action: "/User/profile/newPassword" })
         }
 
     } catch (error) {

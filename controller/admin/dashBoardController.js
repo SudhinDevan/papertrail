@@ -116,7 +116,7 @@ const loadDashboard = async (req, res) => {
       orders,
     });
   } catch (error) {
-    res.render("user/404page");
+    res.render("User/404page");
   }
 };
 
@@ -211,7 +211,7 @@ const monthlySaleReport = async (req, res) => {
 
     res.json({ monthlySales, error: false });
   } catch (error) {
-    res.render("user/404page");
+    res.render("User/404page");
   }
 };
 
@@ -250,7 +250,7 @@ const dailySalesReport = async (req, res) => {
 
     res.json({ dailySales, error: false });
   } catch (error) {
-    res.render("user/404page");
+    res.render("User/404page");
   }
 };
 
@@ -311,7 +311,7 @@ const byDateSaleReport = async (req, res) => {
 
     res.json({ byDateSales, error: false });
   } catch (error) {
-    res.render("user/404page");
+    res.render("User/404page");
   }
 };
 

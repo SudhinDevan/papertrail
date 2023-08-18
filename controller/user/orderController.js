@@ -38,7 +38,7 @@ const loadorder = async (req, res) => {
 
     const ordersToDisplay = orders.slice(startIndex, endIndex);
 
-    res.render('user/orders', {
+    res.render('User/orders', {
         id: userId,
         products,
         orders: ordersToDisplay,
@@ -78,7 +78,7 @@ const loadOrderDetails = async (req, res) => {
         const coupon = await couponModel.findOne({ _id: order.coupon })
 
         const cartAddress = await orderModel.findOne({ _id: orderId }).populate("address");
-        res.render('user/orderDetails', { id: userId, cart, coupon, user, order, address: cartAddress.address });
+        res.render('User/orderDetails', { id: userId, cart, coupon, user, order, address: cartAddress.address });
 
     } catch (error) {
         console.log(error.message);
@@ -192,7 +192,7 @@ const downloadInvoive = async (req,res) => {
         res.render('User/invoiceDownload',{order})
     } catch (error) {
         console.error("Error generating PDF:", error);
-        res.render("user/404page");
+        res.render("User/404page");
     }
 }
 
