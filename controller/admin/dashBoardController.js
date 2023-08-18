@@ -107,7 +107,7 @@ const loadDashboard = async (req, res) => {
 
     const orderCount = await orderModel.countDocuments();
     const userCount = await userModel.countDocuments();
-    res.render("Admin/dashboard", {
+    res.render("Admin/dashBoard", {
       daily,
       category: cat,
       orderCount,
