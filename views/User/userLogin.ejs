@@ -7,9 +7,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Papertrail | User-Login </title>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link rel='stylesheet' href='/style/style.css' />
+
+    <style>
+        .btn-custom {
+            transition: background-color 0.3s, color 0.3s;
+            /* Smooth transition */
+        }
+
+        .btn-custom:hover {
+            background-color: #AED6F1 !important;
+            color: black !important;
+        }
+
+    </style>
+
 </head>
 
 <body class="m-0 p-0" style="background-color: #F1F1F1;">
@@ -35,7 +48,8 @@
                                 </div>
                             </div>
                             <div class="form-group d-flex justify-content-between">
-                                <input type="submit" class="btn btn-danger btn-md" value="Log In">
+                                <input type="submit" style="background-color: #15A78F; color: white;"
+                                    class="btn btn-md btn-login btn-custom" value="Log In">
                                 <span class="justify-content-end mt-2"><a href="/forgotPassword">Forgot
                                         Password?</a></span>
                             </div>

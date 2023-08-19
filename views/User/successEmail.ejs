@@ -1,16 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include('./partials/header.ejs') %>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+    <head>
+        <style>
+            /* Add hover effect to buttons */
+            .btn-custom {
+                background-color: #15A78F;
+                color: aliceblue;
+                transition: background-color 0.3s, color 0.3s;
+                /* Smooth transition */
+            }
 
-<body>
-    <h1>Hello, <%=message%>
-    </h1>
-    <h2>Email Verified</h2>
-</body>
+            .btn-custom:hover {
+                background-color: #F3F6FA;
+                /* New background color on hover */
+                color: black;
+                /* New text color on hover */
+            }
+        </style>
+    </head>
 
-</html>
+    <body>
+        <div class="container d-flex flex-column justify-content-center align-items-center" style="height: 20rem;">
+            <h2 class="text-center">Hi <span id="message">
+                    <%=message%>
+                </span>, Your email is verified successfully</h2>
+            <div class="d-flex mt-3">
+                <a href="/" class="mr-2"><button class="btn btn-custom">Home</button></a>
+                <a href="/login"><button class="btn btn-custom">Login</button></a>
+            </div>
+        </div>
+        </div>
+
+    </body>
+
+
+    <%- include('./partials/footer.ejs') %>
