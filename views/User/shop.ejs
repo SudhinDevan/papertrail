@@ -29,9 +29,9 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-lg-9">
-                    <div class="hero__search">
-                        <div class="hero__search__form" style="margin-left: 6rem;">
+                <div class="col-lg-9 col-12">
+                    <div class="hero__search mx-4">
+                        <div class="hero__search__form " >
                             <form action="#">
                                 <input type="text" id="search" name="search" class="text-dark font-weight-bold"
                                     placeholder="What do yo u need?" value="<%= search %>">
@@ -238,23 +238,6 @@
             const maxamount = $("#maxamount").val();
 
             location.href = `/category?categoryId=${catId}&search=${search}&minamount=${minamount}&maxamount=${maxamount}`
-
-            // $.ajax({
-            //     type: 'get',
-            //     url: '/category/' + catId,
-            //     data: {
-            //         categoryId: catId,
-            //         search: search,
-            //         minamount: minamount,
-            //         maxamount: maxamount,
-            //     },
-            //     success: function (res) {
-            //         $("#productCount").html($(res).find("#productCount").html());
-            //         $("#productsSection").html($(res).find("#productsSection").html());
-            //         $("#pagination").html($(res).find("#pagination").html());
-            //     }
-
-            // })
         }
 
 

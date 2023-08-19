@@ -1,171 +1,171 @@
 <%- include('./partials/header.ejs') %>
+  <style>
+    @media (max-width:480px) {
+      ::placeholder {
+        font-size: 14px;
+        /* Adjust this value as needed */
+      }
+    }
+  </style>
 
-    <!-- Page Preloder -->
-    <div id="preloder">
-        <div class="loader"></div>
-    </div>
+  <!-- Page Preloder -->
+  <div id="preloder">
+    <div class="loader"></div>
+  </div>
 
-    <!-- Hero Section Begin -->
-    <section class="hero">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="hero__categories py-3">
-                        <div class="hero__categories__all">
-                            <i class="fa fa-bars"></i>
-                            <span>All Categories</span>
-                        </div>
-                        <ul>
-                            <% category.forEach((category)=> { %>
-                                <li><a href="#" style="text-decoration: none;">
-                                        <%= category.categoryName %>
-                                    </a></li>
-                                <% }) %>
-                        </ul>
-                    </div>
+  <!-- Hero Section Begin -->
+  <section class="hero">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3">
+          <div class="hero__categories py-3">
+            <div class="hero__categories__all">
+              <i class="fa fa-bars"></i>
+              <span>All Categories</span>
+            </div>
+            <ul>
+              <% category.forEach((category)=> { %>
+                <li><a href="#" style="text-decoration: none;">
+                    <%= category.categoryName %>
+                  </a></li>
+                <% }) %>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-9">
+
+
+          <div id="demo" class="carousel slide my-3" data-ride="carousel">
+
+            <!-- The slideshow -->
+
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <div class="hero__item set-bg" data-setbg="<%= banners[0]?.bannerImage?.url %>">
+                  <div class="hero__text">
+                    <!-- <span class="text-light">
+                                        <%= banners[0].title %>
+                                    </span> -->
+                    <h2 class="text-light">
+                      <%= banners[0].title %> <br />
+                        <%= banners[0].description %>
+                    </h2>
+                    <!-- <p>Free Pickup and Delivery Available</p> -->
+                    <a href="/category?categoryId=<%= banners[0].targetCategory._id %>" class="primary-btn"
+                      style="text-decoration: none;">SHOP NOW</a>
+                  </div>
                 </div>
-                <div class="col-lg-9">
-                    <div class="hero__search" style="margin-left: 7rem;">
-                        <div class="hero__search__form">
-                            <form action="#" class="col-lg-12">
-                                <input type="text" placeholder="your entries here"
-                                    class="col-lg-12 col-md-12 col-sm-12">
-                                <button type="submit" class="site-btn">SEARCH</button>
-                            </form>
-                        </div>
-                    </div>
+              </div>
 
-                    <div id="demo" class="carousel slide" data-ride="carousel">
 
-                        <!-- The slideshow -->
-
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <div class="hero__item set-bg" data-setbg="<%= banners[0]?.bannerImage?.url %>">
-                                    <div class="hero__text">
-                                        <!-- <span class="text-light">
-                                            <%= banners[0].title %>
-                                        </span> -->
-                                        <h2 class="text-light">
-                                            <%= banners[0].title %> <br />
-                                                <%= banners[0].description %>
-                                        </h2>
-                                        <!-- <p>Free Pickup and Delivery Available</p> -->
-                                        <a href="/category?categoryId=<%= banners[0].targetCategory._id %>"
-                                            class="primary-btn" style="text-decoration: none;">SHOP NOW</a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <% for(i=1;i<banners.length;i++){ %>
-                                <div class="carousel-item">
-                                    <div class="hero__item set-bg" data-setbg="<%= banners[i].bannerImage.url %>">
-                                        <div class="hero__text">
-                                            <!-- <span class="text-light">
+              <% for(i=1;i<banners.length;i++){ %>
+                <div class="carousel-item">
+                  <div class="hero__item set-bg" data-setbg="<%= banners[i].bannerImage.url %>">
+                    <div class="hero__text">
+                      <!-- <span class="text-light">
                                                 <%= banners[i].title %>
                                             </span> -->
-                                            <h2 class="text-light">
-                                                <%= banners[i].title %> <br />
-                                                    <%= banners[i].description %>
-                                            </h2>
-                                            <!-- <p>Free Pickup and Delivery Available</p> -->
-                                            <a href="/category?categoryId=<%= banners[i].targetCategory._id %>"
-                                                class="primary-btn" style="text-decoration: none;">SHOP NOW</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <% } %>
-
-                                    <!-- Left and right controls -->
-                                    <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                                        <span class="carousel-control-prev-icon"></span>
-                                    </a>
-                                    <a class="carousel-control-next" href="#demo" data-slide="next">
-                                        <span class="carousel-control-next-icon"></span>
-                                    </a>
-                        </div>
+                      <h2 class="text-light">
+                        <%= banners[i].title %> <br />
+                          <%= banners[i].description %>
+                      </h2>
+                      <!-- <p>Free Pickup and Delivery Available</p> -->
+                      <a href="/category?categoryId=<%= banners[i].targetCategory._id %>" class="primary-btn"
+                        style="text-decoration: none;">SHOP NOW</a>
                     </div>
+                  </div>
                 </div>
+                <% } %>
+
+                  <!-- Left and right controls -->
+                  <a class="carousel-control-prev" href="#demo" data-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                  </a>
+                  <a class="carousel-control-next" href="#demo" data-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                  </a>
             </div>
+          </div>
         </div>
-    </section>
-    <!-- Hero Section End -->
-    <!-- Featured Section Begin -->
-    <section class="featured spad">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="section-title">
-                        <h2>Featured Products</h2>
-                    </div>
-                </div>
-            </div>
-            <div class="row featured__filter">
-                <% for(let i=0;i<4;i++) { %>
-                    <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
-                        <div class="featured__item">
-                            <div class="featured__item__pic set-bg" style="background-size: contain;"
-                                data-setbg="<%= products[i].image[0].url %>">
-                            </div>
-                            <div class="featured__item__text">
-                                <h6><a href="/productDetails?id=<%= products[i]._id %>" style="text-decoration: none;">
-                                        <%= products[i].productName %>
-                                    </a></h6>
-                                <h5>₹<%= products[i].price %>
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-                    <% } %>
-
-            </div>
+      </div>
+    </div>
+  </section>
+  <!-- Hero Section End -->
+  <!-- Featured Section Begin -->
+  <section class="featured spad">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="section-title">
+            <h2>Featured Products</h2>
+          </div>
         </div>
-    </section>
-    <!-- Featured Section End -->
-
-    <!-- Banner Begin -->
-    <!-- <div class="banner">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                    <div class="banner__pic">
-                        <img src="/img/banner/banner-1.jpg" alt="">
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                    <div class="banner__pic">
-                        <img src="/img/banner/banner-2.jpg" alt="">
-                    </div>
-                </div>
+      </div>
+      <div class="row featured__filter">
+        <% for(let i=0;i<4;i++) { %>
+          <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
+            <div class="featured__item">
+              <div class="featured__item__pic set-bg" style="background-size: contain;"
+                data-setbg="<%= products[i].image[0].url %>">
+              </div>
+              <div class="featured__item__text">
+                <h6><a href="/productDetails?id=<%= products[i]._id %>" style="text-decoration: none;">
+                    <%= products[i].productName %>
+                  </a></h6>
+                <h5>₹<%= products[i].price %>
+                </h5>
+              </div>
             </div>
-        </div>
-    </div><br> -->
-    <!-- Banner End -->
+          </div>
+          <% } %>
 
-    <!-- axios cdn -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"></script>
+      </div>
+    </div>
+  </section>
+  <!-- Featured Section End -->
+
+  <!-- axios cdn -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"></script>
 
 
-    <script>
+  <script>
 
-        document.addEventListener("keydown", function (event) {
-            var keycode = event.keyCode || event.which;
-            if (keycode === 13) {
-                event.preventDefault();
-                advanceSearch();
-            }
-        });
+    document.addEventListener("keydown", function (event) {
+      var keycode = event.keyCode || event.which;
+      if (keycode === 13) {
+        event.preventDefault();
+        advanceSearch();
+      }
+    });
 
-        function advanceSearch() {
-            const search = $("#search").val();
+    function advanceSearch() {
+      const search = $("#search").val();
 
-            location.href = `/shop?search=${search}`;
-        }
+      location.href = `/shop?search=${search}`;
+    }
 
-        function login() {
-            const currentUrl = location.href;
-            location.href = `/login?url=${currentUrl}`
-        }
-    </script>
+    function login() {
+      const currentUrl = location.href;
+      location.href = `/login?url=${currentUrl}`
+    }
 
-    <%- include('./partials/footer.ejs') %>
+    function productsInCat(catId) {
+      location.href = `/category?categoryId=${catId}`
+    }
+
+    function advanceSearch() {
+      const search = $("#search").val();
+      if (location.pathname == "/category") {
+
+        const query = new URLSearchParams(location.search);
+        const catId = query.get('categoryId')
+        location.href = `/category?categoryId=${catId}&search=${search}`
+      } else {
+
+        location.href = `/shop?search=${search}`;
+      }
+
+    }
+  </script>
+
+  <%- include('./partials/footer.ejs') %>

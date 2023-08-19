@@ -84,6 +84,7 @@ const verifyLogin = async (req, res) => {
 }
 
 
+
 const loadHome = async (req, res) => {
     try {
         const id = req.session.User_id;
@@ -99,6 +100,7 @@ const loadHome = async (req, res) => {
         res.render('User/404page');
     }
 }
+
 
 
 const successEmail = async (req, res) => {

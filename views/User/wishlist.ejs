@@ -25,7 +25,7 @@
                       </h5> <!-- Corrected the closing tag of h5 -->
                     </div>
                     <div class="wish-cancel">
-                      <button style="box-shadow: none;background-color: #7fad39;" class="btn primary-btn text-light"
+                      <button style="box-shadow: none;background-color: #15A78F;" class="btn primary-btn text-light"
                         onclick="addToClick('<%=wishlist.items[i]._id%>')">ADD
                         TO CART</button>
                       <button class="btn-danger" style="border: none; border-radius: 3px; width: 5rem; height: 2rem;"
@@ -70,6 +70,10 @@
             let x = document.getElementById("snackbar");
             x.className = "show";
             setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+            $.get(location.href, function (data) {
+              $("#cart").html($(data).find("#cart").html());
+              $("#cartCount").html($(data).find("#cartCount").html());
+            })
           } else {
             let x = document.getElementById("snackbar-error");
             x.className = "show";
