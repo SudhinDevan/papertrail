@@ -104,7 +104,7 @@ const loadHome = async (req, res) => {
 
 
 const successEmail = async (req, res) => {
-    res.render("User/successEmail", { message: req.params.username })
+    res.render("User/successEmail", { message: req.params.username, user: null, cart: null })
     const username = req.params.username
     await User.findOneAndUpdate({ username: username }, { $set: { isVerified: true } })
 }
