@@ -154,8 +154,9 @@
                             <% products.forEach((product)=> { %>
                                 <div class="col-lg-4 col-md-6 col-sm-6">
                                     <div class="product__item">
-                                        <img style="height: 18rem; width: 12rem; margin-left: 2.2rem;"
-                                            src="<%= product.image[0].url %>" alt="<%= product.productName %>">
+                                        <a href="/productDetails?id=<%= product._id %>"><img
+                                                style="height: 18rem; width: 12rem; margin-left: 2.2rem;"
+                                                src="<%= product.image[0].url %>" alt="<%= product.productName %>"></a>
                                         <div class="product__item__text">
                                             <h6><a href="/productDetails?id=<%= product._id %>"
                                                     style="text-decoration: none;">

@@ -192,11 +192,13 @@
           if (counter < 4) { %>
             <div class="col-lg-3 col-md-4 col-sm-6">
               <div class="product__item">
-                <div class="product__item__pic set-bg" style="background-size: contain"
-                  data-setbg="<%= pro.image[0].url %>">
-                </div>
+                <a href="/productDetails?id=<%= pro._id %>">
+                  <div class="product__item__pic set-bg" style="background-size: contain"
+                    data-setbg="<%= pro.image[0].url %>">
+                  </div>
+                </a>
                 <div class="product__item__text">
-                  <a href="/productDetails?id=<%= pro._id %>" style="text-decoration: none;">
+                  <a href="/productDetails?id=<%= pro._id %>" style="text-decoration: none; color: black;">
                     <%= pro.productName %>
                       <h5>₹<%= pro.price %>
                       </h5>
