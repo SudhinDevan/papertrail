@@ -245,8 +245,7 @@
             //     makeActive(radioClicked);
             // });
             $(".paymentx").click(function () {//Clicking the card
-                var inputElement = $(this).find('input[type=radio]').attr('id');
-                console.log(inputElement);
+                let inputElement = $(this).find('input[type=radio]').attr('id');
                 btnShow();
                 unclickRadio();
                 removeActive();

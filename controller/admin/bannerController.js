@@ -8,8 +8,8 @@ const loadBanner = async (req, res) => {
   try {
     const banners = await bannerModel.find().populate("targetCategory");
     res.render('Admin/banner', { banners });
-  } catch (error) {
-    console.log(error);
+  }catch (error) {
+    res.render('User/404page')
   }
 }
 
@@ -19,7 +19,7 @@ const loadAddBanner = async (req, res) => {
     const categories = await categoryModel.find();
     res.render('Admin/addBanner', { categories });
   } catch (error) {
-    console.log(error);
+    res.render('User/404page')
   }
 }
 
@@ -43,7 +43,7 @@ const addBanner = async (req, res) => {
     newBanner.save();
     res.redirect('/admin/banner');
   } catch (error) {
-    console.log(error);
+    res.render('User/404page')
   }
 }
 
@@ -54,7 +54,7 @@ const loadEditBanner = async (req, res) => {
     const banner = await bannerModel.findOne({ _id: bannerId });
     res.render("Admin/editBanner", { banner });
   } catch (error) {
-    console.log(error);
+    res.render('User/404page')
   }
 }
 
@@ -72,8 +72,8 @@ const editBanner = async (req, res) => {
     })
 
     res.redirect('/admin/banner');
-  } catch (error) {
-    console.log(error);
+  }catch (error) {
+    res.render('User/404page')
   }
 }
 
@@ -83,8 +83,8 @@ const deleteBanner = async (req, res) => {
     const bannerId = req.query.bannerId;
     const banner = await bannerModel.deleteOne({ _id: bannerId });
     res.status(200).json({ message: 'Banner deleted successfully' });
-  } catch (error) {
-    console.log(error.message);
+  }catch (error) {
+    res.render('User/404page')
   }
 }
 

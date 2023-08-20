@@ -7,19 +7,26 @@ const deleteImage = require('../../utility/deleteImage')
 
 
 const loadProducts = async (req, res) => {
-    const products = await productModel.find();
-    const categories = await categoryModel.find();
-    res.render('Admin/product', { products, categories });
+    try{
+        const products = await productModel.find();
+        const categories = await categoryModel.find();
+        res.render('Admin/product', { products, categories });
+    }catch (error) {
+        res.render('User/404page')
+    }
 }
 
 const loadAddProducts = async (req, res) => {
-    const categories = await categoryModel.find();
-    res.render('Admin/addProduct', { categories: categories })
+    try{
+        const categories = await categoryModel.find();
+        res.render('Admin/addProduct', { categories: categories })
+    }catch (error) {
+        res.render('User/404page')
+    }
 }
 
 const addProduct = async (req, res) => {
     try {
-
         const productName = req.body.productName;
         const category = req.body.category;
         let price = req.body.price;
@@ -46,26 +53,27 @@ const addProduct = async (req, res) => {
 
         await newProduct.save()
         res.redirect('/admin/product');
-    } catch (err) {
-        console.log(err);
+    } catch (error) {
+        res.render('User/404page')
     }
 }
 
 
 const loadEditProduct = async (req, res) => {
-    const idb = req.query.id;
-    const categories = await categoryModel.find();
-    const product = await productModel.findOne({ _id: idb })
-    res.render('Admin/editProduct', { categories, product });
+    try{
+        const idb = req.query.id;
+        const categories = await categoryModel.find();
+        const product = await productModel.findOne({ _id: idb })
+        res.render('Admin/editProduct', { categories, product });
+    }catch (error) {
+        res.render('User/404page')
+    }
 }
 
 
 const editProduct = async (req, res) => {
-
     try {
-
         const id = req.query.id;
-
         const productName = req.body.productName;
         const category = req.body.category;
         let price = req.body.price;
@@ -73,10 +81,8 @@ const editProduct = async (req, res) => {
         const blurb = req.body.blurb;
         const description = req.body.description;
 
-
         price = parseFloat(price);
         quantity = parseInt(quantity);
-
 
         await productModel.findByIdAndUpdate(id, {
             productName: productName,
@@ -89,9 +95,8 @@ const editProduct = async (req, res) => {
 
         res.redirect('/admin/product');
 
-
     } catch (error) {
-        console.log(error);
+        res.render('User/404page')
     }
 
 }
@@ -111,22 +116,19 @@ const deleteProduct = async (req, res) => {
         res.redirect('/admin/product');
 
     } catch (error) {
-        console.log(error);
+        res.render('User/404page')
     }
 }
 
 
 const loadImages = async (req, res) => {
-
     try {
-
         const { id } = req.query;
         const product = await productModel.findOne({ _id: id });
-
         res.render('Admin/editImages', { product });
 
     } catch (error) {
-        console.log(error);
+        res.render('User/404page')
     }
 
 }
@@ -134,19 +136,20 @@ const loadImages = async (req, res) => {
 
 
 const deleteProductImage = async (req, res) => {
-    const { public_id, productId } = req.query;
- 
-    // console.log(productId);
-    await deleteImage(public_id);
-
-    await productModel.updateOne({ _id: productId, "image.public_id": public_id },
+    try{
+        const { public_id, productId } = req.query; 
+        await deleteImage(public_id);
+        await productModel.updateOne({ _id: productId, "image.public_id": public_id },
         {
             $pull: {
                 "image": { public_id: public_id }
             }
         }
-    )
-    res.json({ response: true })
+        )
+        res.json({ response: true })
+    }catch (error) {
+        res.render('User/404page')
+    }
 }
 
 
@@ -155,11 +158,10 @@ const loadAddImage = async (req, res) => {
 
         const { productId } = req.query;
         const product = await productModel.findOne({ _id: productId });
-        console.log(product);
         res.render('Admin/addImage', { productId, product })
 
     } catch (error) {
-        console.log(error);
+        res.render('User/404page')
     }
 }
 
@@ -182,9 +184,11 @@ const editImage = async (req, res) => {
         res.redirect('/admin/product')
 
     } catch (error) {
-        console.log(error);
+        res.render('User/404page')
     }
 }
+
+
 
 module.exports = {
     loadAddProducts,

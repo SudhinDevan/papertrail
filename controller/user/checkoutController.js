@@ -10,8 +10,8 @@ const walletModel = require("../../model/walletSchema");
 const Razorpay = require('razorpay');
 
 const loadCheckoutAddress = async (req, res) => {
+    try{
     const id = req.session.User_id;
-
     const userData = await userModel.findOne({ _id: id });
     const address = await addressModel.find({ _id: id });
     const contactAddress = await addressModel.findOne({ user: id, type: "contact" });
@@ -20,14 +20,16 @@ const loadCheckoutAddress = async (req, res) => {
     const cart = await cartModel.findOne({ userId: id })
 
     res.render('User/checkoutAddress', { id, user: userData, contact: contactAddress, main: mainAddress, secondary: secondaryAddress, address, cart });
+    
+    }catch (error) {
+        res.render('User/404page')
+    }
 }
 
 
 
 const checkoutAddAddress = async (req, res) => {
-
     try {
-
         const user_id = req.session.User_id;
 
         const {
@@ -57,14 +59,13 @@ const checkoutAddAddress = async (req, res) => {
 
 
     } catch (error) {
-        console.log(error);
+      res.render('User/404page')
     }
-
 }
 
 
 const selectAddress = async (req, res) => {
-
+  try{
     const { addressId, userId } = req.query;
     const user = await userModel.findOne({ _id: userId })
 
@@ -85,12 +86,11 @@ const selectAddress = async (req, res) => {
         res.render('User/checkout', { cart, productList, user, address, coupons, wallet });
 
     } else {
-
         res.redirect('/');
-
     }
-
-
+  }catch (error) {
+    res.render('User/404page')
+  }
 }
 
 
@@ -242,7 +242,7 @@ const checkout = async (req, res) => {
         res.json({ response: true, orderId: saveOrder._id });
 
     } catch (error) {
-        console.log(error);
+      res.render('User/404page')
     }
 
 }
@@ -301,7 +301,7 @@ const razorPayPaymet = async (req, res) => {
             })
 
     } catch (error) {
-        console.log(error);
+      res.render('User/404page')
         res.status(500).json({ error: "something went wrong" });
     }
 }

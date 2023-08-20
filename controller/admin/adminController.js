@@ -17,20 +17,18 @@ const userTable = async (req, res) => {
         });
         res.render('Admin/userData', { user: userDetails })
     } catch (error) {
-        console.log(error.message);
+        res.render('User/404page')
     }
 }
 
 const updateAccess = async (req, res) => {
     try {
         let access = req.body.access;
-        console.log(access);
         const id = req.query.id;
-        console.log(id);
         await User.findByIdAndUpdate(id, { $set: { isAccess: access } })
         res.redirect('/admin/userData')
     } catch (error) {
-        console.log(error);
+        res.render('User/404page')
     }
 }
 

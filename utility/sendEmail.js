@@ -30,14 +30,14 @@ const verifyEmail = async (body) => {
         console.log('Email sent: ' + info.response);
         return 'success';
     } catch (error) {
-        console.log(error);
-        return 'error';
+        res.render('User/404page')
     }
 };
 
 
 
 const sendMail = async (option)=>{
+    try{
     const transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
         port: 465,
@@ -50,10 +50,12 @@ const sendMail = async (option)=>{
             rejectUnauthorized: false,
         },
     })
-
-
     const info = await transporter.sendMail(option)
+    }catch (error) {
+    res.render('User/404page')
+  }
 }
+
 
 
 module.exports = {

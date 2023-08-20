@@ -31,7 +31,7 @@
                 </div>
                 <div class="col-lg-9 col-12">
                     <div class="hero__search mx-4">
-                        <div class="hero__search__form " >
+                        <div class="hero__search__form ">
                             <form action="#">
                                 <input type="text" id="search" name="search" class="text-dark font-weight-bold"
                                     placeholder="What do yo u need?" value="<%= search %>">
@@ -111,8 +111,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="button" onclick="advanceSearch()"
-                                class="btn btn-danger btn-sm mt-3">Apply</button>
+                            <button type="button" onclick="advanceSearch()" class="btn btn-md mt-3 mr-3"
+                                style="background-color: #15A78F; color: white; padding-left: 15px; padding-right: 15px;">Apply</button>
+                            <a href="/shop"><button type="button" class="btn btn-danger btn-md mt-3"
+                                    style="color: white; height: 2.3rem;">Clear
+                                    Filter</button></a>
                         </form>
                     </div>
                 </div>

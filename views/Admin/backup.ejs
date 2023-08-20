@@ -179,7 +179,6 @@
                 document.getElementById('status-select').addEventListener('change', function (event) {
                     const status = event.target.value;
                     let id = '<%= order._id %>'
-                    console.log(status)
                     let order = axios({
                         method: "post",
                         url: `/admin/order/status`,

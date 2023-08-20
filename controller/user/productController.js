@@ -6,6 +6,7 @@ const wishlistModel = require('../../model/wishlistSchema')
 
 
 const productInCategory = async (req, res) => {
+    try{
     const userId = req.session.User_id;
     const categoryId = req.query.categoryId;
     const search = req.query.search || '';
@@ -15,9 +16,6 @@ const productInCategory = async (req, res) => {
     const PAGE_SIZE = 6;
     const page = parseInt(req.query.page) || 1;
     const skip = (page - 1) * PAGE_SIZE;
-
-
-    try {
 
         const query = {
             isActive: true,
@@ -59,11 +57,12 @@ const productInCategory = async (req, res) => {
         console.error('Error fetching products by category:', err);
         res.status(500).send('Internal server error');
     }
-};
+}
 
 
 
 const loadShop = async (req, res) => {
+    try{
     const id = req.session.User_id;
     const search = req.query.search || '';
     const user = await userModel.findOne({ _id: id });
@@ -92,14 +91,15 @@ const loadShop = async (req, res) => {
     const totalCount = await productModel.countDocuments(query);
 
     res.render('User/shop', { category, products, user, cart, totalCount, currentPage: page, totalPages: Math.ceil(totalCount / PAGE_SIZE), search, minamount, maxamount });
-};
+    }catch (error) {
+    res.render('User/404page')
+    }
+}
 
 
 const productDetails = async (req, res) => {
     try {
-
         const userId = req.session.User_id;
-
         const user = await userModel.findOne({ _id: userId });
         const cart = await cartModel.findOne({ userId });
         const wishlist = await wishlistModel.findOne({ userId: userId });
@@ -126,13 +126,14 @@ const productDetails = async (req, res) => {
             })
 
     } catch (error) {
-        console.log(error);
+        res.render('User/404page')
     }
 
 }
 
 
 const loadWishlist = async (req, res) => {
+  try{
     const id = req.session.User_id;
     const cart = await cartModel.findOne({ userId: id })
 
@@ -140,18 +141,19 @@ const loadWishlist = async (req, res) => {
     const products = await productModel.find({
         _id: { $in: user.wishlist },
     }).lean()
-
     res.render('User/wishlist', { user, products, cart });
-};
+  }catch (error) {
+    res.render('User/404page')
+  }
+}
 
 
 const addToWishlist = async (req, res) => {
+  try {
     const id = req.session.User_id;
     const productid = req.query.productId;
-
-    try {
-        await userModel.updateOne({ _id: id }, { $push: { wishlist: productid } });
-        res.json({ success: true });
+    await userModel.updateOne({ _id: id }, { $push: { wishlist: productid } });
+    res.json({ success: true });
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, error: "Failed to add to wishlist" });

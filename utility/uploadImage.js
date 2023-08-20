@@ -21,8 +21,8 @@ const imageUpload = async (file) => {
 
         return myResultObj;
 
-    } catch (err) {
-        console.log(err);
+    } catch (error) {
+        res.render('User/404page')
     }
 }
 
@@ -53,8 +53,8 @@ const multipleImage = async (files) => {
 
         return imageUrlList;
 
-    } catch (err) {
-        console.log(err);
+    } catch (error) {
+        res.render('User/404page')
     }
 }
 

@@ -15,7 +15,7 @@ const loadWishlist = async (req, res) => {
     res.render('User/wishlist', { id, user, wishlist, cart });
 
   } catch (error) {
-    console.log(error);
+    res.render('User/404page')
   }
 }
 
@@ -62,20 +62,18 @@ const addToWishlist = async (req, res) => {
     }
 
 
-  } catch (error) {
-    console.log(error);
+  }catch (error) {
+    res.render('User/404page')
   }
 
 }
 
 
 const removeFromWishlist = async (req, res) => {
+  try {
   const productId = req.query.productId
   const user = req.session.User_id;
-
-  try {
     const wishlist = await wishlistModel.findOne({ userId: user })
-    console.log(wishlist);
     if (wishlist) {
       await wishlistModel.updateOne(
         {
@@ -91,7 +89,7 @@ const removeFromWishlist = async (req, res) => {
     }
 
   } catch (error) {
-    console.error(error);
+    res.render('User/404page')
   }
 }
 
@@ -100,5 +98,4 @@ module.exports = {
   addToWishlist,
   loadWishlist,
   removeFromWishlist,
-
 }

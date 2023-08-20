@@ -150,9 +150,8 @@ const loadSalesReport = async (req, res) => {
       },
     ]);
 
-    console.log(yearly);
-
     res.render("Admin/sale", { yearly });
+    
   } catch (error) {
     res.render("User/404page");
   }

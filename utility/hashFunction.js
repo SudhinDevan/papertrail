@@ -6,8 +6,8 @@ const hash = async (password) => {
         const hashed = await bcrypt.hash(password, 10);
         return hashed;
     }
-    catch (err) {
-        console.log(err.message);
+    catch (error) {
+        res.render('User/404page')
     }
 }
 

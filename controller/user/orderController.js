@@ -9,6 +9,7 @@ const walletModel = require('../../model/walletSchema');
 
 
 const loadorder = async (req, res) => {
+    try{
     const userId = req.session.User_id;
     const userData = await userModel.findOne({ _id: userId });
     const cart = await cartModel.findOne({ userId: userId });
@@ -48,14 +49,17 @@ const loadorder = async (req, res) => {
         totalPages,
         itemsPerPage
     });
-};
+
+    }catch (error) {
+    res.render('User/404page')
+    }
+}
 
 
 
 
 const loadOrderDetails = async (req, res) => {
     try {
-
         const userId = req.session.User_id;
         const { orderId } = req.query;
 
@@ -81,14 +85,13 @@ const loadOrderDetails = async (req, res) => {
         res.render('User/orderDetails', { id: userId, cart, coupon, user, order, address: cartAddress.address });
 
     } catch (error) {
-        console.log(error.message);
+        res.render('User/404page')
     }
 }
 
 
 const cancelOrder = async (req, res) => {
     try {
-
         const orderId = req.query.orderId;
         const order = await orderModel.findOne({ _id: orderId }).populate('items')
         if (order.payment_method === "online" || order.payment_method === "wallet") {
@@ -127,12 +130,13 @@ const cancelOrder = async (req, res) => {
         }
         res.send({ response: true });
     } catch (error) {
-        console.log(error);
+        res.render('User/404page')
     }
 }
 
 
 const loadOrderSuccessPage = async (req, res) => {
+    try{
     const userId = req.session.User_id;
     const { orderId } = req.query;
 
@@ -154,6 +158,9 @@ const loadOrderSuccessPage = async (req, res) => {
     const coupon = await couponModel.findOne({ _id: order.coupon })
 
     res.render('User/orderSuccess', { user, order, address, product, coupon, cart });
+    }catch (error) {
+        res.render('User/404page')
+    }
 }
 
 const returnOrder = async (req, res) => {
@@ -163,7 +170,7 @@ const returnOrder = async (req, res) => {
         res.json({ response: true });
 
     } catch (error) {
-        console.log(error)
+        res.render('User/404page')
     }
 
 }

@@ -15,7 +15,7 @@ const isLogin = async(req, res, next) => {
         }
 
     } catch (error) {
-        console.log(error.message);
+        res.render('User/404page')
     }
 }
 
@@ -24,8 +24,9 @@ const isLogout = (req, res) => {
         req.session.User_id = null;
         res.clearCookie('User_id')
         res.redirect('/')
+        
     } catch (error) {
-        console.log(error.message);
+        res.render('User/404page')
     }
 }
 

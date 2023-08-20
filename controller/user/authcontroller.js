@@ -12,7 +12,12 @@ const userModel = require('../../model/userSchema');
 
 // Load Signup page
 const signup = async (req, res) => {
+  try{
+
     res.render("User/userSignup")
+  }catch (error) {
+    res.render('User/404page')
+  }
 }
 
 // Function to hash password
@@ -22,8 +27,8 @@ const hashPassword = async (password) => {
         return hashPassword
     }
     catch (error) {
-        console.log(error.message)
-    }
+      res.render('User/404page')
+  }
 }
 
 // Function to create new user
@@ -51,13 +56,14 @@ const createUser = async (req, res) => {
         }
     }
     catch (error) {
-        console.log(error.message)
+      res.render('User/404page')
     }
 }
 
 
 // Existing user Login
 const verifyLogin = async (req, res) => {
+  try{
     const email = req.body.email
     const password = req.body.password
     const userData = await User.findOne({ email: email })
@@ -81,6 +87,9 @@ const verifyLogin = async (req, res) => {
     } else {
         res.render('User/userLogin', { message: "Invalid User" })
     }
+  }catch (error) {
+    res.render('User/404page')
+  }
 }
 
 
@@ -96,17 +105,22 @@ const loadHome = async (req, res) => {
 
 
         res.render('User/home', { category, products, user, cart, banners });
-    } catch (error) {
-        res.render('User/404page');
+    }catch (error) {
+      res.render('User/404page')
     }
 }
 
 
 
 const successEmail = async (req, res) => {
+  try{
+
     res.render("User/successEmail", { message: req.params.username, user: null, cart: null })
     const username = req.params.username
     await User.findOneAndUpdate({ username: username }, { $set: { isVerified: true } })
+  }catch (error) {
+    res.render('User/404page')
+  }
 }
 
 const loadForgotPassword = (req, res) => {
@@ -138,7 +152,6 @@ const forgotPassword = async (req, res) => {
         });
       }
     } catch (error) {
-      console.log(error);
       res.render("User/404page");
     }
   };

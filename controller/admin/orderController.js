@@ -5,18 +5,19 @@ const walletModel = require("../../model/walletSchema");
 
 
 const loadorder = async (req, res) => {
-
-    const orders = await orderModel.find();
-
-    const users = await orderModel.find().populate("user");
-
-    res.render('Admin/orders', { orders, users });
+    try{
+        const orders = await orderModel.find();
+        const users = await orderModel.find().populate("user");   
+        res.render('Admin/orders', { orders, users });
+    }catch (error) {
+        res.render('User/404page')
+    }
 }
 
 
 const loadOrderDetails = async (req, res) => {
-
-    const {
+    try{
+        const {
         userId,
         orderId,
     } = req.query;
@@ -29,21 +30,25 @@ const loadOrderDetails = async (req, res) => {
         const product = await orderItemModel.findOne({ _id: item }).populate("product")
         products.push(product)
     }
-
+    
     res.render('Admin/orderDetails', { user, order, products, address: cartAddress.address });
+    }catch (error) {
+    res.render('User/404page')
+    }
 }
 
 
 
 const statusChange = async (req, res) => {
+  try{
     const {
-        id,
-        status
+      id,
+      status
     } = req.body;
 
     if (status === "shipped") {
-        await orderModel.findByIdAndUpdate(id, { order_status: status, payment_status: true });
-
+      await orderModel.findByIdAndUpdate(id, { order_status: status, payment_status: true });
+      
     } else if (status === "delivered") {
         await orderModel.findByIdAndUpdate(id, { order_status: status, payment_status: true });
 
@@ -59,13 +64,13 @@ const statusChange = async (req, res) => {
                 user: orderId.user,
                 balance: orderId.price,
                 history: ({
-                    type: "add",
-                    amount: orderId.price,
-                    newBalance: orderId.price
+                  type: "add",
+                  amount: orderId.price,
+                  newBalance: orderId.price
                 })
             })
             await wallet.save();
-        } else {
+          } else {
             let balance = wallet.balance;
             const newBalance = balance + orderId.price;
             const history = {
@@ -76,12 +81,15 @@ const statusChange = async (req, res) => {
             wallet.balance = newBalance;
             wallet.history.push(history);
             wallet.save();
+          }
         }
+        
+        const order = await orderModel.findOne({ _id: id });
+        
+        res.json({ data: order })
+      }catch (error) {
+        res.render('User/404page')
     }
-
-    const order = await orderModel.findOne({ _id: id });
-
-    res.json({ data: order })
 }
 
 

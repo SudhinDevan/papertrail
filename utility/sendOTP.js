@@ -21,8 +21,8 @@ const otpGenerate = async ()=>{
 
         return {secret, OTP}
         
-    } catch (error) {
-        console.log();
+    }catch (error) {
+        res.render('User/404page')
     }
     
     
@@ -40,7 +40,7 @@ const sendOtp = async (user)=>{
         html: `<p>Your OTP is <b>${result.OTP}</b></p>`, // html body
     }
 
-    console.log("before",result.OTP);
+    console.log("OTP:",result.OTP);
 
     await sendMail(option);
     return result.secret;

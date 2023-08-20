@@ -1,17 +1,12 @@
 const User = require('../../model/userSchema')
 const bcrypt = require('bcrypt')
 
-
-// Get Admin Login
-// const adminlogin = async (req, res) => {
-//     res.render('Admin/dashBoard', { message: "" });
-// }
-
 // verify admin credentials
 const verifyAdminLogin = async (req, res) => {
-    const username = req.body.username;
-    const email = req.body.email;
-    const password = req.body.password;
+    try {
+        const username = req.body.username;
+        const email = req.body.email;
+        const password = req.body.password;
     const userData = await User.findOne({ email: email })
     if (userData) {
         const passMatch = await bcrypt.compare(password, userData.password)
@@ -28,17 +23,20 @@ const verifyAdminLogin = async (req, res) => {
     } else {
         res.render('Admin/adminLogin', { message: "Invalid User" })
     }
+  }catch (error) {
+    res.render('User/404page')
+  }
 }
 
-
+   
 const adminLogout = async (req, res) => {
     try {
         req.session.Admin = null;
         res.clearCookie('Admin')
         res.redirect('/admin/')
-    } catch (error) {
-        console.log(error.message);
-    }
+    }catch (error) {
+      res.render('User/404page')
+  }
 
 }
 
@@ -48,12 +46,11 @@ const blockUser = async (req, res) => {
         userData.isAccess = false;
         res.redirect('/userData')
     } catch (error) {
-        console.log(error.message);
-    }
+      res.render('User/404page')
+  }
 }
 
 module.exports = {
-    // adminlogin,
     verifyAdminLogin,
     adminLogout,
     blockUser,

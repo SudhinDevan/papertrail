@@ -25,7 +25,7 @@
             <ul>
               <% category.forEach((categoryItem)=> { %>
                 <li>
-                  <a href="/category/<%= categoryItem._id %>" style="text-decoration: none;">
+                  <a onclick="productsInCat('<%= categoryItem._id %>')" style="text-decoration: none; cursor: pointer;">
                     <%= categoryItem.categoryName %>
                   </a>
                 </li>
@@ -232,26 +232,6 @@
 
     <script>
 
-      $('.zoom').elevateZoom({
-        cursor: "crosshair",
-        zoomWindowFadeIn: 500,
-        zoomWindowFadeOut: 750,
-        zoomWindowOffetx: 10,
-      });
-
-      // $('.product__details__pic__item--large').hover(()=>{
-      //     const i = $('.product__details__pic__item--large').attr('src');
-      //     console.log(i);
-      // })
-
-      function addClass() {
-        $("#izoom").addClass("product__details__pic__item--large zoom")
-      }
-
-    </script>
-
-    <script>
-
       function addToClick(id) {
 
         axios.get(`/addToCart?productId=${id}`)
@@ -329,6 +309,10 @@
       function zoomOut() {
         var element = document.getElementById("overlay");
         element.style.display = "none";
+      }
+
+      function productsInCat(catId) {
+        location.href = `/category?categoryId=${catId}`
       }
 
     </script>

@@ -6,18 +6,16 @@ const loadCoupon = async (req, res) => {
     res.render("Admin/coupon", { coupons });
 
   } catch (error) {
-    throw new Error(error);
+    res.render('User/404page')
   }
 }
 
 
 const loadAddCoupon = (req, res) => {
   try {
-
     res.render('Admin/addCoupon');
-
   } catch (error) {
-    throw new Error(error)
+    res.render('User/404page')
   }
 }
 
@@ -57,7 +55,7 @@ const addCoupon = async (req, res) => {
 
 
   } catch (error) {
-    throw new Error(error)
+    res.render('User/404page')
   }
 }
 
@@ -74,7 +72,7 @@ const loadEditCoupon = async (req, res) => {
     res.render('Admin/editCoupon', { coupon, expDate });
 
   } catch (error) {
-    throw new Error(error);
+    res.render('User/404page')
   }
 }
 
@@ -96,7 +94,7 @@ const editCoupon = async (req, res) => {
     res.json({ response: true });
 
   } catch (error) {
-    throw new Error(error);
+    res.render('User/404page')
   }
 }
 
@@ -138,7 +136,7 @@ const applyCoupon = async (req, res) => {
     }
 
   } catch (error) {
-    console.error(error);
+    res.render('User/404page')
     return res.status(500).json({ response: false, message: 'Server error' });
   }
 };
@@ -150,7 +148,7 @@ const deleteCoupon = async(req,res) => {
   res.json({response:true})
     
   } catch (error) {
-    console.log(error.message);
+    res.render('User/404page')
   }
   
 }

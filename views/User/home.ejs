@@ -24,10 +24,12 @@
               <span>All Categories</span>
             </div>
             <ul>
-              <% category.forEach((category)=> { %>
-                <li><a href="#" style="text-decoration: none;">
-                    <%= category.categoryName %>
-                  </a></li>
+              <% category.forEach((categoryItem)=> { %>
+                <li>
+                  <a onclick="productsInCat('<%= categoryItem._id %>')" style="text-decoration: none; cursor: pointer;">
+                    <%= categoryItem.categoryName %>
+                  </a>
+                </li>
                 <% }) %>
             </ul>
           </div>
@@ -166,6 +168,11 @@
       }
 
     }
+
+    function productsInCat(catId) {
+      location.href = `/category?categoryId=${catId}`
+    }
+
   </script>
 
   <%- include('./partials/footer.ejs') %>

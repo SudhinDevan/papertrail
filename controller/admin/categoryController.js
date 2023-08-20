@@ -12,13 +12,17 @@ const loadCategory = async (req, res) => {
         }
         res.render('Admin/categories', { categories, productsValue });
     } catch (error) {
-        console.log(error.message);
+        res.render('User/404page')
     }
 }
 
 
 const loadAddCategory = async (req, res) => {
-    res.render("Admin/addCategory", { message: "" })
+    try{
+        res.render("Admin/addCategory", { message: "" })
+    }catch (error) {
+        res.render('User/404page')
+    }
 }
 
 const addCategory = async (req, res) => {
@@ -38,20 +42,19 @@ const addCategory = async (req, res) => {
         }
 
 
-    } catch (err) {
-        console.log(err);
+    } catch (error) {
+        res.render('User/404page')
     }
 }
 
 const loadEditCategory = async (req, res) => {
     try {
         const id = req.query.id;
-        console.log(id);
         const categoryData = await categoryModel.findOne({ _id: id });
 
         res.render('Admin/editCategory', { message: null, category: categoryData })
     } catch (error) {
-        console.log(error.message);
+        res.render('User/404page')
     }
 }
 
@@ -64,7 +67,7 @@ const editCategory = async (req, res) => {
         await categoryModel.findByIdAndUpdate(id, { categoryName: req.body.name })
         res.redirect('/admin/category');
     } catch (error) {
-        console.log(error.message);
+        res.render('User/404page')
     }
 }
 

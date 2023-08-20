@@ -6,7 +6,7 @@ const isLogin = (req, res, next) => {
             res.render('Admin/adminLogin', { message: "" })
         }
     } catch (error) {
-        console.log(error.message);
+        res.render('User/404page')
     }
 }
 
@@ -18,7 +18,7 @@ const isLogout = (req, res, next) => {
             next();
         }
     } catch (error) {
-        console.log(error.message)
+        res.render('User/404page')
     }
 }
 

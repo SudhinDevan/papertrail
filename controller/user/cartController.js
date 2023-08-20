@@ -6,6 +6,7 @@ const userModel = require('../../model/userSchema');
 
 
 const loadCart = async (req, res) => {
+    try{
     const id = req.session.User_id;
     const user = await userModel.findOne({ _id: id });
     let cart = await cartModel.findOne({ userId: user })
@@ -27,8 +28,6 @@ const loadCart = async (req, res) => {
             }
         }
 
-
-
         products = await cartModel
             .findOne({ userId: req.session.User_id })
             .populate("items.productId");
@@ -41,6 +40,9 @@ const loadCart = async (req, res) => {
 
     res.render("User/cart", { id, user, cart, products, productList });
 
+    }catch (error) {
+        res.render('User/404page')
+    }
 
 }
 
@@ -52,19 +54,12 @@ const addToCart = async (req, res) => {
         const { productId } = req.query;
         const userId = req.session.User_id;
 
-
-
         const cart = await cartModel.findOne({ userId: userId });
         const product = await productModel.findOne({ _id: productId });
-
-
-
-
 
         if (cart) {
 
             let productExist = await cartModel.findOne({ userId: userId, "items.productId": productId });
-
             if (productExist) {
 
                 const cartProduct = cart.items.find((item) => item.productId == productId)
@@ -72,8 +67,6 @@ const addToCart = async (req, res) => {
                 if (cartProduct.quantity >= product.quantity) {
                     res.json({ response: false })
                 } else {
-
-
                     await cartModel.findOneAndUpdate({ userId: userId, "items.productId": productId },
                         {
                             $inc: {
@@ -135,7 +128,7 @@ const addToCart = async (req, res) => {
 
 
     } catch (error) {
-        console.log(error);
+        res.render('User/404page')
     }
 }
 
@@ -160,9 +153,7 @@ const incrementQuantity = async (req, res) => {
         res.json({ response: true })
 
     } catch (error) {
-
-        console.log(error);
-
+      res.render('User/404page')
     }
 
 }
@@ -188,10 +179,8 @@ const decrementQuantity = async (req, res) => {
 
         res.json({ response: true })
 
-    } catch (error) {
-
-        console.log(error);
-
+    }catch (error) {
+      res.render('User/404page')
     }
 
 }
@@ -226,10 +215,10 @@ const removeItem = async (req, res) => {
 
         res.json({ response: true });
     } catch (error) {
-        console.log(error);
+      res.render('User/404page')
         res.status(500).json({ response: false, error: "An error occurred while removing the item." });
     }
-};
+}
 
 
 
