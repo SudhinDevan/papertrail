@@ -107,9 +107,9 @@
         <% for(let i=0;i<4;i++) { %>
           <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
             <div class="featured__item">
-              <div class="featured__item__pic set-bg" style="background-size: contain;"
+              <a href="/productDetails?id=<%= products[i]._id %>"><div class="featured__item__pic set-bg" style="background-size: contain;"
                 data-setbg="<%= products[i].image[0].url %>">
-              </div>
+              </div></a>
               <div class="featured__item__text">
                 <h6><a href="/productDetails?id=<%= products[i]._id %>" style="text-decoration: none;">
                     <%= products[i].productName %>
