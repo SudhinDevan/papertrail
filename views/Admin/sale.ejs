@@ -203,7 +203,8 @@
               <td>
                 <%=report.items%>
               </td>
-              <td>&#x20B9;<%=report.total%>.00</td>
+              <td>&#x20B9;<%=report.total%>
+              </td>
               <td>&#x20B9;<%=(report.total*30) /100%>
               </td>
               <!-- <td>$400</td> -->
@@ -242,7 +243,7 @@
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker@3.0.3/daterangepicker.min.js" defer></script>
 
 
-    
+
 
 
     <script>
@@ -264,14 +265,14 @@
         });
       });
 
-    //   $(document).ready(function() {
-    //     $('#date-range').daterangepicker({
-    //         opens: 'left',
-    //         startDate: moment().subtract(7, 'days'),
-    //         endDate: moment(),
-    //         // More customization options...
-    //     });
-    // });
+      //   $(document).ready(function() {
+      //     $('#date-range').daterangepicker({
+      //         opens: 'left',
+      //         startDate: moment().subtract(7, 'days'),
+      //         endDate: moment(),
+      //         // More customization options...
+      //     });
+      // });
 
 
 
@@ -299,7 +300,7 @@
                             <td><a href="#">${element._id.month}</a></td>
                             <td>${element.count}</td>
                             <td>${element.items}</td>
-                            <td>&#x20B9;${element.total}.00</td>
+                            <td>&#x20B9;${element.total}</td>
                             <td>&#x20B9;${(element.total * 15) / 100}</td>
                         </tr>`;
               });
@@ -332,7 +333,7 @@
                             <td><a href="#">${element._id.Day}/${element._id.Month}/${element._id.Year}</a></td>
                             <td>${element.count}</td>
                             <td>${element.items}</td>
-                            <td>&#x20B9;${element.total}.00</td>
+                            <td>&#x20B9;${element.total}</td>
                             <td>&#x20B9;${(element.total * 15) / 100}</td>
                         </tr>`;
               });
@@ -370,7 +371,7 @@
                             <td><a href="#">${element._id.Day}/${element._id.Month}/${element._id.Year}</a></td>
                             <td>${element.count}</td>
                             <td>${element.items}</td>
-                            <td>&#x20B9;${element.total}.00</td>
+                            <td>&#x20B9;${element.total}</td>
                             <td>&#x20B9;${(element.total * 15) / 100}</td>
                         </tr>`;
               });
